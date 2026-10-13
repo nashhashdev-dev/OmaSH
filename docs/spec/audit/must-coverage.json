@@ -1,0 +1,522 @@
+[
+  {
+    "id": "MUST-001",
+    "file": "AGENT_BRIEF.md",
+    "line": 35,
+    "section": "## 3. 禁止事項（MUST NOT）",
+    "text": "## 3. 禁止事項（MUST NOT）",
+    "status": "PARTIAL",
+    "coverage": "See expanded prohibitions below",
+    "note": "All eleven prohibitions were reviewed individually."
+  },
+  {
+    "id": "MUST-002",
+    "file": "SPEC.md",
+    "line": 4,
+    "section": "# Reins 仕様書（規範）",
+    "text": "> 規範語：**MUST / MUST NOT / SHOULD / MAY** は RFC 2119 の意味で用いる。",
+    "status": "META",
+    "coverage": "Normative vocabulary",
+    "note": "This line defines the meaning of RFC requirement words; it is not runtime behavior."
+  },
+  {
+    "id": "MUST-003",
+    "file": "SPEC.md",
+    "line": 82,
+    "section": "## 3. 法則（Laws）",
+    "text": "全設計はこの 6 法則から導出される。新機能が法則で表現できない場合、機能ではなく法則の不足として DECISIONS.md に起票する（MUST）。",
+    "status": "COVERED",
+    "coverage": "Common acceptance: decision records; AGENT 2",
+    "note": "Law-inexpressible features must be recorded, with no invented seventh law."
+  },
+  {
+    "id": "MUST-004",
+    "file": "SPEC.md",
+    "line": 158,
+    "section": "### 5.3 `knowledge`",
+    "text": "- `hypothesis`：未確定の推測。ホストは「（仮説）」と明示して描画する（MUST）。",
+    "status": "GAP",
+    "coverage": "M2 deliverables / SPEC 7.4 only",
+    "note": "No acceptance criterion explicitly tests the hypothesis marker."
+  },
+  {
+    "id": "MUST-005",
+    "file": "SPEC.md",
+    "line": 170,
+    "section": "### 5.6 `tool`",
+    "text": "Tools are MCP server definitions or host-native tool names. MCP env entries MUST NOT contain literal secrets. Convert `${secret:NAME}` into the destination's supported environment-variable reference syntax, such as `${NAME}` in .mcp.json. If the destination has no supported reference syntax, account the tool as dropped with reason `secret-unsupported`. Secret values MUST NOT be written to any file or log (D-034).",
+    "status": "GAP",
+    "coverage": "M0 S-2/S-3 expansion checks are partial",
+    "note": "No explicit invariant/acceptance checks that dummy secret values never reach generated files, Reins logs, or fixtures."
+  },
+  {
+    "id": "MUST-006",
+    "file": "SPEC.md",
+    "line": 182,
+    "section": "### 5.8 `task`",
+    "text": "「今何をするか」。TaskSpec はホストによらず次の固定書式にコンパイルされる（MUST、`reins/task-compile` 関数として core に置く）：",
+    "status": "COVERED",
+    "coverage": "M5 acceptance 1; I-LOG-2",
+    "note": "The sent task must use the fixed SPEC 5.8 format; add isolated compiler goldens for earlier feedback."
+  },
+  {
+    "id": "MUST-007",
+    "file": "SPEC.md",
+    "line": 232,
+    "section": "### 6.1 オーサリング",
+    "text": "TypeScript。JSX は任意の糖衣（`jsxImportSource: \"@reins/core\"`）で、`h()` と等価（MUST）。",
+    "status": "GAP",
+    "coverage": "M1 authoring deliverables and type checks are partial",
+    "note": "Behavioral equality of JSX and h is not an explicit acceptance criterion."
+  },
+  {
+    "id": "MUST-008",
+    "file": "SPEC.md",
+    "line": 236,
+    "section": "### 6.1 オーサリング",
+    "text": "`packages/core/src/jsx-runtime.ts` MUST export namespace JSX with the Element, ElementType, IntrinsicElements, and ElementChildrenAttribute members from JsxNamespaceShape. Under react-jsx, session key arrives as jsx/jsxs's third argument and MUST be restored into SessionEl props (D-046).",
+    "status": "PARTIAL",
+    "coverage": "Common API type checks; M1 type tests",
+    "note": "Namespace shape is covered. Restoring the runtime third-argument key requires a runtime assertion, not a type-only check."
+  },
+  {
+    "id": "MUST-009",
+    "file": "SPEC.md",
+    "line": 262,
+    "section": "### 6.2 精緻化アルゴリズム（MUST）",
+    "text": "### 6.2 精緻化アルゴリズム（MUST）",
+    "status": "PARTIAL",
+    "coverage": "I-ELAB-1/3/4/5; M1",
+    "note": "The six algorithm steps are expanded below; cycle-depth and exact root/GID formula coverage remains implicit."
+  },
+  {
+    "id": "MUST-010",
+    "file": "SPEC.md",
+    "line": 277,
+    "section": "### 6.2 精緻化アルゴリズム（MUST）",
+    "text": "Before a dynamic model request or static CLI render, the driver MUST run `ensurePlan()` (D-024). Fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record `content/fetched {ref, digest}`, rebuild `external` from logged content events and CAS, and retry elaboration until done. Components do not access this map directly.",
+    "status": "PARTIAL",
+    "coverage": "I-ELAB-1; I-LOG-2; M3 5; M2 deliverables",
+    "note": "No explicit acceptance exercises parallel retrieval, deadline, CAS reconstruction, and waiting across suspension."
+  },
+  {
+    "id": "MUST-011",
+    "file": "SPEC.md",
+    "line": 279,
+    "section": "### 6.2 精緻化アルゴリズム（MUST）",
+    "text": "The total wait is bounded by `suspenseTimeoutMs`, default 10000 ms; CLI accepts `--suspense-timeout`. Fetch failures and exceeded deadlines record `content/unavailable {ref, reason, detail?}`, where reason is timeout, not-found, denied, or error. Resolve unavailable refs to `[reins: content unavailable: <ref> (<reason>)]` and retry to done. Each node using this placeholder is accounted as degraded with reason `content-unavailable:<ref>`. The used-ref digest map includes the digest of each materialized placeholder. Missing content MUST NOT be silently rendered as an empty string.",
+    "status": "PARTIAL",
+    "coverage": "I-RENDER-2; I-ELAB-1",
+    "note": "Accounting and stable input are covered; timeout/failure placeholders and per-node degraded reasons lack explicit acceptance."
+  },
+  {
+    "id": "MUST-012",
+    "file": "SPEC.md",
+    "line": 283,
+    "section": "### 6.3 フック",
+    "text": "The hooks are `useLog(projection)`, `useTaskState()`, `useContent(ref)`, `useFile(path)`, and `useNamespace()` (types.ts `Hooks`). Calling them outside elaboration fails with `ELAB_HOOK_OUTSIDE_RENDER`. Hooks MUST NOT expose host information (I-ELAB-2).",
+    "status": "COVERED",
+    "coverage": "I-ELAB-2; M1 API surface tests",
+    "note": "No hook exposes host information."
+  },
+  {
+    "id": "MUST-013",
+    "file": "SPEC.md",
+    "line": 287,
+    "section": "### 6.3 フック",
+    "text": "1. **Static lint (MUST):** `@reins/eslint-plugin`, implemented in `packages/eslint-plugin` in M1, checks harness components. It prohibits imports of I/O modules such as `node:fs`, `node:child_process`, and `node:net`; `process.env`; `Date`; `Math.random`; `fetch`; `crypto.getRandomValues`; and I/O outside the `@reins/core` hooks. `reins render` MUST run this lint on the harness package and fail with `ELAB_IMPURE` if it reports a violation.",
+    "status": "COVERED",
+    "coverage": "I-ELAB-1; I-PKG-1; M1 lint acceptance",
+    "note": "Static lint and double elaboration have separate tests."
+  },
+  {
+    "id": "MUST-014",
+    "file": "SPEC.md",
+    "line": 296,
+    "section": "### 6.4 Projection とタスク状態",
+    "text": "- Projection<T>, useLog<T>, and project<T> do not require a Json generic constraint. Development mode MUST check projection state for JSON serializability at runtime (D-044).",
+    "status": "COVERED",
+    "coverage": "M1 acceptance: development JSON-serialization checks",
+    "note": "Unconstrained generic projection state is checked at runtime."
+  },
+  {
+    "id": "MUST-015",
+    "file": "SPEC.md",
+    "line": 318,
+    "section": "### 7.2 ホスト調停（MUST）",
+    "text": "### 7.2 ホスト調停（MUST）",
+    "status": "PARTIAL",
+    "coverage": "I-HOST-1/2/5; M2 4/5/7",
+    "note": "Ownership, drift, and record location are covered; atomic writes, deletion, and concurrency need explicit criteria."
+  },
+  {
+    "id": "MUST-016",
+    "file": "SPEC.md",
+    "line": 320,
+    "section": "### 7.2 ホスト調停（MUST）",
+    "text": "Static host commits to the same workspace MUST be serialized by an exclusive lock at `$REINS_HOME/state/<wsid>/lock`. Hold it across observation, ownership/drift checks, writes, and CommitRecord updates. Fail with `LOCKED` after 30 seconds without acquiring it (D-037).",
+    "status": "GAP",
+    "coverage": "M2 deliverables only",
+    "note": "No explicit acceptance for mutual exclusion across observation/write/record or the 30-second LOCKED deadline."
+  },
+  {
+    "id": "MUST-017",
+    "file": "SPEC.md",
+    "line": 322,
+    "section": "### 7.2 ホスト調停（MUST）",
+    "text": "Before multi-host commits, duplicate planned targets MUST fail the entire plan with TARGET_CONFLICT. When Codex is configured via-agents-md, it emits no AGENTS.md or shared skills and avoids those duplicates (D-064).",
+    "status": "COVERED",
+    "coverage": "M2 acceptance 8",
+    "note": "Duplicate targets fail; Codex co-host mode omits shared targets."
+  },
+  {
+    "id": "MUST-018",
+    "file": "SPEC.md",
+    "line": 338,
+    "section": "### 7.2 ホスト調停（MUST）",
+    "text": "書き込みは一時ファイル + rename で原子的に行う（MUST）。",
+    "status": "GAP",
+    "coverage": "M2 deliverables only",
+    "note": "No explicit acceptance asserts temporary-file-plus-rename writes, including interrupted writes."
+  },
+  {
+    "id": "MUST-019",
+    "file": "SPEC.md",
+    "line": 349,
+    "section": "### 7.3 揮発度と会計",
+    "text": "Volatility is a placement contract. Static/session nodes may change during a Run and the host MUST use the updated content. `render/committed.cacheBreak` is true when the system portion changes, and false otherwise. I-RENDER-4 still requires identical system outputs when only turn nodes differ (D-032).",
+    "status": "PARTIAL",
+    "coverage": "I-RENDER-4; M3 acceptance 3",
+    "note": "Turn-only stability is covered; changed static/session content and cacheBreak toggling are not explicitly tested."
+  },
+  {
+    "id": "MUST-020",
+    "file": "SPEC.md",
+    "line": 395,
+    "section": "### 7.5 静的ホストの対象表",
+    "text": "MCP environment references MUST use the destination's supported reference syntax, never resolved secret values. S-2 and S-3 MUST verify expansion support for every configuration target in this table. A destination without supported expansion drops the affected tool with reason `secret-unsupported` (D-034).",
+    "status": "PARTIAL",
+    "coverage": "M0 S-2/S-3; I-RENDER-2",
+    "note": "Expansion support is covered; non-disclosure and secret-unsupported drop behavior need explicit tests."
+  },
+  {
+    "id": "MUST-021",
+    "file": "SPEC.md",
+    "line": 437,
+    "section": "### 8.3 真偽調停（アンカー評価）",
+    "text": "Command anchors MUST NOT execute in the real workspace (D-040). For git snapshots, create a temporary worktree from the snapshot commit, apply the recorded working-tree diff, execute, and remove the worktree afterward. For non-git snapshots, copy to a temporary directory and remove it afterward; above 1 GiB, report unverifiable with reason `too-large`.",
+    "status": "GAP",
+    "coverage": "M4 deliverables only",
+    "note": "No explicit acceptance verifies command-anchor isolation, cleanup, recorded dirty diff, or >1 GiB behavior."
+  },
+  {
+    "id": "MUST-022",
+    "file": "SPEC.md",
+    "line": 445,
+    "section": "### 8.4 提案（Proposal）",
+    "text": "- A git package with uncommitted changes MUST fail proposal application with DIRTY_PACKAGE. Successful application creates a `reins: apply proposal <id>` commit. Evolvers may write only candidate copies under `$REINS_HOME/candidates/<id>/`, never the canonical package (D-050).",
+    "status": "PARTIAL",
+    "coverage": "I-PROP-1/2; M4 2/3; M7 5",
+    "note": "Candidate-only writes are covered; dirty-package rejection and exact Git commit behavior have no explicit acceptance."
+  },
+  {
+    "id": "MUST-023",
+    "file": "SPEC.md",
+    "line": 454,
+    "section": "### 9.1 CapSet 演算（MUST、core に実装）",
+    "text": "### 9.1 CapSet 演算（MUST、core に実装）",
+    "status": "COVERED",
+    "coverage": "I-CAP-1/2; M1; M5 2",
+    "note": "Capability operations are specified under this header."
+  },
+  {
+    "id": "MUST-024",
+    "file": "SPEC.md",
+    "line": 456,
+    "section": "### 9.1 CapSet 演算（MUST、core に実装）",
+    "text": "- `attenuate(parent, req, opts?)`: for each requested Grant g, intersect g.rights with the union of rights of parent Grants whose patterns contain g.on. RefPattern containment is conservative glob containment (`**` ⊇ `*` ⊇ literal); an undecidable containment is treated as false. Budget fields use min, with omitted fields inheriting the parent value. `opts.strict` defaults to false, which silently attenuates. With `{ strict: true }`, any attenuation throws `CAP_WIDENING`. Session mount MUST pass `{ strict: true }` (D-022).",
+    "status": "COVERED",
+    "coverage": "I-CAP-1; M5 acceptance 2",
+    "note": "Strict mount narrowing rejects; ordinary attenuation stays monotone."
+  },
+  {
+    "id": "MUST-025",
+    "file": "SPEC.md",
+    "line": 482,
+    "section": "## 10. ログ",
+    "text": "- Every log's seq 0 MUST be run/start. Any other initial kind fails with LOG_CORRUPT (D-066).",
+    "status": "COVERED",
+    "coverage": "I-LOG-1; M1",
+    "note": "Corrupt initial kind and hash chain must fail."
+  },
+  {
+    "id": "MUST-026",
+    "file": "SPEC.md",
+    "line": 496,
+    "section": "## 10. ログ",
+    "text": "| session/intent send | Record session/status unknown and notify the human. Delivery cannot be established, so MUST NOT automatically resend. |",
+    "status": "PARTIAL",
+    "coverage": "I-LOG-3; M5 6",
+    "note": "Recovery is required, but no explicit acceptance distinguishes a crash after pre-send logging from successful delivery and tests no automatic resend."
+  },
+  {
+    "id": "MUST-027",
+    "file": "SPEC.md",
+    "line": 524,
+    "section": "### 11.2 エージェントからの起動（ツール）",
+    "text": "The LLM MUST NOT construct an arbitrary child harness or supply arbitrary runtime/caps through session_spawn (D-041). `PackageManifest.sessionProfiles[name]` declares an entry-module component export, allowed runtime kinds, and caps. Select the child's harness from that export and attenuate profile caps against the requester's caps. Authors do not need to include RequestedSessions manually.",
+    "status": "PARTIAL",
+    "coverage": "I-CAP-1; M5 1/2; D-041",
+    "note": "Profile selection is exercised; rejection of LLM-supplied arbitrary harness/runtime/caps is not explicit."
+  },
+  {
+    "id": "MUST-028",
+    "file": "SPEC.md",
+    "line": 526,
+    "section": "### 11.3 マウント手順（MUST）",
+    "text": "### 11.3 マウント手順（MUST）",
+    "status": "PARTIAL",
+    "coverage": "I-CAP-1/3/4; I-SESS-1/5; I-LOG-2; M5",
+    "note": "Six mount steps are expanded below; runtime selection and credential addressing remain undefined."
+  },
+  {
+    "id": "MUST-029",
+    "file": "SPEC.md",
+    "line": 565,
+    "section": "### 12.4 mise",
+    "text": "- セッション起動・アンカー command 評価は `mise exec` 経由で行う（MUST）。",
+    "status": "GAP",
+    "coverage": "M0 pinned tools and M5 manual runtime records are partial",
+    "note": "No explicit acceptance verifies that every session start and command anchor runs through mise exec."
+  },
+  {
+    "id": "MUST-030",
+    "file": "SPEC.md",
+    "line": 576,
+    "section": "## 13. 評価と進化（M7）",
+    "text": "- Final tasks/results are stored under `$REINS_HOME/sealed/<taskset>/`, omitted from evolver Run namespaces, and protected by a read guard that raises SPLIT_LEAK. They MUST NOT remain accessible as ordinary files to evolvers (D-068).",
+    "status": "COVERED",
+    "coverage": "I-EVO-1; M7 acceptance 2/5",
+    "note": "Sealed data is absent from evolver namespaces and direct reads are rejected."
+  },
+  {
+    "id": "MUST-031",
+    "file": "DSH_INTEGRATION.md",
+    "line": 20,
+    "section": "## 1. 位置づけ",
+    "text": "- `@reins/core` と静的ホストは **DSH に依存してはならない**（MUST NOT）。Claude Code / Codex 単体の利用者も CLI だけで R1・R2・R4・R5 を得られる。",
+    "status": "GAP",
+    "coverage": "AGENT 3.4 and DSH dependency rules",
+    "note": "No invariant or explicit acceptance requires the forbidden-import boundary lint to fail for core/static hosts."
+  },
+  {
+    "id": "MUST-032",
+    "file": "DSH_INTEGRATION.md",
+    "line": 21,
+    "section": "## 1. 位置づけ",
+    "text": "- DSH 依存コードは `packages/dsh-plugin/src/adapter/` 以下に集約する（MUST）。adapter 外から `@deepseek-ai/*` を import しない（lint で禁止）。",
+    "status": "GAP",
+    "coverage": "AGENT 3.4 and DSH dependency rules",
+    "note": "Adapter-only DSH imports are specified but lack an explicit milestone acceptance check."
+  },
+  {
+    "id": "MUST-033",
+    "file": "DSH_INTEGRATION.md",
+    "line": 30,
+    "section": "## 3. 動的ホスト `dsh` の写像（MUST）",
+    "text": "## 3. 動的ホスト `dsh` の写像（MUST）",
+    "status": "COVERED",
+    "coverage": "M3 acceptance 6; DSH contract suite; M5",
+    "note": "Mapping clauses are expanded below."
+  },
+  {
+    "id": "MUST-034",
+    "file": "DSH_INTEGRATION.md",
+    "line": 53,
+    "section": "## 3. 動的ホスト `dsh` の写像（MUST）",
+    "text": "**Plan preparation and caching:** before a model request, run asynchronous ensurePlan(). If elaborate returns suspended, fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record content/fetched, rebuild external from content events/CAS, and retry (D-024). At the suspenseTimeoutMs deadline (default 10000), or on fetch failure, record content/unavailable and resolve the specified placeholder. Affected nodes are degraded with reason `content-unavailable:<ref>`. Requests MUST wait for done; synchronous text providers use only the completed plan.",
+    "status": "PARTIAL",
+    "coverage": "I-LOG-2; M3 5",
+    "note": "See MUST-010/011 for suspension, deadline, and degraded-node acceptance gaps."
+  },
+  {
+    "id": "MUST-035",
+    "file": "DSH_INTEGRATION.md",
+    "line": 57,
+    "section": "## 3. 動的ホスト `dsh` の写像（MUST）",
+    "text": "Implement preparation in the asynchronous per-agent system-prompt/assemble waterfall: await ensurePlan(), await next(), then replace the returned assembly's reins parts when the plan changed. Section/context providers are synchronous memo readers. S-5 MUST verify PromptAssembly structure and replacement support; unavailable replacement makes M0 BLOCKED (D-055). Names are exactly reins:static, reins:session, and reins:turn, scoped by registration (D-061).",
+    "status": "COVERED",
+    "coverage": "M0 S-5 acceptance; M3 contracts",
+    "note": "Assembly structure/replacement is an explicit spike gate."
+  },
+  {
+    "id": "MUST-036",
+    "file": "DSH_INTEGRATION.md",
+    "line": 108,
+    "section": "## 7. mise",
+    "text": "開発リポジトリ直下の `mise.toml`（MUST）：",
+    "status": "COVERED",
+    "coverage": "M0 acceptance: fixed tool versions and mise.lock; common lint/test",
+    "note": "The tool/task TOML is syntax-validated; actual pins remain M0 work."
+  },
+  {
+    "id": "MUST-037",
+    "file": "DSH_INTEGRATION.md",
+    "line": 141,
+    "section": "### 8.2 依存面（contract tests）",
+    "text": "`contracts/dsh/` に、Reins が依存する DSH の振る舞いだけを検査するテストを置く（MUST）。1 API 1 ファイル以上：",
+    "status": "COVERED",
+    "coverage": "M3 acceptance 6; M5 provider selection",
+    "note": "The ten listed contract seams must pass; continuable contract is conditional on provider adoption."
+  },
+  {
+    "id": "MUST-038",
+    "file": "DSH_INTEGRATION.md",
+    "line": 157,
+    "section": "### 8.3 パッチ",
+    "text": "- 原則ゼロ。DSH は「拡張は plugin を横に載せる」設計であり、まず拡張点を探す（MUST）。",
+    "status": "PROCESS",
+    "coverage": "Decision-record acceptance; DSH patch policy",
+    "note": "Trying extension points first is a review procedure; no behavior invariant or specific acceptance criterion enforces it."
+  },
+  {
+    "id": "MUST-039",
+    "file": "INVARIANTS.md",
+    "line": 3,
+    "section": "# INVARIANTS — 不変条件（規範）",
+    "text": "各不変条件は **ID・言明・根拠・試験義務** を持つ。実装はすべての ID に対応するテストを `packages/*/test/invariants/<ID>.test.ts` に置かなければならない（MUST）。テスト名は ID で始める。",
+    "status": "COVERED",
+    "coverage": "Common acceptance: introduced I-* tests exist/pass",
+    "note": "Every invariant has its ID-prefixed test obligation."
+  },
+  {
+    "id": "MUST-040",
+    "file": "INVARIANTS.md",
+    "line": 22,
+    "section": "## 精緻化（ELAB）",
+    "text": "| I-ELAB-1 | **Purity:** `ETree.digest` is a function of package digest, lock digest, namespace id, the projection log prefix, and logged content events with their CAS bodies or unavailable placeholders (D-024). External content is reconstructed by the driver from logged input. Development mode MUST elaborate twice and reject differing digests with `ELAB_IMPURE`; this detects nondeterminism only. `reins render` MUST also apply static purity lint and reject violations with `ELAB_IMPURE` (SPEC §6.3, D-023). | React render purity; reproducibility, caching, and time travel. | P, lint |",
+    "status": "COVERED",
+    "coverage": "I-ELAB-1; M1 lint and double-elaboration acceptance",
+    "note": "Duplicate statement of the two purity layers."
+  },
+  {
+    "id": "MUST-041",
+    "file": "INVARIANTS.md",
+    "line": 63,
+    "section": "## ログ（LOG）",
+    "text": "| I-LOG-1 | Append only. Seq is contiguous from zero, prev is the preceding digest, and digest is canonical sha256. Seq zero MUST be run/start; any invalid chain or initial kind fails with LOG_CORRUPT (D-066). | Audit and replay. | P |",
+    "status": "COVERED",
+    "coverage": "I-LOG-1; M1",
+    "note": "Duplicate seq-zero obligation."
+  },
+  {
+    "id": "MUST-042",
+    "file": "INVARIANTS.md",
+    "line": 87,
+    "section": "## 提案・進化・実行（PROP / EVO / RUN）",
+    "text": "| I-PKG-1 | The package digest covers every module reachable from entry and every file matched by the `content` globs. A file outside this coverage MUST NOT affect rendering; violations fail with `ELAB_IMPURE`. Static purity lint checks forbidden direct I/O, and double elaboration detects nondeterminism only (D-023). | The digest identifies all inputs that affect rendering. | P |",
+    "status": "COVERED",
+    "coverage": "I-PKG-1; M1",
+    "note": "Only digest-covered inputs affect rendering."
+  },
+  {
+    "id": "MUST-043",
+    "file": "MILESTONES.md",
+    "line": 53,
+    "section": "## M1 — core",
+    "text": "- Static purity lint for harness components: reject I/O module imports (including `node:fs`, `node:child_process`, and `node:net`), `process.env`, `Date`, `Math.random`, `fetch`, `crypto.getRandomValues`, and I/O outside the `@reins/core` hooks. Provide the lint used by `reins render`, which MUST fail with `ELAB_IMPURE` on violations (SPEC §6.3, D-023).",
+    "status": "COVERED",
+    "coverage": "I-ELAB-1; M1",
+    "note": "Duplicate lint obligation."
+  },
+  {
+    "id": "MUST-044",
+    "file": "DECISIONS.md",
+    "line": 4,
+    "section": "# DECISIONS — 決定記録",
+    "text": "実装エージェントが新たに判断した事項は、この表に追記する（MUST）。追記項目：ID、日付、決定、理由、代替案、影響範囲。",
+    "status": "COVERED",
+    "coverage": "Common acceptance: new decisions recorded",
+    "note": "Process requirement has milestone acceptance."
+  },
+  {
+    "id": "MUST-045",
+    "file": "DECISIONS.md",
+    "line": 37,
+    "section": "## User decisions (2026-10-13)",
+    "text": "| D-023 | 2026-10-13 | Add `packages/eslint-plugin` (`@reins/eslint-plugin`) in M1. Harness components MUST pass static lint that prohibits imports of I/O modules such as `node:fs`, `node:child_process`, and `node:net`, and prohibits `process.env`, `Date`, `Math.random`, `fetch`, `crypto.getRandomValues`, and I/O outside the `@reins/core` hooks. `reins render` MUST run this lint and fail with `ELAB_IMPURE` on violations. Double elaboration detects nondeterminism only. | Combine static effect checks with runtime nondeterminism checks; repeated evaluation alone cannot establish purity. | Rely on double elaboration alone. | SPEC §6.3; I-ELAB-1 and its lint tests; I-PKG-1 detection wording; types.ts error comment; AGENT_BRIEF layout; M1 deliverables. |",
+    "status": "COVERED",
+    "coverage": "I-ELAB-1; M1",
+    "note": "Historical D-023 repeats current lint semantics."
+  },
+  {
+    "id": "MUST-046",
+    "file": "DECISIONS.md",
+    "line": 45,
+    "section": "## User decisions, batch 2 (2026-10-13)",
+    "text": "| D-024 | 2026-10-13 | External content is logged input: `content/fetched {ref, digest}` points into `$REINS_HOME/cas/<digest>`; `content/unavailable {ref, reason, detail?}` records timeout, not-found, denied, or error. Drivers build external inputs from these events and CAS. `ensurePlan()` fetches missing refs in parallel and retries until done; model requests MUST wait. After the default 10000 ms `suspenseTimeoutMs` or a fetch failure, resolve to `[reins: content unavailable: <ref> (<reason>)]`, and account affected nodes as degraded with reason `content-unavailable:<ref>`. Static hosts use the same procedure and CLI accepts `--suspense-timeout`. | Keep external inputs replayable and preserve accounting with bounded waiting. | Render missing content as empty strings. | SPEC §6.2/10/14; DSH_INTEGRATION §3; LogEventMap; ElaborateInput comments; I-ELAB-1. |",
+    "status": "PARTIAL",
+    "coverage": "I-ELAB-1; I-LOG-2; M3 5",
+    "note": "D-024 repeats MUST-010/011; acceptance gaps remain."
+  },
+  {
+    "id": "MUST-047",
+    "file": "DECISIONS.md",
+    "line": 74,
+    "section": "## User decisions, batch 3 (2026-10-13)",
+    "text": "| D-044 | 2026-10-13 | Projection, useLog, and project no longer constrain T to Json. Development mode MUST check JSON serializability at runtime. | Support interface-shaped TaskState projections. | Enforce serialization through the generic constraint. | types.ts; SPEC §6.4; M1. |",
+    "status": "COVERED",
+    "coverage": "M1 development JSON-state acceptance",
+    "note": "Duplicate D-044 obligation."
+  },
+  {
+    "id": "MUST-048",
+    "file": "types.ts",
+    "line": 290,
+    "section": "",
+    "text": "  /** Restrict to these host kinds. Absent = all. Components MUST NOT branch on host otherwise (I-ELAB-2). */",
+    "status": "COVERED",
+    "coverage": "I-ELAB-2; M1",
+    "note": "No host-dependent components."
+  },
+  {
+    "id": "MUST-049",
+    "file": "types.ts",
+    "line": 485,
+    "section": "",
+    "text": "  /** Invoked by elaboration inside the hook context. MUST NOT be called elsewhere. */",
+    "status": "PARTIAL",
+    "coverage": "I-ELAB-1; M1 hook-context tests",
+    "note": "Hooks outside render fail; no explicit criterion checks ComponentCall.render invocation outside the hook context."
+  },
+  {
+    "id": "MUST-050",
+    "file": "types.ts",
+    "line": 504,
+    "section": "",
+    "text": " * the runtime MUST re-insert it into props for `session` (its SessionEl.key).",
+    "status": "PARTIAL",
+    "coverage": "M1 JSX type tests",
+    "note": "Runtime key restoration needs a behavioral test; see MUST-008."
+  },
+  {
+    "id": "MUST-051",
+    "file": "types.ts",
+    "line": 559,
+    "section": "",
+    "text": "/** Merge-extensible. Plugin keys MUST be `<plugin>/<name>`. */",
+    "status": "GAP",
+    "coverage": "types.ts LogEventMap comment only",
+    "note": "No invariant/acceptance checks plugin/name event-key validation."
+  },
+  {
+    "id": "MUST-052",
+    "file": "types.ts",
+    "line": 1045,
+    "section": "",
+    "text": "/** Runtime-only. Signatures packages/core MUST export with exactly these names. */",
+    "status": "COVERED",
+    "coverage": "Common public-API type acceptance",
+    "note": "KernelApi export names and signatures are checked."
+  }
+]

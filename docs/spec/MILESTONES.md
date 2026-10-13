@@ -7,6 +7,7 @@
 - `mise run lint` `mise run test` が通る。そのマイルストーンで導入した全 I-* テストが存在し通る。
 - 新規の公開 API は types.ts の型と一致する（`tsc` で `types.ts` の型を import して検査する型テストを置く）。
 - DECISIONS.md に新しい判断が記録されている。
+- `tsc -p docs/spec/checks` passes. Positive examples compile and negative examples retain their expected diagnostics.
 
 ---
 
@@ -20,7 +21,7 @@
 | S-2 | Claude Code: nested CLAUDE.md loading, .claude/rules frontmatter, skills, .mcp.json, permissions.deny syntax, CLAUDE.md @path import support for AGENTS.md deduplication (D-033), and environment reference expansion in each configuration target (D-034). |
 | S-3 | Codex: AGENTS.md hierarchy, skills, .codex/config.toml mcp_servers, native guard/sandbox realization, and environment reference expansion in each configuration target (D-034). |
 | S-4 | tmux 経由で Claude Code と Codex の TUI を操作：ブラケットペースト送信、Enter、`capture-pane` での idle / working / 承認待ち の判定パターン採取（画面 fixture として保存） |
-| S-5 | DSH：custom profile + bundle のインストール、`--dump-config`、per-agent scope での `systemPrompt.section/context` 登録、order と shadowing、context のログスナップショット、既存の AGENTS.md section provider の所在と無効化方法、`tools.guard` / `tools.restrict` |
+| S-5 | DSH profile/bundle installation, dump-config, per-agent section/context registration, order/shadowing, logged context snapshots, existing AGENTS.md provider disablement, tools.guard/restrict, and asynchronous system-prompt/assemble structure/replacement. Unavailable replacement is BLOCKED (D-055). |
 | S-6 | DSH `ctx.subagents` の `claude-code` / `codex` プロバイダ：DSH_INTEGRATION.md §5 の条件 1〜4 |
 
 受け入れ基準：
@@ -54,9 +55,10 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 
 受け入れ基準：
 - I-REF-1〜5、I-ELAB-1〜5、I-CAP-1・2・4、I-LOG-1・4、I-PKG-1 のテストが通る。
-- `examples/hello` を elaborate した ETree の golden が安定（2 回の CI 実行で同一 digest）。
+- examples/hello ETree goldens normalize namespace id, absolute Mount-config paths, and base to <NS>/<PATH>/<BASE>. Two elaborations on the same machine have identical digests. Rendered-file goldens remain exact (D-051).
 - 欠落 id、重複 id、hook の範囲外呼び出し、`Math.random()` を使うコンポーネント、の各々が規定のエラーコードで失敗するテストがある。
 - I-ELAB-1 lint tests cover forbidden imports and expressions, including deterministic forbidden I/O, and verify that permitted core hooks pass. Double-elaboration tests verify nondeterminism detection separately.
+- Type tests cover soft-branded literals, type-erased component calls, JSON package props, named exports, JSX key restoration, boolean nodes, and unconstrained TaskState projections. Development tests check projection JSON serializability (D-042/044/045/046).
 
 ---
 
@@ -72,13 +74,14 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 - ドリフト検出と持ち上げ提案（SPEC §8.2、提案の作成まで。適用は M4）。
 
 受け入れ基準（fixtures：`fixtures/ws-ts`（TS アプリ、`src/auth/` あり、既存 AGENTS.md と CLAUDE.md あり）、`fixtures/ws-py`、`fixtures/ws-notes`）：
-1. `reins import` → 直後の `reins render --host agents-md,claude-code` で既存ファイルがヘッダ行を除きバイト一致（I-HOST-4）。
+1. Import sets source-specific hosts; rendering immediately with agents-md/claude-code and dedupeWith:null preserves normalized Markdown and parsed JSON/TOML values (I-HOST-4, D-063).
 2. `examples/hello` を 3 ホストへ render した結果が golden と一致。`src/auth/AGENTS.md` と `src/auth/CLAUDE.md` が生成される。
 3. render 後 `git status --porcelain` が空（I-HOST-3）。
 4. 生成された `CLAUDE.md` を手で 1 行変更 → 再 render でそのファイルだけ上書きされず `drift/detected` が記録され、`reins status` が content-patch か lift-drift の提案を表示（I-HOST-2）。
 5. 非所有の `.claude/settings.json` がある状態で enforced rule を含む木を render → `TARGET_OCCUPIED`（I-HOST-1）。
 6. `reins why src/auth/CLAUDE.md:<n>` が gid・via・provenance を表示（I-RENDER-3）。
 7. I-RENDER-1・2・3・5・6、I-HOST-1〜5 のテストが通る。
+8. Static sessions are dropped with session:static-host and accountable descendants delegated. Static when conditions render under Conditional. Duplicate targets fail with TARGET_CONFLICT; Codex via-agents-md omits shared instructions/skills (D-048/059/064).
 
 ---
 
@@ -126,11 +129,12 @@ Session work includes parent/child evaluation rules, one Run per mounted child, 
 1. 台本 LLM が `session_spawn` → `session/requested` → mount → 子 worktree に子ハーネスの CLAUDE.md が生成 → タスクが §5.8 書式で送られる。`session/sent` が送信より前に記録（I-LOG-2, I-LOG-3）。
 2. 親より広い caps を要求 → `CAP_WIDENING`。深さ超過 → `DEPTH_EXCEEDED`（I-CAP-1, I-SESS-1）。
 3. `session/mounted` に Grant ごとの Enforcement（I-CAP-3）。
-4. 子の出力が親の次の要求に `<relay …>` で囲まれて現れ、instruction として現れない（I-SESS-2）。
+4. Child output uses Reins relay context or DSH subagent-report/subagent-settled relay messages, never instruction/rule/knowledge. DSH-provider SessionDigest includes status only (I-SESS-2, D-049).
 5. ノード削除で detach（プロセスは生存）、`onRemove: 'stop'` で停止（I-SESS-3）。
 6. 親プロセスを kill → 再起動 → reattach 成功、または `unknown` 記録（I-SESS-4）。
 7. 子の環境変数に、Grant の無い資格情報（テスト用ダミー `FAKE_TOKEN`）が無い（I-SESS-5）。
 8. 手動手順書 `docs/manual/real-runtimes.md`：実 Claude Code と実 Codex で 1 と 4 を再現した記録。
+9. Unmounted keys leave requestedSessions and cannot be reused within a Run (KEY_REUSED). Reconcile immediately after requests and on dynamic renders. Acceptance commands run directly only in disposable child workspaces; share-mode children use snapshot copies (D-047/058).
 
 ---
 
@@ -154,3 +158,4 @@ Session work includes parent/child evaluation rules, one Run per mounted child, 
 2. evolver principal で final split を読もうとすると `SPLIT_LEAK`（I-EVO-1）。
 3. 比較対象 Trial の RunSpec が harness digest 以外一致しない場合、比較を拒否（I-EVO-2）。
 4. 1 サイクル（propose → select → final → promote）を通しで実行した記録。
+5. Final data is sealed outside evolver namespaces and guarded against direct reads with SPLIT_LEAK; evolvers write only candidate copies (D-050/068).

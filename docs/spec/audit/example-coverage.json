@@ -1,0 +1,109 @@
+[
+  {
+    "file": "SPEC.md",
+    "start": 175,
+    "end": 179,
+    "language": "",
+    "section": "5.7 relay template",
+    "check": "spec-contracts.tsx",
+    "review": "Typed ContextEl payload; template is prose, not TS."
+  },
+  {
+    "file": "SPEC.md",
+    "start": 184,
+    "end": 201,
+    "language": "",
+    "section": "5.8 task template",
+    "check": "spec-contracts.tsx",
+    "review": "Typed TaskSpec exercises command/anchor/human criteria and deliverables/references. Rendering bytes remain implementation acceptance work."
+  },
+  {
+    "file": "SPEC.md",
+    "start": 213,
+    "end": 222,
+    "language": "markdown",
+    "section": "5.11 frontmatter",
+    "check": "spec-contracts.tsx",
+    "review": "Exact data transcribed as typed KnowledgeEl. YAML frontmatter parsed with PyYAML; runtime useFile validation remains M1.",
+    "syntax": "PASS"
+  },
+  {
+    "file": "SPEC.md",
+    "start": 238,
+    "end": 260,
+    "language": "tsx",
+    "section": "6.1 TSX",
+    "check": "spec-fenced.tsx",
+    "review": "Exact fenced TSX body; only its lastFailure helper is supplied as surrounding context."
+  },
+  {
+    "file": "SPEC.md",
+    "start": 324,
+    "end": 337,
+    "language": "",
+    "section": "7.2 pseudocode",
+    "check": "host-reconcile-example.tsx",
+    "review": "Typed ownership/drift/write/delete/commit flow; deletion exposes the nullable observed-digest conflict."
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "start": 9,
+    "end": 18,
+    "language": "",
+    "section": "1 architecture",
+    "check": null,
+    "review": "Non-executable architecture text; no TypeScript meaning."
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "start": 110,
+    "end": 131,
+    "language": "toml",
+    "section": "7 mise TOML",
+    "check": null,
+    "review": "Parsed with Python tomllib; tool versions marked for M0 are placeholders, not verified runtime pins.",
+    "syntax": "PASS"
+  },
+  {
+    "file": "SPEC.md",
+    "section": "4.2/6.2/12.1 digest formulas",
+    "check": "digest-examples.tsx",
+    "review": "Literal typed digest inputs; structured interfaces expose the Json boundary mismatch.",
+    "kind": "inline/prose"
+  },
+  {
+    "file": "SPEC.md",
+    "section": "4.1 references; 5 element props; 6 hooks; 9 strict attenuation; 10 event payloads; 11 profiles",
+    "check": "spec-contracts.tsx / spec-examples.tsx",
+    "review": "Typed literals and kernel calls; prose formulas are represented without executing effects.",
+    "kind": "inline/prose"
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "section": "2 settings / 4 event map / 8 upstream pin",
+    "check": "dsh-examples.tsx",
+    "review": "Typed configuration literals and event-map extension.",
+    "kind": "inline/prose"
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "section": "3 section/context/restrict/guard/register",
+    "check": "dsh-examples.tsx",
+    "review": "Exact inline registrations with a typed local memo view. DSH signatures are stubs for the documented seam; installed upstream behavior remains M0.",
+    "kind": "inline/prose"
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "section": "3 dynamic observe/commit",
+    "check": "dsh-examples.tsx",
+    "review": "D-062 no-record receipt conflicts with the mandatory CommitReceipt.record.",
+    "kind": "inline/prose"
+  },
+  {
+    "file": "SPEC.md / DSH_INTEGRATION.md",
+    "section": "Shell commands, paths, table syntax and output templates",
+    "check": null,
+    "review": "Commands are inventoried, not run as TypeScript. Running real runtimes belongs to gated M0.",
+    "kind": "inline/prose"
+  }
+]

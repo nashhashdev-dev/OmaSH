@@ -10,8 +10,10 @@
 | `INVARIANTS.md` | 不変条件 41 件と試験義務 | 規範（最上位） |
 | `DSH_INTEGRATION.md` | DSH / mise への載せ方、上流追随とパッチ方針 | 規範 |
 | `MILESTONES.md` | M0〜M7 の成果物と受け入れ基準 | 規範 |
-| `DECISIONS.md` | 41 recorded decisions and 10 open questions with defaults. | Record |
+| `DECISIONS.md` | 65 recorded decisions numbered through D-068; D-052/054/056 were not supplied. Ten open questions have defaults. | Record |
 | `DECISIONS-batch-2.md` | Supplied D-024 through D-041 and platform/real-runtime scope. | User decisions, reflected in the normative files. |
+| `DECISIONS-batch-3.md` | Supplied batch-3 decisions and its canonical type source. | User decisions, reflected in the normative files. |
+| `checks/` | Specification examples and positive/negative type checks; run tsc -p docs/spec/checks. | Validation |
 
 ## 渡し方
 

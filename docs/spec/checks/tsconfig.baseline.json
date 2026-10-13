@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["spec-examples.tsx", "negative.tsx", "stub/*.ts", "../types.ts"]
+}

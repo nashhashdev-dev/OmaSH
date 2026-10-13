@@ -1,0 +1,51 @@
+[
+  {
+    "file": "SPEC.md",
+    "start": 175,
+    "language": "",
+    "body": "<relay source=\"<provenance.source>\" node=\"<gid>\">\n...本文...\n</relay>",
+    "end": 179
+  },
+  {
+    "file": "SPEC.md",
+    "start": 184,
+    "language": "",
+    "body": "# Task\n<goal>\n\n## Acceptance criteria\n- [ ] `<argv を空白連結>` exits <expectExit> (cwd: <cwd>)\n- [ ] <anchor の describe>\n- [ ] Ask the human: <question>\n\n## Constraints\n- <constraint>\n\n## Deliverables\n- <name>: <description>[ (at <at>)]\n\n## References\n- <ref>",
+    "end": 201
+  },
+  {
+    "file": "SPEC.md",
+    "start": 213,
+    "language": "markdown",
+    "body": "---\nkind: knowledge\nid: auth.session-store\nclaim: fact\nanchors:\n  - { kind: path, pattern: \"workspace://app/src/auth/session-store.ts\", expect: exists }\n---\nセッションは Redis に保存され、TTL は 24 時間。",
+    "end": 222
+  },
+  {
+    "file": "SPEC.md",
+    "start": 238,
+    "language": "tsx",
+    "body": "// examples/hello/src/index.tsx\nimport { h, use, useFile, useTaskState } from '@reins/core'\n\nexport default function Root() {\n  const ts = useTaskState()\n  return (\n    <>\n      {useFile('content/overview.md')}\n      <scope at=\"workspace://app/src/auth/**\">\n        {useFile('content/auth/session-store.md')}\n        <rule id=\"no-raw-sql\" enforcement=\"enforced\"\n              guard={{ kind: 'deny-command', argvPrefix: ['psql'] }}\n              body={{ format: 'md', text: 'DB へは ORM 経由でのみアクセスする。' }} />\n      </scope>\n      <scope when={{ op: 'event', kind: 'reins/test-failed', within: 'turn' }}>\n        <context id=\"last-failure\" body={{ format: 'md', text: lastFailure(ts) }} priority={90} />\n      </scope>\n      {use('@acme/verify', { strict: true })}\n    </>\n  )\n}",
+    "end": 260
+  },
+  {
+    "file": "SPEC.md",
+    "start": 324,
+    "language": "",
+    "body": "plan     = host.plan(tree, ctx)\nlog 'render/intent' {host, plan.digest}\nobserved = host.observe(plan)\nlast     = CommitRecord(workspace, host) or null\nfor each target T in plan ∪ last:\n  o = observed[T], l = last[T], p = plan[T]\n  if l == null and o != null:           → TARGET_OCCUPIED（全体失敗。import を提案）\n  if l != null and o != l.digest:       → drift/detected、T は skip（I-HOST-2）\n  elif p != null and p.digest != o:     → 書く\n  elif p == null and l != null:         → 削除（自分の生成物のみ）\nwrite CommitRecord（skip した T は旧 digest を保持）\nlog 'render/committed' or 'render/failed'",
+    "end": 337
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "start": 9,
+    "language": "",
+    "body": "            ┌──────────── @reins/core（DSH 非依存・純粋）────────────┐\n            │ refs / caps / elaborate / projections / log / task-compile │\n            └───────────────┬──────────────────────┬──────────────────┘\n                            │                      │\n        driver A: @reins/cli（単体）      driver B: dsh-plugin-reins（Cordis plugin）\n        静的ホスト（agents-md /          動的ホスト dsh、DSH ログ橋渡し、\n        claude-code / codex）、           session_* ツール、ctx.subagents 連携、\n        tmux セッションホスト             ガードによる権限強制",
+    "end": 18
+  },
+  {
+    "file": "DSH_INTEGRATION.md",
+    "start": 110,
+    "language": "toml",
+    "body": "[tools]\nnode = \"22\"\npnpm = \"10\"\ntmux = \"latest\"          # Required for S-4; pin the version in M0.\n\"npm:@deepseek-ai/dsh\" = \"<M0 で固定>\"\n\"npm:@anthropic-ai/claude-code\" = \"<M0 で固定>\"\n\"npm:@openai/codex\" = \"<M0 で固定>\"\n\n[tasks.build]\nrun = \"pnpm -r build\"\n[tasks.test]\nrun = \"pnpm -r test\"\n[tasks.invariants]\nrun = \"pnpm -r test -- --testNamePattern '^I-'\"\n[tasks.contracts]\nrun = \"pnpm --filter dsh-contracts test\"\n[tasks.\"dsh:candidate\"]\nrun = \"node scripts/dsh-candidate.mjs\"   # Argument: candidate version.\n[tasks.lint]\nrun = \"pnpm -r lint\"",
+    "end": 131
+  }
+]

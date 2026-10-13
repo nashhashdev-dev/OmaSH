@@ -1,6 +1,6 @@
 # DSH / mise 統合仕様（規範）
 
-本書は Reins を DeepSeek Harness（DSH）と mise に載せる方法を定める。DSH の API 名は 2026-10-13 時点の上流ドキュメント（末尾の出典）から取った。**実装前に M0 スパイクで実物と照合し、ずれがあれば本書だけを直す**（SPEC・types・不変条件は変えない）。
+本書は Reins を DeepSeek Harness（DSH）と mise に載せる方法を定める。DSH の API 名は 2026-10-13 時点の上流ドキュメント（末尾の出典）から取った。Before implementation, verify the documented APIs in M0. Follow AGENT_BRIEF §2: update this integration document and the SPEC §7.5 target table when upstream differs, record the decision, and preserve the laws, types, and invariants.
 
 ---
 
@@ -41,6 +41,8 @@
 | ハーネスへの書き込み禁止（I-CAP-2） | `ctx.tools.guard()` で harness Mount の locator 配下への書き込み系ツールを常に拒否 | `fs/*` イベントでも拒否 |
 | session_* ツール | `ctx.tools.register()`（`defineTool`） | `spawn` 権限が無ければ登録しない |
 
+The inline plan(ac) helper is an adapter-local memo view. Its system(bucket) selects the completed per-agent prompt output's system part for that volatility. The typed helper is included in checks/dsh-examples.tsx.
+
 | Additional mapping | DSH behavior |
 |---|---|
 | skill | Names/descriptions under `## Skills` in reins:static; `skill_load {name}` returns the body through a logged DSH tool result (D-031). |
@@ -51,6 +53,10 @@
 **Plan preparation and caching:** before a model request, run asynchronous ensurePlan(). If elaborate returns suspended, fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record content/fetched, rebuild external from content events/CAS, and retry (D-024). At the suspenseTimeoutMs deadline (default 10000), or on fetch failure, record content/unavailable and resolve the specified placeholder. Affected nodes are degraded with reason `content-unavailable:<ref>`. Requests MUST wait for done; synchronous text providers use only the completed plan.
 
 Memoize by (tree.digest, taskState digest). ETree.digest excludes logSeq and includes the used external-content digest (D-025). Record render/committed only when plan digest changes, and include cacheBreak indicating whether the system portion changed (D-032). Section order is Rules → Instructions → Knowledge → Skills → Conditional → raw (D-031).
+
+Implement preparation in the asynchronous per-agent system-prompt/assemble waterfall: await ensurePlan(), await next(), then replace the returned assembly's reins parts when the plan changed. Section/context providers are synchronous memo readers. S-5 MUST verify PromptAssembly structure and replacement support; unavailable replacement makes M0 BLOCKED (D-055). Names are exactly reins:static, reins:session, and reins:turn, scoped by registration (D-061).
+
+Dynamic observe returns empty targets; commit updates memo and records changed-plan render/committed only. It creates no CommitRecord and has no drift (D-062).
 
 ## 4. DSH ログの橋渡し
 
@@ -66,6 +72,8 @@ One DSH root session owns one Run. `$REINS_HOME/runs/index.json` maps DSH sessio
 | `agent/request`（waterfall、観察のみで `next()` を呼ぶ） | `model/request {host, bytes, external: {system:'dsh', session, seqFrom, seqTo}}` |
 
 The model/request bridge is an observation listener that calls next(). The separate budget-enforcement waterfall may reject without next() when limits are exceeded (D-039).
+
+Reverse-map absolute tool paths through Namespace locators into workspace://<authority>/<path> before recording ws/touched. Paths outside all Mounts are not recorded (D-067).
 
 `LogEventMap` 拡張：`'reins/test-failed': { argv: string[]; exit: number; excerpt: string }`。
 
@@ -87,7 +95,7 @@ The model/request bridge is an observation listener that calls next(). The separ
 3. follow-up（`followup`）、`interrupt`、終了通知（`subagent-settled`）が使える。
 4. 子の使用量（tokens / cost）が観測できる（できなければ budget は advisory と記録）。
 
-いずれかが欠ければフォールバックを使い、その事実を DECISIONS.md に記録する。DSH の子レポート（`subagent-report`、`relay` 形式）と終了通知は、そのまま `context trust:'relay'` として親の木へ入れる。
+If a provider lacks a required condition, use the fallback and record the decision. For DSH-provider children, output travels through DSH relay messages with source kind subagent-report/subagent-settled; SessionDigest renders only state. Other child outputs enter Reins relay context. Child content never becomes instruction, rule, or knowledge (D-049, I-SESS-2).
 
 **深さ**：DSH の `SessionHeader.delegationDepth` と Reins の `Budget.maxDepth` の小さい方を実効値とする。
 
@@ -103,17 +111,23 @@ Cordis の scope は依存とライフサイクルの単位であり、セキュ
 [tools]
 node = "22"
 pnpm = "10"
-tmux = "latest"          # M5 以降。M0 で版を固定する
+tmux = "latest"          # Required for S-4; pin the version in M0.
 "npm:@deepseek-ai/dsh" = "<M0 で固定>"
 "npm:@anthropic-ai/claude-code" = "<M0 で固定>"
 "npm:@openai/codex" = "<M0 で固定>"
 
-[tasks.build]       run = "pnpm -r build"
-[tasks.test]        run = "pnpm -r test"
-[tasks.invariants]  run = "pnpm -r test -- --testNamePattern '^I-'"
-[tasks.contracts]   run = "pnpm --filter dsh-contracts test"
-[tasks."dsh:candidate"] run = "node scripts/dsh-candidate.mjs"   # 引数: 新しい版
-[tasks.lint]        run = "pnpm -r lint"
+[tasks.build]
+run = "pnpm -r build"
+[tasks.test]
+run = "pnpm -r test"
+[tasks.invariants]
+run = "pnpm -r test -- --testNamePattern '^I-'"
+[tasks.contracts]
+run = "pnpm --filter dsh-contracts test"
+[tasks."dsh:candidate"]
+run = "node scripts/dsh-candidate.mjs"   # Argument: candidate version.
+[tasks.lint]
+run = "pnpm -r lint"
 ```
 
 `mise.lock` をコミットする。ハーネスパッケージ側の `mise.toml` / `mise.lock` は SPEC §12.4。

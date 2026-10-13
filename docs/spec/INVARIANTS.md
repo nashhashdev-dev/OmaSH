@@ -10,7 +10,7 @@
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
 | I-REF-1 | `resolve(ref, ns, lock)` は (ref, ns.id, lock digest) が同じなら同じ `locator` と `version` を返す。 | 再現性。 | P |
-| I-REF-2 | Run 開始時に全 Mount の `base` を確定する。Run 中に Mount の束縛（resolver・config・base）は変わらない。内容の変化は `ws/snapshot` / `ws/touched` イベントとしてのみ表現する。 | 「どの版で何をしたか」を一意にする。 | P, E |
+| I-REF-2 | Mount bases are fixed at Run start, and resolver/config/base bindings remain unchanged during the Run. Workspace changes are represented by ws/snapshot or ws/touched. The harness binding alone may change through logged harness/switched (D-026/065), which becomes elaboration input. | Identify the exact versions used by a Run. | P, E |
 | I-REF-3 | semver/tag ピンは Lock を経由してのみ解決される。Lock に無い未固定参照の解決は `REF_UNPINNED` で失敗する。 | 暗黙の最新版取得を禁止。 | P |
 | I-REF-4 | `parseRef(formatRef(r))` は `r` と構造的に等しい。`formatRef(parseRef(s))` は正規化済みの `s` と等しい。 | 参照を ID として使える。 | P |
 | I-REF-5 | Namespace は不変値。fork は新しい `id` と `parent` を持つ新 Namespace を作る。 | Plan 9 的名前空間。親子の差分が追える。 | P |
@@ -30,7 +30,7 @@
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
 | I-RENDER-1 | `host.plan(tree, ctx)` は純粋・同期。同じ (tree.digest, ctx, host id) なら同じ `RenderPlan.digest`。 | 再現性。memo 化の正当性。 | P |
-| I-RENDER-2 | **Complete accounting:** within each plan, every ENode except the synthetic root occurs exactly once in Accounting.entries. Parent plans account session descendants as delegated with reason `session:<key>`; child plans account them fully. Exactly once is per plan, not globally across the parent/child tree. Filtered entries require reasons (D-028). | Explain every rendered, absent, or delegated node. | P |
+| I-RENDER-2 | **Complete accounting:** within each plan, every ENode except synthetic root and scope containers occurs exactly once. Scope effects appear in descendant filtered reasons. Parent plans delegate accountable session descendants with reason session:<key>; child plans account them fully. Exactly once is per plan, not globally. Filtered entries require reasons (D-028/043). | Explain every rendered, absent, or delegated element. | P |
 | I-RENDER-3 | **Complete source maps:** mappings cover each output's entire UTF-16 code-unit range without gaps or overlap. Positions are JavaScript string indices with an exclusive end; each range points to an ENode gid or `'host'` (D-020). | Trace output to its definition (`reins why`). | P |
 | I-RENDER-4 | **Volatility ordering:** plans for two trees differing only in `turn` nodes have completely identical `static` and `session` output strings. Dynamic hosts order outputs by increasing volatility (D-020). | Stable prompt-cache prefixes and minimal changes. | P |
 | I-RENDER-5 | **強制の誠実性**：`enforcement: 'enforced'` の rule は、ホストの guard 機構で実現されるか、`onUnsupported: 'downgrade'` で `degraded` と会計されるかのいずれか。それ以外は `ENFORCEMENT_UNAVAILABLE` で plan 失敗。散文で書いただけで強制済みと扱わない。 | 安全性の誤認を防ぐ。 | P |
@@ -43,7 +43,7 @@
 | I-HOST-1 | **所有**：ホストは自分の CommitRecord に記録された target、または存在しない target にのみ書く。存在する非所有 target は `TARGET_OCCUPIED`（`reins import` を提案）。 | 人間のファイルを壊さない。 | E |
 | I-HOST-2 | **ドリフト不上書き**：observed digest が last CommitRecord の digest と異なる target は上書きしない。`drift/detected` を記録し `skippedDrift` に入れる。上書きは `human` principal の明示 `--force` のみ。 | hydration mismatch を検出して保存する。 | E |
 | I-HOST-3 | `generated` モードでは全出力 target が git の除外（`git rev-parse --git-path info/exclude` の管理ブロック）に入る。追跡済みの生成物を見つけたら finding を出す。 | ハーネスとワークスペースの版を混ぜない。 | E |
-| I-HOST-4 | **Import round trip:** immediately rendering a lossless import into the same host preserves Markdown bytes after removing generated headers and normalizing the final newline to one. JSON/TOML preserve structural equality of parsed values. Unsupported configuration fields MUST be listed and fail import; explicit --lossy reports and removes those fields. Imported IDs are imported.<path-slug>, with numbered collision suffixes (D-035). | Preserve existing assets and make any requested loss explicit. | G, E |
+| I-HOST-4 | **Import round trip:** with dedupeWith:null, immediately rendering a lossless import into the same host preserves Markdown bytes after header removal and final-newline normalization; JSON/TOML preserve parsed values structurally. CLAUDE.md imports use hosts claude-code; AGENTS.md imports use agents-md/codex. Deduplicated output does not require round-trip equality. Unsupported fields fail unless explicit --lossy reports and removes them; IDs use imported.<path-slug> with numbered collision suffixes (D-035/063). | Preserve imported assets and make requested loss explicit. | G, E |
 | I-HOST-5 | CommitRecord はワークスペース内に置かない（`$REINS_HOME/state/…`）。 | ワークスペースを汚さない。 | E |
 
 ## 権限（CAP）
@@ -60,7 +60,7 @@
 
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
-| I-LOG-1 | 追記のみ。`seq` は 0 から連続、`prev` は直前の `digest`、`digest` は正規形の sha256。検証失敗は `LOG_CORRUPT`。 | 監査・再生。 | P |
+| I-LOG-1 | Append only. Seq is contiguous from zero, prev is the preceding digest, and digest is canonical sha256. Seq zero MUST be run/start; any invalid chain or initial kind fails with LOG_CORRUPT (D-066). | Audit and replay. | P |
 | I-LOG-2 | **モデル可視 ⇒ 記録済み**：モデルまたは子ランタイムに渡る全バイトは、ログ（または `ExternalLogRef` が指す DSH セッションログ）から再構成できる。PTY への送信は送信前に `session/sent` を記録する。 | DSH の不変条件を Reins 全体へ拡張。 | E, C |
 | I-LOG-3 | **二相効果**：ファイルのコミット・セッションの mount/send/interrupt/stop は、意図イベント（`render/intent` / `session/intent`）→ 結果イベントの順で記録される。結果の無い意図は再起動時に検出され、調停される。 | クラッシュ回復と監査。 | E |
 | I-LOG-4 | Projection の `reduce` は純粋。`project(p, log, n)` は log[0..n] の関数。 | I-ELAB-1 の前提。 | P |
@@ -70,7 +70,7 @@
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
 | I-SESS-1 | セッションの親子関係は木（非循環）。深さは `maxDepth` を超えない（`DEPTH_EXCEEDED`）。兄弟内で `key` は一意。 | 増殖の制御。 | P |
-| I-SESS-2 | **子出力は信頼しない**：子由来の内容は `trust: 'relay'` の `context` としてのみ親の木に入る。`instruction`・`rule`・`knowledge` に自動昇格しない。 | 子 → 親へのプロンプトインジェクション対策。 | P |
+| I-SESS-2 | **Untrusted child content:** child-origin content enters parent model context only through Reins context trust:relay or DSH relay messages with source kind subagent-report/subagent-settled. It never becomes instruction, rule, or knowledge. For DSH-provider children, SessionDigest renders state only (D-049). | Prevent child-to-parent prompt injection and duplicate relays. | P |
 | I-SESS-3 | `session` ノードが木から消えたときの動作は `onRemove`（既定 `detach`）に従う。暗黙の kill は無い。 | 再描画の揺れで作業中の子を殺さない。 | E |
 | I-SESS-4 | マウントされた全セッションは最終的に `session/unmounted` か終端 `session/status` を持つ。親の再起動時、結果の無いセッションは `reattach` を試み、失敗したら `unknown` として記録する。 | 孤児を作らない。 | E |
 | I-SESS-5 | 子の名前空間は親の名前空間から `WorkspaceBinding` で明示されたものだけを含む（既定で何も継承しない）。資格情報は Grant が無い限り子の環境変数に渡さない。 | 明示的な受け渡しのみ。 | E |
@@ -81,7 +81,7 @@
 |---|---|---|---|
 | I-PROP-1 | ハーネス source への非 human の書き込みは、Proposal の適用としてのみ起きる。適用は原子的で、新しいパッケージ digest を生み、`proposal/decided` を記録する。 | 変更の追跡可能性。 | E |
 | I-PROP-2 | `code-patch` を含む Proposal は、パッケージのテストと全 I-* テストが通らない限り適用できない。 | コード空間の変更の安全性。 | E |
-| I-EVO-1 | `final` split のタスクとその結果は、`evolver` principal から読めない。`promoter` だけが読む。違反は `SPLIT_LEAK`。 | 選択への過適合の防止。 | P |
+| I-EVO-1 | Final tasks/results reside in REINS_HOME/sealed/<taskset> and are absent from evolver Run namespaces. Read guards deny evolver access with SPLIT_LEAK; only the promoter reads final data (D-068). | Prevent selection overfitting through final data access. | P |
 | I-EVO-2 | Candidate は親 harness digest と Proposal を持ち、比較される Trial 群は harness digest 以外の RunSpec 項目が一致する。 | 差の原因をハーネスに限定。 | P |
 | I-RUN-1 | `RunSpec` から Namespace・Lock・パッケージ・ホスト版が一意に復元でき、`run/start` に完全な RunSpec が記録される。 | 「Harness v18 × Workspace v482 × モデル × 依存」の固定。 | E |
 | I-PKG-1 | The package digest covers every module reachable from entry and every file matched by the `content` globs. A file outside this coverage MUST NOT affect rendering; violations fail with `ELAB_IMPURE`. Static purity lint checks forbidden direct I/O, and double elaboration detects nondeterminism only (D-023). | The digest identifies all inputs that affect rendering. | P |

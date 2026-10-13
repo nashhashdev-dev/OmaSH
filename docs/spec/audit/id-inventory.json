@@ -1,0 +1,7183 @@
+{
+  "invariant": {
+    "definitions": [
+      "I-CAP-1",
+      "I-CAP-2",
+      "I-CAP-3",
+      "I-CAP-4",
+      "I-CAP-5",
+      "I-ELAB-1",
+      "I-ELAB-2",
+      "I-ELAB-3",
+      "I-ELAB-4",
+      "I-ELAB-5",
+      "I-EVO-1",
+      "I-EVO-2",
+      "I-HOST-1",
+      "I-HOST-2",
+      "I-HOST-3",
+      "I-HOST-4",
+      "I-HOST-5",
+      "I-LOG-1",
+      "I-LOG-2",
+      "I-LOG-3",
+      "I-LOG-4",
+      "I-PKG-1",
+      "I-PROP-1",
+      "I-PROP-2",
+      "I-REF-1",
+      "I-REF-2",
+      "I-REF-3",
+      "I-REF-4",
+      "I-REF-5",
+      "I-RENDER-1",
+      "I-RENDER-2",
+      "I-RENDER-3",
+      "I-RENDER-4",
+      "I-RENDER-5",
+      "I-RENDER-6",
+      "I-RUN-1",
+      "I-SESS-1",
+      "I-SESS-2",
+      "I-SESS-3",
+      "I-SESS-4",
+      "I-SESS-5"
+    ],
+    "references": {
+      "I-ELAB-2": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 38,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 283,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 23,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 290,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-HOST-5": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 41,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 47,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-SESS-2": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 43,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 173,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 543,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 98,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 73,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 132,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 79,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 383,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 79,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 80,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-CAP-2": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 44,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 443,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 457,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 41,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 54,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 94,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 103,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 162,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-1": [
+        {
+          "file": "SPEC.md",
+          "line": 85,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 404,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 32,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 763,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-ELAB-1": [
+        {
+          "file": "SPEC.md",
+          "line": 85,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 288,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 22,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 66,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 60,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 45,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 23,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-LOG-3": [
+        {
+          "file": "SPEC.md",
+          "line": 86,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 65,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 129,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 59,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 140,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-CAP-1": [
+        {
+          "file": "SPEC.md",
+          "line": 88,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 26,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 53,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 36,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 301,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 419,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-5": [
+        {
+          "file": "SPEC.md",
+          "line": 89,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 164,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 36,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-CAP-3": [
+        {
+          "file": "SPEC.md",
+          "line": 89,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 470,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 55,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 131,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 185,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-2": [
+        {
+          "file": "SPEC.md",
+          "line": 89,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 343,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 33,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 33,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 49,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 73,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 701,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 59,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 60,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 17,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 18,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-REF-2": [
+        {
+          "file": "SPEC.md",
+          "line": 117,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 92,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 106,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 33,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 99,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 100,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-REF-3": [
+        {
+          "file": "SPEC.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 14,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 147,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 32,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-REF-1": [
+        {
+          "file": "SPEC.md",
+          "line": 131,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 12,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-ELAB-5": [
+        {
+          "file": "SPEC.md",
+          "line": 146,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 26,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-6": [
+        {
+          "file": "SPEC.md",
+          "line": 173,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 37,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-ELAB-3": [
+        {
+          "file": "SPEC.md",
+          "line": 273,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 24,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-HOST-2": [
+        {
+          "file": "SPEC.md",
+          "line": 332,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 44,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 80,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 755,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-4": [
+        {
+          "file": "SPEC.md",
+          "line": 342,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 349,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 35,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 102,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 34,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 272,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 85,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-HOST-3": [
+        {
+          "file": "SPEC.md",
+          "line": 368,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 45,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 79,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-HOST-4": [
+        {
+          "file": "SPEC.md",
+          "line": 373,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 601,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 46,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 77,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 56,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 90,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 115,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 117,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 64,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "I-PROP-2": [
+        {
+          "file": "SPEC.md",
+          "line": 443,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 83,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 117,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-PROP-1": [
+        {
+          "file": "SPEC.md",
+          "line": 443,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 82,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 116,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-CAP-5": [
+        {
+          "file": "SPEC.md",
+          "line": 469,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 104,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 57,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 103,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-LOG-1": [
+        {
+          "file": "SPEC.md",
+          "line": 481,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 63,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 93,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-SESS-1": [
+        {
+          "file": "SPEC.md",
+          "line": 527,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 72,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-CAP-4": [
+        {
+          "file": "SPEC.md",
+          "line": 527,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 56,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-SESS-5": [
+        {
+          "file": "SPEC.md",
+          "line": 528,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 76,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 135,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-SESS-4": [
+        {
+          "file": "SPEC.md",
+          "line": 544,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 75,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 134,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-PKG-1": [
+        {
+          "file": "SPEC.md",
+          "line": 551,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 87,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RUN-1": [
+        {
+          "file": "SPEC.md",
+          "line": 557,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 86,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 148,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 924,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-EVO-1": [
+        {
+          "file": "SPEC.md",
+          "line": 572,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 84,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 158,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-EVO-2": [
+        {
+          "file": "SPEC.md",
+          "line": 573,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 85,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 159,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-LOG-2": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 80,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 64,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 104,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 129,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-REF-4": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 15,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 32,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-REF-5": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 16,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-ELAB-4": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 25,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-RENDER-3": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 34,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 82,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 34,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-HOST-1": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 43,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 81,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-LOG-4": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 66,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "I-SESS-3": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 74,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 133,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 426,
+          "historical": false,
+          "definition": false
+        }
+      ]
+    },
+    "undefined": [],
+    "external": [],
+    "no_explicit_current_reference_outside_definition": [],
+    "excluded_non_identifiers": {}
+  },
+  "decision": {
+    "definitions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007",
+      "D-008",
+      "D-009",
+      "D-010",
+      "D-011",
+      "D-012",
+      "D-013",
+      "D-014",
+      "D-015",
+      "D-016",
+      "D-017",
+      "D-018",
+      "D-019",
+      "D-020",
+      "D-021",
+      "D-022",
+      "D-023",
+      "D-024",
+      "D-025",
+      "D-026",
+      "D-027",
+      "D-028",
+      "D-029",
+      "D-030",
+      "D-031",
+      "D-032",
+      "D-033",
+      "D-034",
+      "D-035",
+      "D-036",
+      "D-037",
+      "D-038",
+      "D-039",
+      "D-040",
+      "D-041",
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-045",
+      "D-046",
+      "D-047",
+      "D-048",
+      "D-049",
+      "D-050",
+      "D-051",
+      "D-053",
+      "D-055",
+      "D-057",
+      "D-058",
+      "D-059",
+      "D-060",
+      "D-061",
+      "D-062",
+      "D-063",
+      "D-064",
+      "D-065",
+      "D-066",
+      "D-067",
+      "D-068"
+    ],
+    "references": {
+      "D-013": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 38,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 22,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-049": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 43,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 543,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 98,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 73,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 132,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 79,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 79,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-003": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 54,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 12,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 1056,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-008": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 17,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-023": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 69,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 285,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 22,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 87,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 40,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 82,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 980,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 127,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-002": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 89,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 11,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-051": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 93,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 58,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 81,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 121,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-001": [
+        {
+          "file": "SPEC.md",
+          "line": 3,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 10,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-018": [
+        {
+          "file": "SPEC.md",
+          "line": 100,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 32,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 66,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-057": [
+        {
+          "file": "SPEC.md",
+          "line": 116,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 84,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 95,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-060": [
+        {
+          "file": "SPEC.md",
+          "line": 148,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 149,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 87,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 288,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 37,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-034": [
+        {
+          "file": "SPEC.md",
+          "line": 170,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 395,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 21,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 22,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 55,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 101,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-042": [
+        {
+          "file": "SPEC.md",
+          "line": 234,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 273,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 61,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 72,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 20,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 10,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-045": [
+        {
+          "file": "SPEC.md",
+          "line": 234,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 269,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 61,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 75,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 475,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 886,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 1013,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 24,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-046": [
+        {
+          "file": "SPEC.md",
+          "line": 236,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 268,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 61,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 76,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 492,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 32,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-024": [
+        {
+          "file": "SPEC.md",
+          "line": 271,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 277,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 294,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 405,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 486,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 585,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 28,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 22,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 54,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 41,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 45,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "README.md",
+          "line": 14,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 525,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 568,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 687,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 11,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 132,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-025": [
+        {
+          "file": "SPEC.md",
+          "line": 274,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 405,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 54,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 46,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 527,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 25,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 57,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-043": [
+        {
+          "file": "SPEC.md",
+          "line": 274,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 343,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 33,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 73,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 529,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 15,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-029": [
+        {
+          "file": "SPEC.md",
+          "line": 295,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 529,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 50,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 62,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-044": [
+        {
+          "file": "SPEC.md",
+          "line": 296,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 61,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 74,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 641,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 20,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-047": [
+        {
+          "file": "SPEC.md",
+          "line": 297,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 137,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 77,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 848,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 995,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 74,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-062": [
+        {
+          "file": "SPEC.md",
+          "line": 316,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 59,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 89,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 56,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-037": [
+        {
+          "file": "SPEC.md",
+          "line": 320,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 58,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 992,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 135,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-064": [
+        {
+          "file": "SPEC.md",
+          "line": 322,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 397,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 91,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 993,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 66,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-059": [
+        {
+          "file": "SPEC.md",
+          "line": 345,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 86,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 51,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-028": [
+        {
+          "file": "SPEC.md",
+          "line": 347,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 33,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 49,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 691,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 57,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-032": [
+        {
+          "file": "SPEC.md",
+          "line": 349,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 53,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 584,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 82,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-027": [
+        {
+          "file": "SPEC.md",
+          "line": 351,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 48,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 42,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 49,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-048": [
+        {
+          "file": "SPEC.md",
+          "line": 360,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 78,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 47,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-031": [
+        {
+          "file": "SPEC.md",
+          "line": 369,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 406,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 407,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 588,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 48,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 49,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 52,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 76,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-030": [
+        {
+          "file": "SPEC.md",
+          "line": 374,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 51,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 68,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-033": [
+        {
+          "file": "SPEC.md",
+          "line": 393,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 21,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 54,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 101,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 88,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 64,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-061": [
+        {
+          "file": "SPEC.md",
+          "line": 409,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 88,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 680,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 40,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-040": [
+        {
+          "file": "SPEC.md",
+          "line": 433,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 437,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 540,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 112,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 61,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 85,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 157,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 89,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-050": [
+        {
+          "file": "SPEC.md",
+          "line": 445,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 465,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 161,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 80,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 994,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 116,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-022": [
+        {
+          "file": "SPEC.md",
+          "line": 456,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 527,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 36,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 419,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 1061,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-039": [
+        {
+          "file": "SPEC.md",
+          "line": 471,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 473,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 50,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 51,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 74,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 151,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 60,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 151,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-066": [
+        {
+          "file": "SPEC.md",
+          "line": 482,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 63,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 93,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 102,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-036": [
+        {
+          "file": "SPEC.md",
+          "line": 488,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 559,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 63,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 57,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 935,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 937,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 123,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-038": [
+        {
+          "file": "SPEC.md",
+          "line": 490,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 59,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 586,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 140,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-041": [
+        {
+          "file": "SPEC.md",
+          "line": 515,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 524,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 41,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 62,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "README.md",
+          "line": 14,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 897,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 1015,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 167,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 28,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-021": [
+        {
+          "file": "SPEC.md",
+          "line": 516,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 536,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-058": [
+        {
+          "file": "SPEC.md",
+          "line": 540,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 137,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 85,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 87,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-065": [
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 92,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 99,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-026": [
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 587,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 47,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 575,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 32,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 100,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-068": [
+        {
+          "file": "SPEC.md",
+          "line": 576,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 161,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 95,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "README.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 108,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-035": [
+        {
+          "file": "SPEC.md",
+          "line": 586,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 601,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 46,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 56,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 110,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-063": [
+        {
+          "file": "SPEC.md",
+          "line": 601,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 46,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 77,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 90,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 60,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-055": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 24,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 83,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 129,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-067": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 76,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 94,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 105,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-020": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 34,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 102,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 106,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 34,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-005": [
+        {
+          "file": "DECISIONS.md",
+          "line": 12,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 14,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-004": [
+        {
+          "file": "DECISIONS.md",
+          "line": 13,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-006": [
+        {
+          "file": "DECISIONS.md",
+          "line": 15,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-007": [
+        {
+          "file": "DECISIONS.md",
+          "line": 16,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-009": [
+        {
+          "file": "DECISIONS.md",
+          "line": 18,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 103,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-010": [
+        {
+          "file": "DECISIONS.md",
+          "line": 19,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-011": [
+        {
+          "file": "DECISIONS.md",
+          "line": 20,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-012": [
+        {
+          "file": "DECISIONS.md",
+          "line": 21,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-014": [
+        {
+          "file": "DECISIONS.md",
+          "line": 23,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-015": [
+        {
+          "file": "DECISIONS.md",
+          "line": 24,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-016": [
+        {
+          "file": "DECISIONS.md",
+          "line": 25,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-017": [
+        {
+          "file": "DECISIONS.md",
+          "line": 26,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-019": [
+        {
+          "file": "DECISIONS.md",
+          "line": 33,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-056": [
+        {
+          "file": "DECISIONS.md",
+          "line": 68,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "README.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-052": [
+        {
+          "file": "DECISIONS.md",
+          "line": 68,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "README.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-054": [
+        {
+          "file": "DECISIONS.md",
+          "line": 68,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "README.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "D-053": [
+        {
+          "file": "DECISIONS.md",
+          "line": 82,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 1,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 4,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 126,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 141,
+          "historical": true,
+          "definition": false
+        }
+      ]
+    },
+    "undefined": [
+      "D-052",
+      "D-054",
+      "D-056"
+    ],
+    "external": [],
+    "no_explicit_current_reference_outside_definition": [
+      "D-004",
+      "D-006",
+      "D-007",
+      "D-010",
+      "D-011",
+      "D-012",
+      "D-014",
+      "D-015",
+      "D-016",
+      "D-017",
+      "D-019",
+      "D-053"
+    ],
+    "excluded_non_identifiers": {}
+  },
+  "open_question": {
+    "definitions": [
+      "OQ-01",
+      "OQ-02",
+      "OQ-03",
+      "OQ-04",
+      "OQ-05",
+      "OQ-06",
+      "OQ-07",
+      "OQ-08",
+      "OQ-09",
+      "OQ-10"
+    ],
+    "references": {
+      "OQ-01": [
+        {
+          "file": "SPEC.md",
+          "line": 393,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 54,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 101,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 95,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "OQ-02": [
+        {
+          "file": "DECISIONS.md",
+          "line": 102,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-03": [
+        {
+          "file": "DECISIONS.md",
+          "line": 103,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-04": [
+        {
+          "file": "DECISIONS.md",
+          "line": 104,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-05": [
+        {
+          "file": "DECISIONS.md",
+          "line": 105,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-06": [
+        {
+          "file": "DECISIONS.md",
+          "line": 106,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-07": [
+        {
+          "file": "DECISIONS.md",
+          "line": 107,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-08": [
+        {
+          "file": "DECISIONS.md",
+          "line": 108,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-09": [
+        {
+          "file": "DECISIONS.md",
+          "line": 109,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "OQ-10": [
+        {
+          "file": "DECISIONS.md",
+          "line": 110,
+          "historical": false,
+          "definition": true
+        }
+      ]
+    },
+    "undefined": [],
+    "external": [],
+    "no_explicit_current_reference_outside_definition": [
+      "OQ-02",
+      "OQ-03",
+      "OQ-04",
+      "OQ-05",
+      "OQ-06",
+      "OQ-07",
+      "OQ-08",
+      "OQ-09",
+      "OQ-10"
+    ],
+    "excluded_non_identifiers": {}
+  },
+  "error": {
+    "definitions": [
+      "REF_INVALID",
+      "REF_UNRESOLVED",
+      "REF_UNPINNED",
+      "ID_MISSING",
+      "ID_DUPLICATE",
+      "ELAB_HOOK_OUTSIDE_RENDER",
+      "ELAB_IMPURE",
+      "ELAB_CYCLE",
+      "UNSUPPORTED_NODE",
+      "ENFORCEMENT_UNAVAILABLE",
+      "TARGET_OCCUPIED",
+      "DRIFT",
+      "CAP_DENIED",
+      "CAP_WIDENING",
+      "BUDGET_EXCEEDED",
+      "DEPTH_EXCEEDED",
+      "LOG_CORRUPT",
+      "SPLIT_LEAK",
+      "LOCKED",
+      "TARGET_CONFLICT",
+      "DIRTY_PACKAGE",
+      "KEY_REUSED",
+      "INTERNAL"
+    ],
+    "references": {
+      "INTERNAL": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 91,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 996,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "REF_UNRESOLVED": [
+        {
+          "file": "SPEC.md",
+          "line": 129,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 975,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "REF_UNPINNED": [
+        {
+          "file": "SPEC.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 14,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 976,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "REF_INVALID": [
+        {
+          "file": "SPEC.md",
+          "line": 148,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 974,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 1047,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "ELAB_CYCLE": [
+        {
+          "file": "SPEC.md",
+          "line": 269,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 981,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "ELAB_IMPURE": [
+        {
+          "file": "SPEC.md",
+          "line": 275,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 287,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 288,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 22,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 87,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 980,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "ELAB_HOOK_OUTSIDE_RENDER": [
+        {
+          "file": "SPEC.md",
+          "line": 283,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 979,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 1068,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "LOCKED": [
+        {
+          "file": "SPEC.md",
+          "line": 320,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 58,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 992,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 137,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 138,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "TARGET_CONFLICT": [
+        {
+          "file": "SPEC.md",
+          "line": 322,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 397,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 91,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 993,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 67,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "TARGET_OCCUPIED": [
+        {
+          "file": "SPEC.md",
+          "line": 331,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 391,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 43,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 81,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 24,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 984,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "DIRTY_PACKAGE": [
+        {
+          "file": "SPEC.md",
+          "line": 445,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 80,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 994,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 118,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "CAP_WIDENING": [
+        {
+          "file": "SPEC.md",
+          "line": 456,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 36,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 987,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 1061,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "LOG_CORRUPT": [
+        {
+          "file": "SPEC.md",
+          "line": 482,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 63,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 93,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 990,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 103,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "KEY_REUSED": [
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 137,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 77,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 995,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 76,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "SPLIT_LEAK": [
+        {
+          "file": "SPEC.md",
+          "line": 576,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 84,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 158,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 161,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 95,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 991,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 110,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "ID_MISSING": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 24,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 977,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "ID_DUPLICATE": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 24,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 978,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "ENFORCEMENT_UNAVAILABLE": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 36,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 983,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "CAP_DENIED": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 54,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 116,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 986,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "BUDGET_EXCEEDED": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 56,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 988,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "DEPTH_EXCEEDED": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 130,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 989,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "UNSUPPORTED_NODE": [
+        {
+          "file": "types.ts",
+          "line": 982,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "DRIFT": [
+        {
+          "file": "types.ts",
+          "line": 985,
+          "historical": false,
+          "definition": true
+        }
+      ]
+    },
+    "undefined": [],
+    "external": [],
+    "no_explicit_current_reference_outside_definition": [
+      "DRIFT",
+      "UNSUPPORTED_NODE"
+    ],
+    "excluded_non_identifiers": {
+      "DSH_INTEGRATION": "non-error identifier",
+      "UPDATE_GOLDEN": "non-error identifier",
+      "REINS_DEV": "non-error identifier",
+      "REINS_HOME": "non-error identifier",
+      "AGENT_BRIEF": "non-error identifier",
+      "FAKE_TOKEN": "non-error identifier"
+    }
+  },
+  "event": {
+    "definitions": [
+      "run/start",
+      "run/end",
+      "ws/snapshot",
+      "ws/touched",
+      "task/state",
+      "turn/start",
+      "content/fetched",
+      "content/unavailable",
+      "harness/switched",
+      "render/intent",
+      "render/committed",
+      "render/failed",
+      "model/request",
+      "drift/detected",
+      "anchor/evaluated",
+      "proposal/created",
+      "proposal/decided",
+      "session/requested",
+      "session/intent",
+      "session/mounted",
+      "session/sent",
+      "session/observed",
+      "session/status",
+      "session/result",
+      "session/unmounted",
+      "cap/denied",
+      "budget/charged",
+      "reins/test-failed"
+    ],
+    "references": {
+      "reins/test-failed": [
+        {
+          "file": "SPEC.md",
+          "line": 253,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 71,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 78,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "content/fetched": [
+        {
+          "file": "SPEC.md",
+          "line": 277,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 486,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 45,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 569,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 13,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "content/unavailable": [
+        {
+          "file": "SPEC.md",
+          "line": 279,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 486,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 45,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 570,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 14,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 18,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "turn/start": [
+        {
+          "file": "SPEC.md",
+          "line": 292,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 69,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 152,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 566,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 567,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "session/unmounted": [
+        {
+          "file": "SPEC.md",
+          "line": 297,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 75,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 77,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 613,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 848,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 75,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "session/requested": [
+        {
+          "file": "SPEC.md",
+          "line": 297,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 515,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 129,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 62,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 77,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 600,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 848,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 77,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "render/committed": [
+        {
+          "file": "SPEC.md",
+          "line": 316,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 336,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 349,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 405,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 494,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 59,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 46,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 59,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 89,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 578,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 28,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 29,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 84,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 86,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 145,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 149,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 57,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "render/intent": [
+        {
+          "file": "SPEC.md",
+          "line": 326,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 494,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 65,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 577,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 145,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "drift/detected": [
+        {
+          "file": "SPEC.md",
+          "line": 332,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 421,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 613,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 44,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 80,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 591,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "render/failed": [
+        {
+          "file": "SPEC.md",
+          "line": 336,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 494,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 589,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 145,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "tools/pre-execute": [
+        {
+          "file": "SPEC.md",
+          "line": 403,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 40,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "anchor/evaluated": [
+        {
+          "file": "SPEC.md",
+          "line": 427,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 592,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "ws/touched": [
+        {
+          "file": "SPEC.md",
+          "line": 439,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 70,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 76,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 94,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 564,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 843,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 105,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "proposal/decided": [
+        {
+          "file": "SPEC.md",
+          "line": 443,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 82,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 116,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 594,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "session/sent": [
+        {
+          "file": "SPEC.md",
+          "line": 448,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 516,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 536,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 64,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 129,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 609,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "assistant/message": [
+        {
+          "file": "SPEC.md",
+          "line": 471,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 50,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 60,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 152,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "agent/request": [
+        {
+          "file": "SPEC.md",
+          "line": 471,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 50,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 60,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 152,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "budget/charged": [
+        {
+          "file": "SPEC.md",
+          "line": 471,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 50,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 56,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 615,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 152,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "run/start": [
+        {
+          "file": "SPEC.md",
+          "line": 482,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 557,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 63,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 86,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 47,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 93,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 561,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 575,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 34,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 103,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "model/request": [
+        {
+          "file": "SPEC.md",
+          "line": 483,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 72,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 74,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 104,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 590,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "session/status": [
+        {
+          "file": "SPEC.md",
+          "line": 495,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 496,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 516,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 536,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 75,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 611,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 146,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 147,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "session/intent": [
+        {
+          "file": "SPEC.md",
+          "line": 495,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 496,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 516,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 536,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 65,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 35,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 601,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 146,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 147,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "session/mounted": [
+        {
+          "file": "SPEC.md",
+          "line": 495,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 515,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 532,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 55,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 131,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 602,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 146,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 77,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "harness/switched": [
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 587,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 47,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 92,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 576,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 34,
+          "historical": true,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 100,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "cap/denied": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 40,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 103,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 614,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "system-prompt/assemble": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 57,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 24,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 83,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 131,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "session/event": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 65,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "tool/result": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 70,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 71,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 152,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "ws/snapshot": [
+        {
+          "file": "INVARIANTS.md",
+          "line": 13,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 106,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 139,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 563,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "run/end": [
+        {
+          "file": "types.ts",
+          "line": 562,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "task/state": [
+        {
+          "file": "types.ts",
+          "line": 565,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "types.ts",
+          "line": 842,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "proposal/created": [
+        {
+          "file": "types.ts",
+          "line": 593,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "session/observed": [
+        {
+          "file": "types.ts",
+          "line": 610,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "session/result": [
+        {
+          "file": "types.ts",
+          "line": 612,
+          "historical": false,
+          "definition": true
+        }
+      ]
+    },
+    "undefined": [],
+    "external": [
+      "agent/request",
+      "assistant/message",
+      "session/event",
+      "system-prompt/assemble",
+      "tool/result",
+      "tools/pre-execute"
+    ],
+    "no_explicit_current_reference_outside_definition": [
+      "proposal/created",
+      "run/end",
+      "session/observed",
+      "session/result"
+    ],
+    "excluded_non_identifiers": {
+      "reins/core": "npm package",
+      "reins/eslint-plugin": "npm package",
+      "reins/host-agents-md": "npm package",
+      "reins/host-claude-code": "npm package",
+      "reins/host-codex": "npm package",
+      "reins/reconcile": "npm package",
+      "reins/session-tmux": "npm package",
+      "reins/cli": "npm package",
+      "reins/eval": "npm package",
+      "content/auth": "content file path",
+      "reins/task-compile": "core function",
+      "content/overview": "content file path",
+      "reins/task-state": "projection ID",
+      "render/check": "CLI invocation shorthand",
+      "harness/lock": "two input values",
+      "tool/rule": "element-kind shorthand",
+      "harness/blob": "upstream URL path",
+      "turn/task": "volatility/element shorthand"
+    }
+  },
+  "package": {
+    "definitions": [
+      "@reins/cli",
+      "@reins/core",
+      "@reins/eslint-plugin",
+      "@reins/eval",
+      "@reins/host-agents-md",
+      "@reins/host-claude-code",
+      "@reins/host-codex",
+      "@reins/reconcile",
+      "@reins/session-tmux",
+      "dsh-plugin-reins"
+    ],
+    "references": {
+      "@reins/core": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 40,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 68,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "SPEC.md",
+          "line": 232,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 240,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 287,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 10,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 20,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 38,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 53,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/eslint-plugin": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 69,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "SPEC.md",
+          "line": 287,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 40,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 82,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 127,
+          "historical": true,
+          "definition": false
+        }
+      ],
+      "@reins/host-agents-md": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 70,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 67,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/host-claude-code": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 71,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 67,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/host-codex": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 72,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 67,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/reconcile": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 73,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 67,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/session-tmux": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 74,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 124,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/cli": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 75,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "SPEC.md",
+          "line": 580,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 14,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 67,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "dsh-plugin-reins": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 76,
+          "historical": false,
+          "definition": true
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 14,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 90,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@reins/eval": [
+        {
+          "file": "AGENT_BRIEF.md",
+          "line": 77,
+          "historical": false,
+          "definition": true
+        }
+      ],
+      "@me/swe": [
+        {
+          "file": "SPEC.md",
+          "line": 107,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 109,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 32,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 66,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 884,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@acme/verify": [
+        {
+          "file": "SPEC.md",
+          "line": 256,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@anthropic-ai/claude-code": [
+        {
+          "file": "SPEC.md",
+          "line": 564,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 116,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@openai/codex": [
+        {
+          "file": "SPEC.md",
+          "line": 564,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 117,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "types.ts",
+          "line": 432,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "@deepseek-ai/dsh": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 115,
+          "historical": false,
+          "definition": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 138,
+          "historical": false,
+          "definition": false
+        }
+      ],
+      "dsh-contracts": [
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 126,
+          "historical": false,
+          "definition": false
+        }
+      ]
+    },
+    "undefined": [],
+    "external": [
+      "@acme/verify",
+      "@anthropic-ai/claude-code",
+      "@deepseek-ai/dsh",
+      "@me/swe",
+      "@openai/codex",
+      "dsh-contracts"
+    ],
+    "no_explicit_current_reference_outside_definition": [
+      "@reins/eval"
+    ],
+    "excluded_non_identifiers": {},
+    "external_roles": {
+      "@acme/verify": "illustrative harness dependency",
+      "@me/swe": "illustrative harness package",
+      "@deepseek-ai/dsh": "external DSH tool",
+      "@anthropic-ai/claude-code": "external runtime tool",
+      "@openai/codex": "external runtime tool",
+      "dsh-contracts": "contract-test package selected by mise task"
+    }
+  },
+  "cli": {
+    "definitions": [
+      "init",
+      "render",
+      "import",
+      "reload",
+      "run",
+      "status",
+      "why",
+      "explain",
+      "check",
+      "lock",
+      "add",
+      "replay",
+      "propose list",
+      "propose show",
+      "propose apply",
+      "propose reject",
+      "session ls",
+      "session attach",
+      "session send",
+      "session interrupt",
+      "session stop",
+      "eval run",
+      "eval compare",
+      "eval promote"
+    ],
+    "references": {
+      "import": [
+        {
+          "file": "SPEC.md",
+          "line": 23,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 391,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 586,
+          "historical": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 43,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 104,
+          "historical": false
+        },
+        {
+          "file": "types.ts",
+          "line": 283,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 111,
+          "historical": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 61,
+          "historical": true
+        }
+      ],
+      "why": [
+        {
+          "file": "SPEC.md",
+          "line": 27,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 590,
+          "historical": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 34,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 82,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 106,
+          "historical": false
+        }
+      ],
+      "explain": [
+        {
+          "file": "SPEC.md",
+          "line": 27,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 591,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 96,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 106,
+          "historical": false
+        }
+      ],
+      "render": [
+        {
+          "file": "SPEC.md",
+          "line": 287,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 424,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 585,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 609,
+          "historical": false
+        },
+        {
+          "file": "INVARIANTS.md",
+          "line": 22,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 53,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 37,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 22,
+          "historical": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 125,
+          "historical": true
+        }
+      ],
+      "status": [
+        {
+          "file": "SPEC.md",
+          "line": 366,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 421,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 589,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 613,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 80,
+          "historical": false
+        }
+      ],
+      "run": [
+        {
+          "file": "SPEC.md",
+          "line": 407,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 508,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 588,
+          "historical": false
+        },
+        {
+          "file": "DSH_INTEGRATION.md",
+          "line": 49,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 52,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 78,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 78,
+          "historical": true
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 80,
+          "historical": true
+        },
+        {
+          "file": "DECISIONS-batch-3.md",
+          "line": 49,
+          "historical": true
+        }
+      ],
+      "check": [
+        {
+          "file": "SPEC.md",
+          "line": 427,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 592,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 112,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 115,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 106,
+          "historical": false
+        }
+      ],
+      "session attach": [
+        {
+          "file": "SPEC.md",
+          "line": 539,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 594,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 617,
+          "historical": false
+        }
+      ],
+      "lock": [
+        {
+          "file": "SPEC.md",
+          "line": 554,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 595,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 143,
+          "historical": false
+        }
+      ],
+      "reload": [
+        {
+          "file": "SPEC.md",
+          "line": 561,
+          "historical": false
+        },
+        {
+          "file": "SPEC.md",
+          "line": 587,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS.md",
+          "line": 47,
+          "historical": false
+        },
+        {
+          "file": "DECISIONS-batch-2.md",
+          "line": 34,
+          "historical": true
+        }
+      ],
+      "init": [
+        {
+          "file": "SPEC.md",
+          "line": 584,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 73,
+          "historical": false
+        }
+      ],
+      "propose list": [
+        {
+          "file": "SPEC.md",
+          "line": 593,
+          "historical": false
+        }
+      ],
+      "propose show": [
+        {
+          "file": "SPEC.md",
+          "line": 593,
+          "historical": false
+        }
+      ],
+      "propose apply": [
+        {
+          "file": "SPEC.md",
+          "line": 593,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 112,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 116,
+          "historical": false
+        }
+      ],
+      "propose reject": [
+        {
+          "file": "SPEC.md",
+          "line": 593,
+          "historical": false
+        }
+      ],
+      "session ls": [
+        {
+          "file": "SPEC.md",
+          "line": 594,
+          "historical": false
+        }
+      ],
+      "session send": [
+        {
+          "file": "SPEC.md",
+          "line": 594,
+          "historical": false
+        }
+      ],
+      "session interrupt": [
+        {
+          "file": "SPEC.md",
+          "line": 594,
+          "historical": false
+        }
+      ],
+      "session stop": [
+        {
+          "file": "SPEC.md",
+          "line": 594,
+          "historical": false
+        }
+      ],
+      "add": [
+        {
+          "file": "SPEC.md",
+          "line": 595,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 143,
+          "historical": false
+        }
+      ],
+      "replay": [
+        {
+          "file": "SPEC.md",
+          "line": 596,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 143,
+          "historical": false
+        },
+        {
+          "file": "MILESTONES.md",
+          "line": 148,
+          "historical": false
+        }
+      ],
+      "eval run": [
+        {
+          "file": "SPEC.md",
+          "line": 597,
+          "historical": false
+        }
+      ],
+      "eval compare": [
+        {
+          "file": "SPEC.md",
+          "line": 597,
+          "historical": false
+        }
+      ],
+      "eval promote": [
+        {
+          "file": "SPEC.md",
+          "line": 597,
+          "historical": false
+        }
+      ],
+      "session": [
+        {
+          "file": "MILESTONES.md",
+          "line": 124,
+          "historical": false
+        }
+      ]
+    },
+    "undefined": [],
+    "no_explicit_reference": [],
+    "excluded": {
+      "reins from": "generated-header prose",
+      "reins parts": "assembly prose"
+    }
+  },
+  "scope": {
+    "canonical": [
+      "AGENT_BRIEF.md",
+      "SPEC.md",
+      "DSH_INTEGRATION.md",
+      "INVARIANTS.md",
+      "MILESTONES.md",
+      "DECISIONS.md",
+      "README.md",
+      "types.ts"
+    ],
+    "historical": [
+      "DECISIONS-batch-2.md",
+      "DECISIONS-batch-3.md"
+    ],
+    "notes": [
+      "Ranges and same-prefix slash references are expanded.",
+      "Unused means no explicit current reference; it does not prove an implementation is unused.",
+      "External DSH events are documented seams, not claims verified against an installed DSH.",
+      "Decision records retain historical alternatives superseded by later approved decisions."
+    ]
+  },
+  "missing_requested_decisions": [
+    "D-052",
+    "D-054",
+    "D-056"
+  ]
+}

@@ -40,7 +40,7 @@
 4. `@reins/core` と静的ホストから `@deepseek-ai/*` を import する。DSH 依存は `packages/dsh-plugin/src/adapter/` のみ。
 5. ワークスペースに CommitRecord・ログ・状態ファイルを置く（I-HOST-5）。
 6. 非所有ファイルの上書き・併合、ドリフトした生成物の上書き（`--force` の human を除く）。
-7. 子セッションの出力を instruction / rule / knowledge として親の木に入れる（I-SESS-2）。
+7. Promote child output into instruction/rule/knowledge. Parent model context accepts only Reins relay context or DSH subagent-report/subagent-settled relay messages (I-SESS-2, D-049).
 8. agent principal に `harness:write` を与える経路を作る（I-CAP-2）。
 9. 秘密を生成ファイル・ログ・テスト fixture に平文で書く。
 10. M0 を飛ばす。テストなしで受け入れ基準を「満たした」と報告する。
@@ -90,7 +90,7 @@ reins/
 - 入力検証：外部から来る JSON（ファイル、frontmatter、ツール引数）は zod 等で検証してから types.ts の型にする。
 - エラー：`class ReinsError extends Error { code: ReinsErrorCode; node?; detail? }`。それ以外の throw はバグ扱い（`INTERNAL`）。
 - ライブラリは `console` に書かない。CLI だけが表示する。
-- テスト：不変条件テストは `test/invariants/I-XXX-N.test.ts`、名前は ID で始める。property test は fast-check、既定 200 runs、失敗時の seed をログに出す。golden は `__golden__/`、更新は `UPDATE_GOLDEN=1` のときのみ。
+- Tests: invariant files use `test/invariants/I-XXX-N.test.ts`, and test names start with their ID. Use fast-check with 200 runs and report failure seeds. Goldens live in __golden__ and update only with UPDATE_GOLDEN=1. Normalize ETree namespace IDs, absolute Mount-config paths, and base to <NS>, <PATH>, and <BASE>; rendered file goldens compare exactly (D-051).
 - 時刻と ULID は注入可能にする（テストで固定）。
 - コミット：1 論理変更 1 コミット。件名 `<package>: <変更>`、本文で関係する I-* / D-* を列挙。
 
@@ -100,7 +100,7 @@ reins/
 
 1. 受け入れ基準を読み、対応するテストを **先に** 書く（失敗する状態でコミット可）。
 2. 実装する。
-3. `mise run lint && mise run test` を通す。
+3. Run `mise run lint && mise run test` and `tsc -p docs/spec/checks`. Re-run the specification type checks whenever SPEC examples or types.ts change.
 4. DECISIONS.md・CHANGELOG.md を更新。
 5. 利用者へ報告する。
 

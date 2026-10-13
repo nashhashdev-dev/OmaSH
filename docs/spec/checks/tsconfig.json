@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true, "exactOptionalPropertyTypes": true, "noUncheckedIndexedAccess": true,
+    "target": "es2022", "module": "nodenext", "moduleResolution": "nodenext",
+    "jsx": "react-jsx", "jsxImportSource": "@reins/core",
+    "allowImportingTsExtensions": true, "noEmit": true,
+    "paths": { "@reins/core": ["./stub/index.ts"], "@reins/core/jsx-runtime": ["./stub/jsx-runtime.ts"] }
+  },
+  "include": ["*.tsx", "stub/*.ts", "../types.ts"]
+}
