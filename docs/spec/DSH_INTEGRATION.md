@@ -33,7 +33,7 @@
 
 | Reins | DSH API | 備考 |
 |---|---|---|
-| `static` バケット | `ctx.systemPrompt.section({ name: 'reins:static', order: 10, text: (ac) => plan(ac).system('static') })` | DSH 慣例：-100 identity、0 persona、100–199 tool guidance。Reins は persona の後・tool guidance の前 |
+| `static` バケット | `ctx.systemPrompt.section({ name: 'reins:static', order: 10, text: (ac) => plan(ac).system('static') })` | Pinned DSH 0.2.0-rc.2: identity -1000, persona prefix 0, tool guidance starts at 1000. Reins 10/20 remains after the persona prefix and before tool guidance (S-5). |
 | `session` バケット | `section({ name: 'reins:session', order: 20, text })` | |
 | `turn` バケット、`at`/`when` 付きノード | `ctx.systemPrompt.context({ name: 'reins:turn', order: 10, text })` | `PromptContext` は DSH が変化時のみログへスナップショットする cache-safe な経路 |
 | `tools: 'allowlist'` | `ctx.tools.restrict()`（scope 内） | 提示・検索・実行の 3 面が揃う |
@@ -84,10 +84,12 @@ Reverse-map absolute tool paths through Namespace locators into workspace://<aut
 | runtime.kind | 第一候補 | フォールバック |
 |---|---|---|
 | `dsh` | `ctx.subagents` の `spawn-in-process` プロバイダ（continuable）。子 agent の scope に動的ホスト `dsh` を登録 | — |
-| `claude-code` | `ctx.subagents` の `claude-code` プロバイダ | Reins 自前の構造化アダプタ（ヘッドレス JSON 出力モード）、さらに tmux |
-| `codex` | `ctx.subagents` の `codex` プロバイダ | 同上 |
+| `claude-code` | Reins structured headless adapter; the pinned DSH provider is one-shot and rejected by S-6 (D-097). | tmux for interactive sessions; S-4 remains blocked in the current environment. |
+| `codex` | Reins structured headless adapter; the pinned DSH provider is one-shot and rejected by S-6 (D-097). | Same. |
 | その他 ACP 対応 | `acp` プロバイダ | tmux |
 | `interactive: true` | 常に tmux（人間が attach するため） | — |
+
+S-6 observation for 0.2.0-rc.2: the real registered product providers have no prepareContinuable capability, reject continuation with UNSUPPORTED_CAPABILITY, and declare agentOptions:false. Their source derives cwd from parent.session.header.cwd and does not expose product usage in the parent result. No live child was launched; the rejection is established before launch. The existing fallback must implement the unchanged Reins session contract.
 
 第一候補の採用条件（M0 スパイク S-6 で全て確認できた場合のみ）：
 1. 子の作業ディレクトリを Reins が作った worktree に指定できる。
@@ -111,25 +113,36 @@ Cordis の scope は依存とライフサイクルの単位であり、セキュ
 
 ```toml
 [tools]
-node = "22"
-pnpm = "10"
-tmux = "latest"          # Required for S-4; pin the version in M0.
-"npm:@deepseek-ai/dsh" = "<M0 で固定>"
-"npm:@anthropic-ai/claude-code" = "<M0 で固定>"
-"npm:@openai/codex" = "<M0 で固定>"
+node = "22.23.3"
+pnpm = "10.34.7"
+tmux = "3.7c"
+"npm:@deepseek-ai/dsh" = "0.2.0-rc.2"
+"npm:@anthropic-ai/claude-code" = "2.1.296"
+"npm:@openai/codex" = "0.162.1"
+"npm:opencode-ai" = "1.19.0"
+"npm:@mariozechner/pi-coding-agent" = "0.73.1"
 
-[tasks.build]
-run = "pnpm -r build"
-[tasks.test]
-run = "pnpm -r test"
-[tasks.invariants]
-run = "pnpm -r test -- --testNamePattern '^I-'"
-[tasks.contracts]
-run = "pnpm --filter dsh-contracts test"
-[tasks."dsh:candidate"]
-run = "node scripts/dsh-candidate.mjs"   # Argument: candidate version.
+[tool_alias.pnpm]
+backend = "npm:pnpm"
+
+[tool_alias.tmux]
+backend = "github:tmux/tmux-builds"
+
+[settings]
+npm.package_manager = "pnpm"
+task.run_auto_install = false
+
 [tasks.lint]
-run = "pnpm -r lint"
+run = "pnpm lint"
+
+[tasks.test]
+run = "pnpm test"
+
+[tasks."m0:probe"]
+description = "Run disposable probes with real, pinned upstream runtimes"
+run = "node spikes/m0/probe.mjs"
+
+# Build, invariant, contract, and candidate tasks are added with their milestones.
 ```
 
 `mise.lock` をコミットする。ハーネスパッケージ側の `mise.toml` / `mise.lock` は SPEC §12.4。

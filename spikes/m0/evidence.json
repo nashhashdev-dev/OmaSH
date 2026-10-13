@@ -1,0 +1,130 @@
+{
+  "milestone": "M0",
+  "status": "BLOCKED",
+  "transport": "local-protocol-fixture",
+  "productionKeysSupplied": false,
+  "lawsInvariantsExportedTypesChanged": false,
+  "acceptance": {
+    "sixConclusions": true,
+    "fixedVersionsAndMiseLock": true,
+    "allRuntimeVerificationComplete": false
+  },
+  "spikes": [
+    {
+      "id": "S-1",
+      "conclusion": "partial",
+      "observations": [
+        {
+          "name": "Codex hierarchy",
+          "status": "blocked",
+          "evidence": "codex-cli 0.162.1 starts; root/nested exec probes both exit 1 before any request: Error loading config.toml: no /proc/self/exe available. Is /proc mounted?"
+        },
+        {
+          "name": "OpenCode hierarchy",
+          "status": "blocked",
+          "evidence": "Verified official opencode-linux-x64 1.19.0 payload exits with signal 6 for --version and --help."
+        },
+        {
+          "name": "Pi hierarchy",
+          "status": "not-run",
+          "evidence": "The dependency installation was interrupted when network approval was cancelled. No Pi CLI was launched; no nested-loading conclusion is inferred."
+        }
+      ]
+    },
+    {
+      "id": "S-2",
+      "conclusion": "partial",
+      "observations": [
+        {
+          "name": "Claude Code startup",
+          "status": "blocked",
+          "evidence": "Verified official claude-code-linux-x64 2.1.296 payload aborts on --version and --help; Bun reports panic(main thread): abort() called."
+        },
+        {
+          "name": "imports/rules/skills/MCP/deny/env expansion",
+          "status": "not-run",
+          "evidence": "Startup is blocked, so every requested configuration behavior remains unverified. Official documentation is corroboration only."
+        }
+      ]
+    },
+    {
+      "id": "S-3",
+      "conclusion": "partial",
+      "observations": [
+        {
+          "name": "Codex version",
+          "status": "pass",
+          "evidence": "codex --version: codex-cli 0.162.1."
+        },
+        {
+          "name": "hierarchy/skills/MCP/sandbox/env expansion",
+          "status": "blocked",
+          "evidence": "Both no-daemon, read-only headless probes fail while loading config without /proc/self/exe. The local Responses fixture receives zero requests; no configuration behavior is inferred."
+        }
+      ]
+    },
+    {
+      "id": "S-4",
+      "conclusion": "partial",
+      "observations": [
+        {
+          "name": "tmux version",
+          "status": "pass",
+          "evidence": "tmux -V: tmux 3.7c."
+        },
+        {
+          "name": "dedicated Unix socket",
+          "status": "blocked",
+          "evidence": "tmux -S <M0_TMP>/tmux.sock new-session exits 1: error connecting to <M0_TMP>/tmux.sock (Operation not permitted). Independent socket(AF_UNIX, SOCK_STREAM) also raises errno 1."
+        },
+        {
+          "name": "paste/Enter/idle/working/approval screens",
+          "status": "not-run",
+          "evidence": "No tmux pane can be created. No screen fixtures or UI state patterns are fabricated."
+        }
+      ]
+    },
+    {
+      "id": "S-5",
+      "conclusion": "partial",
+      "observations": [
+        {
+          "name": "order/scope/shadow/disposal",
+          "status": "pass",
+          "evidence": "S-5 real SystemPrompt orders, isolates, shadows, and disposes scoped sections."
+        },
+        {
+          "name": "async assembly replacement",
+          "status": "pass",
+          "evidence": "S-5 real asynchronous assembly returns replacement sections and contexts in one scope. Awaited preparation and scope isolation verified."
+        },
+        {
+          "name": "restrict/guard/scope boundary",
+          "status": "pass",
+          "evidence": "S-5 real tool restrictions remove visibility and execution; guards cannot be overridden. Calling outside the scope still succeeds, confirming that scope is not a security boundary."
+        },
+        {
+          "name": "profile/bundle/dump-config/logged snapshots/AGENTS disablement",
+          "status": "not-run",
+          "evidence": "The complete DSH CLI dependency installation was interrupted by network approval cancellation. Direct registry tests do not prove profile loading or changed-only logged snapshots."
+        }
+      ]
+    },
+    {
+      "id": "S-6",
+      "conclusion": "reject",
+      "observations": [
+        {
+          "name": "real provider registration and continuation rejection",
+          "status": "pass",
+          "evidence": "S-6 real product providers register but reject continuable children before any launch: UNSUPPORTED_CAPABILITY; prepareContinuable absent; agentOptions:false; disposal unregisters both providers."
+        },
+        {
+          "name": "live child cwd/instruction loading/follow-up/interrupt/settled/usage",
+          "status": "not-run",
+          "evidence": "No native child was launched. Package source derives cwd from parent Session and excludes product usage from the parent result. Unsupported continuation is sufficient to reject adoption, independently of live authentication."
+        }
+      ]
+    }
+  ]
+}

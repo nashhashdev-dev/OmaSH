@@ -7,6 +7,14 @@
     "@anthropic-ai/claude-code": "2.1.296",
     "@openai/codex": "0.162.1",
     "opencode-ai": "1.19.0",
-    "@mariozechner/pi-coding-agent": "0.73.1"
+    "@mariozechner/pi-coding-agent": "0.73.1",
+    "@deepseek-ai/cordis": "4.0.4",
+    "@deepseek-ai/dsh-system-prompt": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-scope": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-subagent": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-subagent-codex": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-subagent-claude-code": "0.2.0-rc.2"
   }
 }

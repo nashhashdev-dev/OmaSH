@@ -1,0 +1,30 @@
+{
+  "runtime": "codex",
+  "transport": "local-protocol-fixture",
+  "observations": [
+    {
+      "probe": "root-cwd",
+      "exitCode": 1,
+      "requestCount": 0,
+      "rootMarker": false,
+      "childMarker": false,
+      "skillMarker": false,
+      "categories": [
+        "could not",
+        "error"
+      ]
+    },
+    {
+      "probe": "nested-cwd",
+      "exitCode": 1,
+      "requestCount": 0,
+      "rootMarker": false,
+      "childMarker": false,
+      "skillMarker": false,
+      "categories": [
+        "could not",
+        "error"
+      ]
+    }
+  ]
+}

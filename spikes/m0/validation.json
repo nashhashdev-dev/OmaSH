@@ -1,0 +1,18 @@
+[
+  {
+    "check": "lint",
+    "exitCode": 0
+  },
+  {
+    "check": "test",
+    "exitCode": 0
+  },
+  {
+    "check": "types strict",
+    "exitCode": 0
+  },
+  {
+    "check": "spec checks",
+    "exitCode": 0
+  }
+]

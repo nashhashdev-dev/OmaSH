@@ -402,6 +402,8 @@ ENode.effective.onUnsupported is optional and contains only the authored/inherit
 | context / task | none（drop） | none（drop） | none（drop） |
 | session | none; drop with session:static-host | same | same |
 
+M0 verification status (2026-10-13): the entries above remain provisional where native probes are blocked. The pinned Claude/OpenCode binaries abort before configuration loading; Codex reports its version but cannot load configuration without /proc/self/exe. Consequently nested-file loading, skills, configuration environment expansion, and native sandbox behavior have not been confirmed in this environment. See SPIKES.md; do not treat documentation-only evidence as a passed runtime test.
+
 `.claude/settings.json` 等が既に存在し非所有なら `TARGET_OCCUPIED`。ユーザ自身の設定と共存したい場合、ユーザがそのファイルを `reins import` して木の `raw`（JSON は `tool`/`rule` へ変換）にする。
 
 When agents-md and claude-code are selected together, the Claude host's `dedupeWith` setting defaults to `agents-md`; its other value is null. If S-2 confirms CLAUDE.md `@path` imports, each CLAUDE.md begins with `@AGENTS.md` from the same directory, followed by nodes whose hosts contain only claude-code. Without confirmed import support, both files retain full content (D-033, OQ-01).
