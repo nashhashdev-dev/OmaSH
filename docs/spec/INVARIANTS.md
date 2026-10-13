@@ -19,7 +19,7 @@
 
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
-| I-ELAB-1 | **Purity:** `ETree.digest` is a function of (package digest, lock digest, namespace id, log[0..logSeq]). Development mode MUST elaborate twice and reject differing digests with `ELAB_IMPURE`; this detects nondeterminism only. Static purity lint is also required: `reins render` MUST lint harness components using `@reins/eslint-plugin` and fail with `ELAB_IMPURE` on violations (SPEC §6.3, D-023). | React render purity; reproducibility, caching, and time travel. | P, lint |
+| I-ELAB-1 | **Purity:** `ETree.digest` is a function of package digest, lock digest, namespace id, the projection log prefix, and logged content events with their CAS bodies or unavailable placeholders (D-024). External content is reconstructed by the driver from logged input. Development mode MUST elaborate twice and reject differing digests with `ELAB_IMPURE`; this detects nondeterminism only. `reins render` MUST also apply static purity lint and reject violations with `ELAB_IMPURE` (SPEC §6.3, D-023). | React render purity; reproducibility, caching, and time travel. | P, lint |
 | I-ELAB-2 | **ホスト非依存**：精緻化はホストを知らない。Hooks にホスト情報を返すものは存在しない。ホスト差は `hosts` プロパティと各ホストの plan だけで表す。 | 同じ木を複数ホストへ render する、という中心命題。 | P（API 面の型テスト） |
 | I-ELAB-3 | `knowledge` `rule` `skill` `tool` `context` `task` `raw` は `id` 必須、`session` は `key` 必須。欠落は `ID_MISSING`。パッケージ内重複は `ID_DUPLICATE`。 | 差分・アンカー・提案・sourcemap の安定参照。 | P |
 | I-ELAB-4 | ETree には component・fragment・`ref` 形式の Content が残らない。 | ETree が IR として自己完結する。 | P |
@@ -30,7 +30,7 @@
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
 | I-RENDER-1 | `host.plan(tree, ctx)` は純粋・同期。同じ (tree.digest, ctx, host id) なら同じ `RenderPlan.digest`。 | 再現性。memo 化の正当性。 | P |
-| I-RENDER-2 | **全量会計**：ETree の全 ENode（root を除く）が `Accounting.entries` にちょうど 1 回現れる。`filtered` には理由が必須。 | 「なぜ X がプロンプトに無いか」に必ず答えられる。黙って消える情報を作らない。 | P |
+| I-RENDER-2 | **Complete accounting:** within each plan, every ENode except the synthetic root occurs exactly once in Accounting.entries. Parent plans account session descendants as delegated with reason `session:<key>`; child plans account them fully. Exactly once is per plan, not globally across the parent/child tree. Filtered entries require reasons (D-028). | Explain every rendered, absent, or delegated node. | P |
 | I-RENDER-3 | **Complete source maps:** mappings cover each output's entire UTF-16 code-unit range without gaps or overlap. Positions are JavaScript string indices with an exclusive end; each range points to an ENode gid or `'host'` (D-020). | Trace output to its definition (`reins why`). | P |
 | I-RENDER-4 | **Volatility ordering:** plans for two trees differing only in `turn` nodes have completely identical `static` and `session` output strings. Dynamic hosts order outputs by increasing volatility (D-020). | Stable prompt-cache prefixes and minimal changes. | P |
 | I-RENDER-5 | **強制の誠実性**：`enforcement: 'enforced'` の rule は、ホストの guard 機構で実現されるか、`onUnsupported: 'downgrade'` で `degraded` と会計されるかのいずれか。それ以外は `ENFORCEMENT_UNAVAILABLE` で plan 失敗。散文で書いただけで強制済みと扱わない。 | 安全性の誤認を防ぐ。 | P |
@@ -43,7 +43,7 @@
 | I-HOST-1 | **所有**：ホストは自分の CommitRecord に記録された target、または存在しない target にのみ書く。存在する非所有 target は `TARGET_OCCUPIED`（`reins import` を提案）。 | 人間のファイルを壊さない。 | E |
 | I-HOST-2 | **ドリフト不上書き**：observed digest が last CommitRecord の digest と異なる target は上書きしない。`drift/detected` を記録し `skippedDrift` に入れる。上書きは `human` principal の明示 `--force` のみ。 | hydration mismatch を検出して保存する。 | E |
 | I-HOST-3 | `generated` モードでは全出力 target が git の除外（`git rev-parse --git-path info/exclude` の管理ブロック）に入る。追跡済みの生成物を見つけたら finding を出す。 | ハーネスとワークスペースの版を混ぜない。 | E |
-| I-HOST-4 | **取り込み往復**：`reins import` で取り込んだ直後に同じホストへ render すると、各ファイルは元と一致する（正規化：末尾改行を 1 個に統一、生成ヘッダ行を除く）。 | 既存資産の無損失移行。 | G, E |
+| I-HOST-4 | **Import round trip:** immediately rendering a lossless import into the same host preserves Markdown bytes after removing generated headers and normalizing the final newline to one. JSON/TOML preserve structural equality of parsed values. Unsupported configuration fields MUST be listed and fail import; explicit --lossy reports and removes those fields. Imported IDs are imported.<path-slug>, with numbered collision suffixes (D-035). | Preserve existing assets and make any requested loss explicit. | G, E |
 | I-HOST-5 | CommitRecord はワークスペース内に置かない（`$REINS_HOME/state/…`）。 | ワークスペースを汚さない。 | E |
 
 ## 権限（CAP）

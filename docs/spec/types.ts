@@ -492,8 +492,11 @@ export interface ETree {
   readonly namespace: Digest
   /** Log seq the projections were computed at; -1 = static projection (SPEC §6.4). */
   readonly logSeq: number
+  /** Digest of the used external-content {ref: digest} map, including unavailable placeholders. */
+  readonly external: Digest
   /** Synthetic container, excluded from Accounting.entries (I-RENDER-2). */
   readonly root: ENode
+  /** Digest of canonical {package, lock, namespace, external, root}; excludes logSeq. */
   readonly digest: Digest
 }
 
@@ -509,6 +512,7 @@ export interface ENode {
     readonly caps: CapSet
     readonly volatility: Volatility
     readonly hosts?: readonly HostKind[]
+    /** Author setting (including inheritance) or the resolved SPEC §7.3 default (D-027). */
     readonly onUnsupported: OnUnsupported
     readonly toolsMode: 'inherit' | 'allowlist'
   }
@@ -527,6 +531,15 @@ export interface LogEventMap {
   'run/end': { readonly outcome: 'completed' | 'failed' | 'aborted'; readonly summary?: string }
   'ws/snapshot': { readonly authority: string; readonly digest: Digest; readonly reason: 'mount' | 'turn' | 'commit' }
   'ws/touched': { readonly paths: readonly RefString[]; readonly op: 'read' | 'write' }
+  /** Body stored at $REINS_HOME/cas/<digest>; external inputs are reconstructed from the log and CAS. */
+  'content/fetched': { readonly ref: RefString; readonly digest: Digest }
+  'content/unavailable': {
+    readonly ref: RefString
+    readonly reason: 'timeout' | 'not-found' | 'denied' | 'error'
+    readonly detail?: string
+  }
+  /** Explicit active-version change; does not mutate namespace mount bindings. */
+  'harness/switched': { readonly digest: Digest; readonly lock: Digest }
   'task/state': { readonly phase: string; readonly note?: string }
   /** Turn boundary; resets TaskState.eventsThisTurn. In DSH, bridged from DSH `turn/start`. */
   'turn/start': { readonly external?: ExternalLogRef }
@@ -537,6 +550,10 @@ export interface LogEventMap {
     readonly tree: Digest
     readonly outputs: readonly { readonly target: string; readonly digest: Digest }[]
     readonly accounting: AccountingSummary
+    /** True when the system portion changed; volatility controls placement, not freezing. */
+    readonly cacheBreak: boolean
+    /** Startup observation confirmed an unfinished render intent's outputs. */
+    readonly recovered?: boolean
   }
   'render/failed': { readonly host: HostId; readonly plan: Digest; readonly error: ReinsErrorData }
   'model/request': { readonly host: HostId; readonly bytes: Digest; readonly external?: ExternalLogRef }
@@ -549,7 +566,7 @@ export interface LogEventMap {
     readonly newVersion?: Digest
     readonly reason?: string
   }
-  'session/requested': { readonly key: SessionKey; readonly spec: Json /* SessionEl props */ }
+  'session/requested': { readonly key: SessionKey; readonly spec: Json /* profile-based spawn request, SPEC §11.2 */ }
   'session/intent': { readonly key: SessionKey; readonly op: SessionOp }
   'session/mounted': {
     readonly key: SessionKey
@@ -635,7 +652,8 @@ export interface PromptPart {
 
 export type AccountStatus =
   | 'rendered'
-  | 'degraded' // rendered as prose although realization was requested natively (downgrade)
+  | 'delegated' // session descendant handled by the child host; reason is session:<key>
+  | 'degraded' // fallback prose (downgrade) or a logged content-unavailable placeholder
   | 'filtered' // scope/when/hosts excluded it — reason REQUIRED
   | 'dropped' // unsupported + onUnsupported 'drop'
   | 'error' // unsupported + onUnsupported 'error' → plan fails
@@ -648,11 +666,12 @@ export interface AccountEntry {
 }
 
 export interface Accounting {
-  readonly entries: readonly AccountEntry[] // exactly one per ENode except the synthetic root (I-RENDER-2)
+  readonly entries: readonly AccountEntry[] // exactly once per plan per ENode except synthetic root; session descendants may be delegated
 }
 
 export interface AccountingSummary {
   readonly rendered: number
+  readonly delegated: number
   readonly degraded: number
   readonly filtered: number
   readonly dropped: number
@@ -834,6 +853,14 @@ export interface PackageManifest {
   /** Globs (relative) of files that affect rendering besides `entry` imports. Default ["content/**"]. */
   readonly content?: readonly string[]
   readonly dependencies?: { readonly [name: string]: string /* RefString with semver/tag/digest pin */ }
+  /** Profiles available to session_spawn; export is a component named export from the entry module. */
+  readonly sessionProfiles?: {
+    readonly [name: string]: {
+      readonly export: string
+      readonly runtime: readonly RuntimeSpec['kind'][]
+      readonly caps: CapSet
+    }
+  }
   readonly requires?: {
     readonly hosts?: readonly HostKind[]
     readonly dsh?: string // semver range
@@ -862,6 +889,10 @@ export interface ModelSpec {
 
 /** Everything needed to reproduce a run (I-RUN-1). */
 export interface RunSpec {
+  /** Parent run and session key for a mounted child. */
+  readonly parent?: { readonly run: RunId; readonly session: SessionKey }
+  /** Source run and log position of a DSH session fork. */
+  readonly forkedFrom?: { readonly run: RunId; readonly seq: number }
   readonly harness: { readonly name: string; readonly digest: Digest }
   readonly lock: Digest
   readonly namespace: Namespace
@@ -923,6 +954,7 @@ export type ReinsErrorCode =
   | 'BUDGET_EXCEEDED'
   | 'DEPTH_EXCEEDED'
   | 'LOG_CORRUPT'
+  | 'LOCKED' // static workspace commit lock was not acquired within 30 seconds
   | 'SPLIT_LEAK' // final split accessed by a selecting principal
   | 'INTERNAL'
 
@@ -957,14 +989,16 @@ export interface ElaborateInput {
   readonly log: readonly LogEvent[]
   /** Events with seq ≤ logSeq are visible to hooks; -1 = static projection (empty log). */
   readonly logSeq: number
-  /** Already-fetched external content (non-`harness://self` refs). Grows across suspensions. */
+  /** Driver materialization from logged content events and CAS, including unavailable placeholders; grows across suspensions. */
   readonly external: { readonly [ref: string]: string }
 }
 
 /**
  * Elaboration is synchronous and pure. When a hook needs content not present in
  * `input.external`, elaboration finishes the pass and returns `suspended` with every
- * missing ref; the driver fetches them and calls `elaborate` again (Suspense-style).
+ * missing ref; ensurePlan fetches them, records content events, and retries.
+ * Timeout/fetch failures become logged unavailable placeholders. Model requests
+ * MUST wait for done; suspended results do not expose a partial tree.
  */
 export type ElaborateResult =
   | { readonly kind: 'done'; readonly tree: ETree }

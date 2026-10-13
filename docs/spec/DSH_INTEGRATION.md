@@ -25,7 +25,7 @@
 - `packages/dsh-plugin` は Cordis plugin を export し、`package.json` の `dsh.bundle` で `cordis.patch.yml` を指す DSH bundle として配布する。
 - 利用者向け profile テンプレート `reins`：`dsh-base` の上に Reins bundle を積む。`dsh plugin add` でインストール可能にする。
 - plugin 名 `reins`、提供サービス `ctx.reins`、`inject: ['systemPrompt', 'tools', 'agents', 'sessions']`、任意依存 `subagents`。
-- 設定（schemastery で定義）：`{ harness: string /* パッケージパス or harness:// ref */, workspace: string, reinsHome?: string, testCommandPatterns?: string[][] }`
+- Settings (schemastery): `{ harness: string, workspace: string, reinsHome?: string, testCommandPatterns?: string[][], suspenseTimeoutMs?: number }`. Harness is a package path or harness ref; suspenseTimeoutMs defaults to 10000 (D-024).
 
 ## 3. 動的ホスト `dsh` の写像（MUST）
 
@@ -41,9 +41,20 @@
 | ハーネスへの書き込み禁止（I-CAP-2） | `ctx.tools.guard()` で harness Mount の locator 配下への書き込み系ツールを常に拒否 | `fs/*` イベントでも拒否 |
 | session_* ツール | `ctx.tools.register()`（`defineTool`） | `spawn` 権限が無ければ登録しない |
 
-**plan の memo 化**：`text` プロバイダは同期関数で、各アセンブリで呼ばれる。`ctx.reins` は (tree.digest, taskState digest) をキーに RenderPlan をキャッシュする。elaborate も同期（Suspense の再試行だけ非同期で、要求時点で未取得の外部内容があればその回は空文字で描画し、取得後に `system-prompt/change` を発火して次アセンブリで反映）。
+| Additional mapping | DSH behavior |
+|---|---|
+| skill | Names/descriptions under `## Skills` in reins:static; `skill_load {name}` returns the body through a logged DSH tool result (D-031). |
+| task | First entry in reins:turn, compiled with SPEC §5.8. Ordinary user messages remain human-authored; only reins run with profile reins-headless sends an initial compiled task message (D-031). |
+| budget usage | Read assistant/message usage and append budget/charged; an over-budget agent/request waterfall rejects without next() and stops the turn (D-039). |
+| wallclock | Measure from mount, interrupt on excess, and stop after 30 seconds (D-039). |
+
+**Plan preparation and caching:** before a model request, run asynchronous ensurePlan(). If elaborate returns suspended, fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record content/fetched, rebuild external from content events/CAS, and retry (D-024). At the suspenseTimeoutMs deadline (default 10000), or on fetch failure, record content/unavailable and resolve the specified placeholder. Affected nodes are degraded with reason `content-unavailable:<ref>`. Requests MUST wait for done; synchronous text providers use only the completed plan.
+
+Memoize by (tree.digest, taskState digest). ETree.digest excludes logSeq and includes the used external-content digest (D-025). Record render/committed only when plan digest changes, and include cacheBreak indicating whether the system portion changed (D-032). Section order is Rules → Instructions → Knowledge → Skills → Conditional → raw (D-031).
 
 ## 4. DSH ログの橋渡し
+
+One DSH root session owns one Run. `$REINS_HOME/runs/index.json` maps DSH session IDs to RunIds; resume appends to the existing Run. A fork records RunSpec.forkedFrom `{run, seq}`, and each mounted child owns a Run with parent `{run, session}` (D-036).
 
 `session/event` を購読し、Reins ログへ写す（本文は重複保存しない）：
 
@@ -53,6 +64,8 @@
 | `tool/result`（fs 系ツール、read/write） | `ws/touched {paths, op}` |
 | `tool/result`（bash 系、argv が `testCommandPatterns` に一致し exit≠0） | `reins/test-failed`（拡張イベント）|
 | `agent/request`（waterfall、観察のみで `next()` を呼ぶ） | `model/request {host, bytes, external: {system:'dsh', session, seqFrom, seqTo}}` |
+
+The model/request bridge is an observation listener that calls next(). The separate budget-enforcement waterfall may reject without next() when limits are exceeded (D-039).
 
 `LogEventMap` 拡張：`'reins/test-failed': { argv: string[]; exit: number; excerpt: string }`。
 
@@ -121,6 +134,7 @@ tmux = "latest"          # M5 以降。M0 で版を固定する
 | `tools.guard` | 単調拒否、後続 waterfall で覆らない |
 | `tools.pre-execute` | deny 決定の型 |
 | `agent.request.observe` | 観察 listener が `next()` で透過 |
+| `agent.request.budget` | Usage charges propagate to ancestors; over-budget requests are rejected without next() (D-039). |
 | `session.event.stream` | `turn/start` `tool/result` の到着と順序 |
 | `subagents.continuable` | startContinuable / followup / interrupt / settled 通知（S-6 で第一候補採用時のみ） |
 | `scope.not-security` | 文書化された前提の回帰検知（scope 外からの呼び出しが技術的に可能であることを確認し、Reins が guard に依存していることを示す） |

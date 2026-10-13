@@ -17,8 +17,8 @@
 | ID | 検証すること |
 |---|---|
 | S-1 | 汎用 AGENTS.md：ネストした `<dir>/AGENTS.md` を Codex・OpenCode・Pi が読むか、読む条件（cwd、触ったファイル） |
-| S-2 | Claude Code：ネスト `CLAUDE.md` の読み込み条件、`.claude/rules/` の有無と frontmatter、`.claude/skills/<name>/SKILL.md`、`.mcp.json`、`.claude/settings.json` の `permissions.deny` の構文（Bash prefix、Edit/Write path） |
-| S-3 | Codex：AGENTS.md 階層、skills ディレクトリ、`.codex/config.toml` の `mcp_servers`、拒否規則・sandbox 設定で enforced rule を実現できるか |
+| S-2 | Claude Code: nested CLAUDE.md loading, .claude/rules frontmatter, skills, .mcp.json, permissions.deny syntax, CLAUDE.md @path import support for AGENTS.md deduplication (D-033), and environment reference expansion in each configuration target (D-034). |
+| S-3 | Codex: AGENTS.md hierarchy, skills, .codex/config.toml mcp_servers, native guard/sandbox realization, and environment reference expansion in each configuration target (D-034). |
 | S-4 | tmux 経由で Claude Code と Codex の TUI を操作：ブラケットペースト送信、Enter、`capture-pane` での idle / working / 承認待ち の判定パターン採取（画面 fixture として保存） |
 | S-5 | DSH：custom profile + bundle のインストール、`--dump-config`、per-agent scope での `systemPrompt.section/context` 登録、order と shadowing、context のログスナップショット、既存の AGENTS.md section provider の所在と無効化方法、`tools.guard` / `tools.restrict` |
 | S-6 | DSH `ctx.subagents` の `claude-code` / `codex` プロバイダ：DSH_INTEGRATION.md §5 の条件 1〜4 |
@@ -27,6 +27,8 @@
 - 6 件すべてに結論（採用／不採用／部分）があり、SPEC §7.5 の表・DSH_INTEGRATION.md・DECISIONS.md の OQ が更新されている。
 - `mise.toml` の各ツール版が固定され `mise.lock` がある。
 - **停止条件**：スパイク結果が法則（SPEC §3）や不変条件と矛盾する場合、実装に進まず利用者に報告する。
+
+Use real runtimes for all six spikes (batch 2 scope). If Claude Code/Codex authentication or a DSH LLM key is unavailable, report the affected spike as BLOCKED and continue the independent spikes. Supported development/runtime platforms are Linux and macOS.
 
 ---
 
@@ -48,6 +50,7 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 - Resolver `fs`、`harness-pkg`（ローカルのみ）。
 - `examples/hello`（SPEC §6.1 相当）。
 - Static purity lint for harness components: reject I/O module imports (including `node:fs`, `node:child_process`, and `node:net`), `process.env`, `Date`, `Math.random`, `fetch`, `crypto.getRandomValues`, and I/O outside the `@reins/core` hooks. Provide the lint used by `reins render`, which MUST fail with `ELAB_IMPURE` on violations (SPEC §6.3, D-023).
+- Logged external-content input, CAS/placeholder materialization, and the ETree digest excluding logSeq while including used external digests (D-024/025).
 
 受け入れ基準：
 - I-REF-1〜5、I-ELAB-1〜5、I-CAP-1・2・4、I-LOG-1・4、I-PKG-1 のテストが通る。
@@ -64,6 +67,7 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 成果物：
 - 3 ホストの `plan / observe / commit`（SPEC §7.2〜7.5、M0 で確定した対象表）。
 - ホスト調停、CommitRecord、git exclude 管理ブロック、原子的書き込み。
+- Bounded ensurePlan/content retrieval, unsupported/delegated accounting, precise nested scopes, validated co-host deduplication, reference-only secret configuration, structural import with explicit --lossy, and serialized static commits (D-024/027/028/030/033/034/035/037).
 - `reins init / render / import / status / why`。
 - ドリフト検出と持ち上げ提案（SPEC §8.2、提案の作成まで。適用は M4）。
 
@@ -85,6 +89,7 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 成果物：
 - Cordis plugin、bundle、profile テンプレート `reins`。
 - 動的ホスト `dsh`、plan の memo 化、DSH ログ橋渡し、guard による権限強制（I-CAP-2 の harness 書き込み拒否を含む）。
+- ensurePlan before model requests; unchanged-plan event suppression; skill_load/task placement; cache-break recording; Run resume/fork mapping; explicit reload and headless run commands; usage charging and pre-request budget rejection (D-024/025/026/031/032/036/039).
 - `reins explain --host dsh --seq <n>`。
 - 決定的な台本 LLM アダプタ（テスト用、`ctx.llm` に登録、受け取った system と messages をファイルに保存し、台本どおりのツール呼び出しを返す）。
 
@@ -101,7 +106,7 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 
 ## M4 — 真偽調停と提案
 
-成果物：アンカー評価器（path / grep / command / import-boundary(TS)）、`reins check`、提案の適用（`reins propose apply`、`git apply --3way` 相当、原子的置換、新 digest）、任意の log-pattern 検出プラグイン。
+成果物：アンカー評価器（path / grep / command / import-boundary(TS)）、`reins check`、提案の適用（`reins propose apply`、`git apply --3way` 相当、原子的置換、新 digest）、任意の log-pattern 検出プラグイン。Command anchors run in disposable snapshot copies, never in the real workspace (D-040).
 
 受け入れ基準：
 1. `fixtures/ws-ts` で `package.json` の `test:unit` を `test:u` に改名 → `reins check` で該当 command アンカーが `violated`、ハーネス側・ワークスペース側の 2 候補を持つ提案ができる。
@@ -114,6 +119,8 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 ## M5 — セッション
 
 パッケージ：`@reins/session-tmux`、構造化アダプタ（M0 の S-6 結果に応じて DSH プロバイダ経由または自前）、DSH 側 `session_*` ツール、`<RequestedSessions/>` `<SessionDigest/>`、CLI `reins session …`。
+
+Session work includes parent/child evaluation rules, one Run per mounted child, startup intent recovery without automatic resend, observable usage/wallclock enforcement, and predeclared profile-only LLM spawning with kernel-injected RequestedSessions (D-029/036/038/039/041).
 
 受け入れ基準（CI は偽ランタイム `fixtures/fake-agent`：受け取ったタスクを echo し、指定ファイルを書き、`DONE` を表示するスクリプトで行う）：
 1. 台本 LLM が `session_spawn` → `session/requested` → mount → 子 worktree に子ハーネスの CLAUDE.md が生成 → タスクが §5.8 書式で送られる。`session/sent` が送信より前に記録（I-LOG-2, I-LOG-3）。

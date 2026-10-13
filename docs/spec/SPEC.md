@@ -50,6 +50,7 @@
 - 自然言語の知識を完全に形式化すること（本文は Markdown のまま持つ。構造化するのは**メタデータ**：出所・範囲・条件・認識論的地位・検証根拠）。
 - 汎用ワークフローエンジン（DSH の `ctx.workflowEngine` 等を使う）。
 - GUI。CLI と DSH Web UI 上の表示（任意）のみ。
+- Supported operating systems are Linux and macOS. Windows is a non-goal; tmux and POSIX paths are required (batch 2 scope).
 
 ---
 
@@ -164,7 +165,7 @@ In `harness://@me/swe@^2#no-raw-sql`, authority is `@me/swe`, path is empty, pin
 Agent Skills 形式（`SKILL.md` + frontmatter `name` `description`）で描画される手順。`resources` は SKILL.md と同じディレクトリへコピーされる。
 
 ### 5.6 `tool`
-`mcp`（サーバ定義）または `native`（ホスト固有ツール名）。MCP の `env` 値に秘密を直書きしてはならない（MUST NOT）。`${secret:NAME}` 参照を使い、ホストが commit 時に環境から解決する。解決できない秘密は出力ファイルに書かず、該当ツールを `dropped` にする。
+Tools are MCP server definitions or host-native tool names. MCP env entries MUST NOT contain literal secrets. Convert `${secret:NAME}` into the destination's supported environment-variable reference syntax, such as `${NAME}` in .mcp.json. If the destination has no supported reference syntax, account the tool as dropped with reason `secret-unsupported`. Secret values MUST NOT be written to any file or log (D-034).
 
 ### 5.7 `context`
 毎ターン変わり得る情報。既定 `volatility: 'turn'`、既定 `onUnsupported: 'drop'`。`budgetTokens` を超える本文はホストが切り詰め、末尾に `…[truncated by reins: <gid>]` を付ける。`trust: 'relay'` は外部由来（子の出力、Web）を表し、ホストは次の形でのみ描画する（I-RENDER-6, I-SESS-2）：
@@ -261,11 +262,15 @@ export default function Root() {
    - 配列は平坦化、`null` `false` `undefined` は捨てる、文字列は instruction に変換。
    - `$component` は `via` に名前を積んで関数を呼び、結果を再帰展開。`use(pkg)` は現在パッケージを `deps[pkg]` に切り替えてその entry を展開する（部分木のノードはそのパッケージに帰属する）。同一コンポーネントの再入が深さ 256 を超えたら `ELAB_CYCLE`。
    - `fragment` は子を親へ平坦化。
-   - Content `ref` は解決して `md` にする。`harness://self/...` は現在パッケージの files から、それ以外は `external` から。無ければ欠落 ref を記録して空文字で続行し、パスの最後に `suspended` を返す。
+   - Resolve Content refs to md. Read `harness://self/...` from the current package's files and other refs from driver-materialized `external`. Missing refs produce `suspended` with all missing refs; no suspended tree may supply a model request (D-024).
 3. scope の実効値を計算（§5.1）。
 4. gid を付与：id があれば `<pkg>#<id>`、無ければ `<pkg>#~<via を / 連結>/<兄弟 index>`。id 必須違反・重複を検査（I-ELAB-3）。
-5. ETree を正規 JSON にし digest を付ける。
+5. Set `ETree.external` to the digest of the used `{ref: digest}` mapping. Compute `ETree.digest = digestJson({package, lock, namespace, external, root})`; retain logSeq as projection metadata outside this digest (D-025).
 6. 開発モード（`REINS_DEV=1`、テストでは常時）では 1〜5 を 2 回行い digest 不一致なら `ELAB_IMPURE`。
+
+Before a dynamic model request or static CLI render, the driver MUST run `ensurePlan()` (D-024). Fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record `content/fetched {ref, digest}`, rebuild `external` from logged content events and CAS, and retry elaboration until done. Components do not access this map directly.
+
+The total wait is bounded by `suspenseTimeoutMs`, default 10000 ms; CLI accepts `--suspense-timeout`. Fetch failures and exceeded deadlines record `content/unavailable {ref, reason, detail?}`, where reason is timeout, not-found, denied, or error. Resolve unavailable refs to `[reins: content unavailable: <ref> (<reason>)]` and retry to done. Each node using this placeholder is accounted as degraded with reason `content-unavailable:<ref>`. The used-ref digest map includes the digest of each materialized placeholder. Missing content MUST NOT be silently rendered as an empty string.
 
 ### 6.3 フック
 
@@ -280,6 +285,8 @@ Purity checks have two required layers (D-023):
 
 - 組み込み Projection `reins/task-state` は `TaskState`（types.ts §9）を作る。`turn` 境界はログイベント `turn/start`（DSH 内では DSH の `turn/start` を橋渡しして記録する。DSH_INTEGRATION.md §4）。
 - **静的射影**：`logSeq = -1`（空ログ）。静的ホスト向けの精緻化は常に静的射影で行う。したがって JS の条件分岐で `useTaskState()` に依存するノードは静的ホストには現れない。静的ホストにも条件付きで伝えたい内容は `scope when`（データの Predicate）で書く（SHOULD）。
+- The static projection applies to component task-state hooks; logged content inputs are still materialized through the same ensurePlan procedure (D-024).
+- Parent elaboration expands `session.children`, so JavaScript branches use parent state. Child hosts evaluate data `when`/`at` using the child's TaskState: the child's log projection for dynamic hosts, or the static projection for static hosts (D-029). Use data predicates for child-local dynamic conditions.
 
 ### 6.5 Predicate の評価と記述
 
@@ -299,6 +306,8 @@ Purity checks have two required layers (D-023):
 `RuntimeHost`（types.ts §7）。`plan` は純粋・同期、`observe` は読み取りのみ、`commit` だけが書く。
 
 ### 7.2 ホスト調停（MUST）
+
+Static host commits to the same workspace MUST be serialized by an exclusive lock at `$REINS_HOME/state/<wsid>/lock`. Hold it across observation, ownership/drift checks, writes, and CommitRecord updates. Fail with `LOCKED` after 30 seconds without acquiring it (D-037).
 
 ```
 plan     = host.plan(tree, ctx)
@@ -321,17 +330,33 @@ log 'render/committed' or 'render/failed'
 - 動的ホスト：`static` → `session` → `turn` の順に並べる（I-RENDER-4）。
 - Account for every ENode except the synthetic root (I-RENDER-2, D-019). The root is a container. `filtered` reason format: `when:<describe>` / `at:<pattern>` / `hosts:<list>`.
 
+The parent host accounts session descendants as `delegated`, with reason `session:<key>`; the child's host accounts those nodes fully. Exactly once is required within each plan, including delegated entries, rather than globally across parent and child plans (D-028).
+
+Volatility is a placement contract. Static/session nodes may change during a Run and the host MUST use the updated content. `render/committed.cacheBreak` is true when the system portion changes, and false otherwise. I-RENDER-4 still requires identical system outputs when only turn nodes differ (D-032).
+
+When the author has not specified onUnsupported, use these defaults (D-027). ENode.effective.onUnsupported is the resolved author setting or default. Select defaults from element properties without exposing host information to elaboration; the host decides whether realization is available.
+
+| Unsupported situation | Default |
+|---|---|
+| Enforced rule with no guard realization | error |
+| Context or turn-volatility node on a static host | drop |
+| Task on a static host | drop |
+| MCP tool with no host MCP configuration target | drop |
+| Native tool whose name is unknown to the host | drop |
+| Scope with tools:allowlist and no host restriction mechanism | downgrade; prose `Use only these tools: …` |
+| Skill with no skills directory | downgrade; name, description, and body under `## Skills` |
+
 ### 7.4 静的ホスト共通規則
 - 出力ファイル先頭（frontmatter を持つ形式では frontmatter の直後）に 1 行のヘッダ：
   `<!-- generated by reins from <pkg>@<digest 先頭12桁>; edits are detected as drift (reins status) -->`
   TOML は `#` コメントで同じ 1 行ヘッダを付ける。JSON はコメント不可のためヘッダを付けず、所有は CommitRecord だけで追跡する。
 - `generated` モード：全 target を `$(git rev-parse --git-path info/exclude)` の管理ブロック（`# >>> reins` 〜 `# <<< reins`）に列挙する（I-HOST-3）。`embedded` モードでは除外しない。
-- ファイル内の節順序（固定、空節は省略）：`## Rules` → `## Instructions` → `## Knowledge` → `## Conditional`（`when` 付き）→ 取り込み `raw`。節内は priority 降順、次に gid 昇順。
+- Section order, omitting empty sections: `## Rules` → `## Instructions` → `## Knowledge` → `## Skills` → `## Conditional` → imported raw. Within a section, sort by descending priority, then ascending gid (D-031).
   - Rule：`- **<id>** (<advisory|enforced>): <body>`
   - Knowledge：`### <id>` の下に本文、`hypothesis` は見出し末尾に ` (hypothesis)`。
   - Conditional：`### <describe>` の下に、その scope の要素を同じ規則で描画。
 - **raw だけからなる target** はヘッダ + raw 本文をそのまま出力する（I-HOST-4 の往復を保証）。
-- `at` の扱い（`pathScoping: 'nested-files'`）：pattern の最初のグロブを含むセグメントより前の固定接頭辞ディレクトリ D に、ホストの指示ファイル名で出力する（例：`workspace://app/src/auth/**` → `src/auth/AGENTS.md`）。固定接頭辞が空なら、ルートファイルの Conditional 節に `touches` として描画する。
+- For `pathScoping: 'nested-files'`, let D be the fixed prefix directory before the first glob. If D is nonempty and the remaining pattern is exactly `**`, render normally in D's instruction file (`workspace://app/src/auth/**` → `src/auth/AGENTS.md`). For every other remainder, such as `src/auth/*.ts`, render in that file's Conditional section with `touches(<pattern>)`. If D is empty, use the root file's Conditional section. An `at` authority other than PlanContext.workspaceAuthority is filtered with reason `at:other-workspace` (D-030).
 
 ### 7.5 静的ホストの対象表
 
@@ -350,12 +375,20 @@ log 'render/committed' or 'render/failed'
 
 `.claude/settings.json` 等が既に存在し非所有なら `TARGET_OCCUPIED`。ユーザ自身の設定と共存したい場合、ユーザがそのファイルを `reins import` して木の `raw`（JSON は `tool`/`rule` へ変換）にする。
 
+When agents-md and claude-code are selected together, the Claude host's `dedupeWith` setting defaults to `agents-md`; its other value is null. If S-2 confirms CLAUDE.md `@path` imports, each CLAUDE.md begins with `@AGENTS.md` from the same directory, followed by nodes whose hosts contain only claude-code. Without confirmed import support, both files retain full content (D-033, OQ-01).
+
+MCP environment references MUST use the destination's supported reference syntax, never resolved secret values. S-2 and S-3 MUST verify expansion support for every configuration target in this table. A destination without supported expansion drops the affected tool with reason `secret-unsupported` (D-034).
+
 ### 7.6 動的ホスト `dsh`
 DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は `DSH_INTEGRATION.md` §3。要点：
 - `static`/`session` → `ctx.systemPrompt.section()`、`turn` と `at`/`when` 付き → `ctx.systemPrompt.context()`（DSH の cache-safe な動的文脈）。
 - `at` は動的ホストでは `when: touches(at)` として評価する（`pathScoping: 'on-touch'`）。
 - `tools: 'allowlist'` → `ctx.tools.restrict()`、enforced rule と権限 → `ctx.tools.guard()` / `tools/pre-execute`。
 - plan は (tree.digest, taskState digest) で memo 化（I-RENDER-1 により正当）。
+- Run ensurePlan before each model request; only done trees may be planned. Record render/committed only when the plan digest differs from the previously committed plan (D-024/025).
+- Skills expose only names and descriptions under `## Skills` in reins:static. `skill_load { name }` returns the body as a DSH tool result, which is logged (D-031).
+- Tasks lead reins:turn, compiled with §5.8. Reins does not synthesize ordinary user messages. Only `reins run --task <file> --profile reins-headless` sends the compiled task as the initial user message (D-031).
+- Dynamic section order matches static hosts: Rules → Instructions → Knowledge → Skills → Conditional → raw.
 
 ---
 
@@ -379,9 +412,11 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 |---|---|---|
 | path | pattern に一致するパスの有無 | Mount が無い |
 | grep | pattern に一致する全ファイルで regex | 一致ファイル 0 件かつ expect=match のときは `violated`、Mount が無いときのみ unverifiable |
-| command | argv を cwd で実行（`exec` 権限必須、timeout） | 権限が無い |
+| command | Run argv in a disposable copy of the specified snapshot, with exec permission and timeout (D-040). | Missing permission, or a non-git snapshot above 1 GiB (`too-large`). |
 | import-boundary | TS/JS は dependency-cruiser、その他は custom evaluator | 対応言語が無い |
 | custom | 登録 evaluator | evaluator が無い |
+
+Command anchors MUST NOT execute in the real workspace (D-040). For git snapshots, create a temporary worktree from the snapshot commit, apply the recorded working-tree diff, execute, and remove the worktree afterward. For non-git snapshots, copy to a temporary directory and remove it afterward; above 1 GiB, report unverifiable with reason `too-large`.
 
 `violated` に対して Proposal を作る：変更が最近ワークスペースで起きた（`ws/touched` の write に含まれる）なら `content-patch`（ハーネスを実態に合わせる）を第一候補、そうでなければ `workspace-patch` を第一候補とし、両方を提示する（パッチ生成は M4 では空 diff + rationale でよい。LLM による diff 生成は任意プラグイン）。
 
@@ -414,7 +449,9 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 ### 9.3 強制点
 - DSH 内のエージェント：`ctx.tools.guard()`（単調拒否）と `fs/*` イベント。Cordis の scope は権限境界ではない（I-CAP-5）。
 - 外部ランタイム（Claude Code / Codex）：起動時の強制（独立 worktree、環境変数の最小化、必要なら `ctx.sandbox` 相当のサンドボックスでラップ）と、§7.5 の settings による拒否規則。取れない権限は `advisory` と記録（I-CAP-3）。
-- 予算：tokens/usd はランタイムが使用量を報告する場合のみ `enforced`（超過で interrupt → stop）、wallclock は常に `enforced`（タイマー）。
+- DSH usage: charge from assistant/message usage through budget/charged. At agent/request, the budget waterfall rejects an over-budget request without calling next(), stopping the turn (D-039).
+- External usage: charge from structured adapter usage or PTY status-reader values. When unavailable, record enforcement as advisory.
+- Wallclock is always enforced from mount time. On excess, interrupt, then stop after 30 seconds (D-039).
 
 ---
 
@@ -425,6 +462,18 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 - 連鎖検証（I-LOG-1）は読み込み時に常に行う。
 - DSH 内で起きたモデル要求の本文は DSH のセッションログが正本。Reins ログには `model/request` に `ExternalLogRef` を記録する（重複保存しない）。
 - 任意：OpenTelemetry GenAI semantic conventions へのエクスポータ（プラグイン）。
+
+External content is logged input (D-024): `content/fetched {ref: RefString, digest: Digest}` records a body in `$REINS_HOME/cas/<digest>`. `content/unavailable {ref, reason, detail?}` records timeout, not-found, denied, or error. Drivers materialize external input from content events and CAS; unavailable placeholders are reconstructed from logged ref/reason. Model requests always wait for a done tree through §6.2 ensurePlan.
+
+Run ownership (D-036): one Run per human CLI render/check/import invocation, per DSH root session, per mounted child session, and per evaluation Trial. `$REINS_HOME/runs/index.json` maps DSH session IDs to RunIds. Resume appends to the existing Run; child/fork relationships are recorded in RunSpec.
+
+On startup, reconcile intents without recorded outcomes (D-038):
+
+| Intent | Recovery |
+|---|---|
+| render/intent | Re-observe. If the observed outputs match the intended plan, record render/committed with recovered:true. Otherwise record render/failed and retain CommitRecord. |
+| session/intent mount | Try reattach. Record session/mounted on success, or session/status unknown on failure. |
+| session/intent send | Record session/status unknown and notify the human. Delivery cannot be established, so MUST NOT automatically resend. |
 
 ---
 
@@ -441,7 +490,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 
 | ツール | 動作 |
 |---|---|
-| `session_spawn {key, runtime, workspace, task, caps?, interactive?}` | `session/requested` を記録する。組み込みコンポーネント `<RequestedSessions/>`（root ハーネスが含める）が `TaskState.requestedSessions` から `session` ノードを生成し、調停が mount する。ツールは mount 完了（`session/mounted`）まで待ち、`session://…` ref を返す。 |
+| `session_spawn {key, profile, workspace, task, interactive?}` | Select a predeclared manifest session profile, record session/requested, and wait for session/mounted before returning a session ref. RequestedSessions projects requests into session nodes; the kernel automatically appends it at the root's end when the root principal has spawn (D-041). |
 | `session_send {key, text}` | Record `session/intent` → record `session/sent` → perform `send`; on send failure, record `session/status` with status `failed` (D-021). |
 | `session_status {key}` | 最新状態と直近観測の要約（relay として） |
 | `session_interrupt {key}` | interrupt |
@@ -450,10 +499,12 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 
 `spawn` 権限が無ければ `session_spawn` はツール集合に現れない。
 
+The LLM MUST NOT construct an arbitrary child harness or supply arbitrary runtime/caps through session_spawn (D-041). `PackageManifest.sessionProfiles[name]` declares an entry-module component export, allowed runtime kinds, and caps. Select the child's harness from that export and attenuate profile caps against the requester's caps. Authors do not need to include RequestedSessions manually.
+
 ### 11.3 マウント手順（MUST）
 1. `effective caps = attenuate(parent caps, node.caps, { strict: true })`. Check depth, child count, and budgets (I-SESS-1, I-CAP-4, D-022).
 2. `WorkspaceBinding` に従い子 Namespace を作る（明示されたものだけ。I-SESS-5）。`fork-worktree` の既定パスは `$REINS_HOME/worktrees/<RunId>/<key>`。
-3. 子の木（`node.children`）を、子ランタイムに対応する静的ホストで plan し、`renderedFiles` を得る（`runtime.kind` → host：`claude-code`→`claude-code`、`codex`→`codex`、`opencode`/`pi`→`agents-md`、`dsh`→子 DSH エージェントの scope に `dsh` 動的ホスト）。子ワークスペースへ §7.2 でコミット。
+3. Parent elaboration has already expanded node.children and evaluated JavaScript branches using parent state. Plan the subtree with the child runtime's host, evaluating data when/at with child TaskState: the child log projection for dynamic DSH, or the static projection for static hosts (D-029). Map claude-code→claude-code, codex→codex, opencode/pi→agents-md, dsh→the child's DSH scope. Static plans produce renderedFiles and commit through §7.2.
 4. TaskSpec を §5.8 書式にコンパイル。
 5. セッションホストを選ぶ：`interactive` なら `tmux`（PTY）、そうでなければ構造化（DSH の `ctx.subagents` プロバイダ。DSH_INTEGRATION.md §5）。ランタイムは `mise exec <tool> -- <cmd>` で起動する。
 6. `session/mounted` に caps と Grant ごとの `Enforcement` を記録。
@@ -483,6 +534,10 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 ### 12.3 Run
 `RunSpec`（types.ts §11）を `run/start` に完全記録する（I-RUN-1）。Run の識別：`RunId`（ULID）。比較キー：`digestJson(RunSpec から seed を除いたもの)`。
 
+Each CLI render/check/import invocation, DSH root session, mounted child session, and evaluation Trial owns one Run (D-036). Child RunSpec.parent is `{run, session}`; a DSH fork records forkedFrom `{run, seq}`. Resume continues the same Run, using runs/index.json for DSH session-to-Run mapping.
+
+Human harness edits do not automatically change an active Run. `reins reload` or DSH `/reins-reload` records `harness/switched {digest, lock}`. Elaboration uses the last switched harness/lock, or the run/start harness/lock when none exists. Namespace mount bindings remain fixed under I-REF-2 (D-026).
+
 ### 12.4 mise
 - ハーネスパッケージは `mise.toml` を持てる。ランタイム CLI（`npm:@anthropic-ai/claude-code`、`npm:@openai/codex`、`tmux` 等）の版はここで固定し、`mise.lock` の digest を `Lockfile.mise` に入れる。
 - セッション起動・アンカー command 評価は `mise exec` 経由で行う（MUST）。
@@ -504,8 +559,10 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 | コマンド | 機能 | 導入 |
 |---|---|---|
 | `reins init [--embedded]` | パッケージ雛形 | M1 |
-| `reins render --harness <dir> --workspace <dir> --host <kind>[,..] [--dry-run] [--force]` | 精緻化 → plan → 調停 → commit。初回に binding を保存 | M2 |
-| `reins import --workspace <dir> [--host ...]` | 既存指示ファイルを content/imported/ に raw として取り込み、配置コンポーネントを生成 | M2 |
+| `reins render --harness <dir> --workspace <dir> --host <kind>[,..] [--dry-run] [--force] [--suspense-timeout <ms>]` | Lint → ensurePlan with bounded content fetching → plan → reconcile → commit. Save binding on first use (D-024). | M2 |
+| `reins import --workspace <dir> [--host ...] [--lossy]` | Import Markdown as raw and JSON/TOML as structural tool/rule nodes; generate composition components. Unsupported fields fail unless --lossy reports and drops them (D-035). | M2 |
+| `reins reload` | Explicitly record harness/switched for a running harness; DSH command is /reins-reload (D-026). | M3 |
+| `reins run --task <file> --profile reins-headless` | Start a headless run with the §5.8 compiled task as its initial user message (D-031). | M3 |
 | `reins status` | ドリフト・未適用提案・追跡済み生成物 | M2 |
 | `reins why <file>:<line>` | sourcemap → gid、via、provenance | M2 |
 | `reins explain --host <kind> [--seq n]` | 会計表（rendered / filtered 理由 / dropped） | M3 |
@@ -516,6 +573,8 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 | `reins eval run|compare|promote` | 評価 | M7 |
 
 binding：`$REINS_HOME/state/<wsid>/binding.json`（`wsid = digestBytes(realpath(git common dir) または realpath(root))`）。`REINS_HOME` 既定 `~/.reins`。
+
+Configuration import converts MCP servers to tool nodes and representable permissions.deny settings to enforced rule nodes (D-035). List unmappable items and fail, or report their removal with --lossy. Imported IDs are `imported.<path-slug>`; resolve collisions with -2, -3, and subsequent suffixes. Markdown round trips normalize the generated header and final newline; JSON/TOML round trips preserve parsed values structurally (I-HOST-4).
 
 ---
 
