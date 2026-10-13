@@ -1,8 +1,8 @@
 [
   {
     "file": "SPEC.md",
-    "start": 175,
-    "end": 179,
+    "start": 181,
+    "end": 185,
     "language": "",
     "section": "5.7 relay template",
     "check": "spec-contracts.tsx",
@@ -10,8 +10,8 @@
   },
   {
     "file": "SPEC.md",
-    "start": 184,
-    "end": 201,
+    "start": 190,
+    "end": 207,
     "language": "",
     "section": "5.8 task template",
     "check": "spec-contracts.tsx",
@@ -19,8 +19,8 @@
   },
   {
     "file": "SPEC.md",
-    "start": 213,
-    "end": 222,
+    "start": 219,
+    "end": 228,
     "language": "markdown",
     "section": "5.11 frontmatter",
     "check": "spec-contracts.tsx",
@@ -29,8 +29,8 @@
   },
   {
     "file": "SPEC.md",
-    "start": 238,
-    "end": 260,
+    "start": 246,
+    "end": 268,
     "language": "tsx",
     "section": "6.1 TSX",
     "check": "spec-fenced.tsx",
@@ -38,12 +38,12 @@
   },
   {
     "file": "SPEC.md",
-    "start": 324,
-    "end": 337,
+    "start": 337,
+    "end": 351,
     "language": "",
     "section": "7.2 pseudocode",
     "check": "host-reconcile-example.tsx",
-    "review": "Typed ownership/drift/write/delete/commit flow; deletion exposes the nullable observed-digest conflict."
+    "review": "Typed ownership/drift/write/delete/commit flow; deletion carries observed:null and static receipts are discriminated."
   },
   {
     "file": "DSH_INTEGRATION.md",
@@ -56,8 +56,8 @@
   },
   {
     "file": "DSH_INTEGRATION.md",
-    "start": 110,
-    "end": 131,
+    "start": 112,
+    "end": 133,
     "language": "toml",
     "section": "7 mise TOML",
     "check": null,
@@ -68,7 +68,7 @@
     "file": "SPEC.md",
     "section": "4.2/6.2/12.1 digest formulas",
     "check": "digest-examples.tsx",
-    "review": "Literal typed digest inputs; structured interfaces expose the Json boundary mismatch.",
+    "review": "Typed digest inputs use the validated toJson boundary.",
     "kind": "inline/prose"
   },
   {
@@ -96,7 +96,7 @@
     "file": "DSH_INTEGRATION.md",
     "section": "3 dynamic observe/commit",
     "check": "dsh-examples.tsx",
-    "review": "D-062 no-record receipt conflicts with the mandatory CommitReceipt.record.",
+    "review": "D-070 no-record dynamic receipt is represented explicitly by kind:dynamic.",
     "kind": "inline/prose"
   },
   {

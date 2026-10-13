@@ -55,10 +55,19 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 
 受け入れ基準：
 - I-REF-1〜5、I-ELAB-1〜5、I-CAP-1・2・4、I-LOG-1・4、I-PKG-1 のテストが通る。
-- examples/hello ETree goldens normalize namespace id, absolute Mount-config paths, and base to <NS>/<PATH>/<BASE>. Two elaborations on the same machine have identical digests. Rendered-file goldens remain exact (D-051).
+- ETree goldens save only {package:{name},root}, comparing gids and deps exactly. File goldens use memfs fixtureNamespace(name), /fixture/<name>, and zero SHA-256 base. Dedicated tests cover useNamespace; same-machine elaborations retain identical digests (D-088).
 - 欠落 id、重複 id、hook の範囲外呼び出し、`Math.random()` を使うコンポーネント、の各々が規定のエラーコードで失敗するテストがある。
 - I-ELAB-1 lint tests cover forbidden imports and expressions, including deterministic forbidden I/O, and verify that permitted core hooks pass. Double-elaboration tests verify nondeterminism detection separately.
 - Type tests cover soft-branded literals, type-erased component calls, JSON package props, named exports, JSX key restoration, boolean nodes, and unconstrained TaskState projections. Development tests check projection JSON serializability (D-042/044/045/046).
+
+Additional M1 acceptance (D-083/084/085/091):
+- JSX and h produce identical ETree in property tests; runtime session key restoration is asserted.
+- Component re-entry at the depth-256 limit fails ELAB_CYCLE; ComponentCall.render outside elaboration fails ELAB_HOOK_OUTSIDE_RENDER.
+- Invalid plugin event kinds fail EVENT_KIND_INVALID; unknown elements/leaf children fail INVALID_ELEMENT.
+- Reachable-module top-level initializer lint runs before evaluation; pureDependencies are explicit trusted imports.
+- Fixtures importing @deepseek-ai/* into core/static hosts fail dependency-boundary lint.
+- Vitest setup blocks fetch/net.connect, isolates HOME/REINS_HOME, and rejects writes outside test temporary directories.
+- toJson validates allowed values, removes undefined object properties, and rejects unsupported values with NOT_JSON.
 
 ---
 
@@ -74,14 +83,21 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 - ドリフト検出と持ち上げ提案（SPEC §8.2、提案の作成まで。適用は M4）。
 
 受け入れ基準（fixtures：`fixtures/ws-ts`（TS アプリ、`src/auth/` あり、既存 AGENTS.md と CLAUDE.md あり）、`fixtures/ws-py`、`fixtures/ws-notes`）：
-1. Import sets source-specific hosts; rendering immediately with agents-md/claude-code and dedupeWith:null preserves normalized Markdown and parsed JSON/TOML values (I-HOST-4, D-063).
-2. `examples/hello` を 3 ホストへ render した結果が golden と一致。`src/auth/AGENTS.md` と `src/auth/CLAUDE.md` が生成される。
+1. Human --adopt after a matching lossless import records observed ownership before rendering. Import sets source-specific hosts; rendering immediately with agents-md/claude-code and dedupeWith:null preserves normalized Markdown and parsed JSON/TOML values (I-HOST-4, D-063).
+2. Render hello to all three hosts against file goldens. no-raw-sql has explicit downgrade: Claude is rendered with permissions.deny, agents-md/Codex are degraded. Nested auth instruction files are generated (D-087).
 3. render 後 `git status --porcelain` が空（I-HOST-3）。
 4. 生成された `CLAUDE.md` を手で 1 行変更 → 再 render でそのファイルだけ上書きされず `drift/detected` が記録され、`reins status` が content-patch か lift-drift の提案を表示（I-HOST-2）。
 5. 非所有の `.claude/settings.json` がある状態で enforced rule を含む木を render → `TARGET_OCCUPIED`（I-HOST-1）。
 6. `reins why src/auth/CLAUDE.md:<n>` が gid・via・provenance を表示（I-RENDER-3）。
 7. I-RENDER-1・2・3・5・6、I-HOST-1〜5 のテストが通る。
 8. Static sessions are dropped with session:static-host and accountable descendants delegated. Static when conditions render under Conditional. Duplicate targets fail with TARGET_CONFLICT; Codex via-agents-md omits shared instructions/skills (D-048/059/064).
+
+Additional M2 acceptance (D-071/086/090/091):
+- Hypothesis headings have goldens; I-HOST-6/7 pass atomic-failure/concurrent-lock tests.
+- Deleted drift is displayed, not restored or proposed; human targeted force restores, and removed declarations prune absent records.
+- Lossless matching adoption succeeds only with human confirmation; lossy/mismatching/unrelated targets remain non-owned.
+- I-SEC-1 scans static outputs/state/logs for dummy secrets; only env reference syntax is emitted, and unsupported expansion drops with secret-unsupported.
+- Source changes affect workspace snapshots, generated-output changes do not; exact D-090 exclusions are tested.
 
 ---
 
@@ -98,12 +114,18 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 
 受け入れ基準：
 1. `dsh --profile reins --dump-config` に Reins の行が出る。
-2. 台本 LLM で 3 ターン実行：ターン 2 で `src/auth/x.ts` を読む → ターン 3 の要求にだけ auth 系ノードが現れる（on-touch）。
+2. In a four-turn script, read src/auth/x.ts in turn 2; auth content appears in turn 3. With no auth touch in turns 3/4, it is absent from turn 4 request (recent window, D-076).
 3. Across turns, `reins:static` and `reins:session` output strings are completely identical; only `reins:turn` changes (I-RENDER-4, D-020).
 4. エージェントがハーネスディレクトリへ書こうとするツール呼び出しが拒否され、`cap/denied` が記録される（I-CAP-2, I-CAP-5）。
 5. `model/request` が DSH セッションログを指し、そこから要求本文を再構成できる（I-LOG-2）。
 6. DSH_INTEGRATION.md §8.2 の contract（`subagents.continuable` を除く）が全て通る。
 7. **Demo:** `examples/hello/demo.sh` demonstrates one tree producing AGENTS.md, CLAUDE.md, and DSH per-turn prompts, with origin tracing through `reins why` / `reins explain` using UTF-16 code-unit ranges (D-020).
+
+Additional M3 acceptance (D-072/078/091):
+- Parallel suspension fetches, injected-clock timeout, CAS replay, and dependency-based degraded accounting pass.
+- Changing a static portion during a Run sets cacheBreak:true.
+- No session_* tools are presented without spawn permission.
+- Normalized HostConfig affects plan/memo/replay identity; setting changes cannot reuse a mismatching plan.
 
 ---
 
@@ -116,6 +138,11 @@ Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
 2. agent principal で `reins propose apply` → `CAP_DENIED`。human で適用 → 新パッケージ digest、`proposal/decided`（I-PROP-1）。
 3. `code-patch` を含みテストを壊す提案は適用されない（I-PROP-2）。
 4. `rationale` / `preference` の knowledge は評価対象外であることのテスト。
+
+Additional M4 acceptance (D-050/091):
+- A writing command anchor cannot alter the real workspace; temporary worktrees are removed.
+- An injected non-git snapshot size above 1 GiB produces unverifiable.
+- Dirty package application fails DIRTY_PACKAGE; successful Git application uses reins: apply proposal <id>.
 
 ---
 
@@ -135,6 +162,13 @@ Session work includes parent/child evaluation rules, one Run per mounted child, 
 7. 子の環境変数に、Grant の無い資格情報（テスト用ダミー `FAKE_TOKEN`）が無い（I-SESS-5）。
 8. 手動手順書 `docs/manual/real-runtimes.md`：実 Claude Code と実 Codex で 1 と 4 を再現した記録。
 9. Unmounted keys leave requestedSessions and cannot be reused within a Run (KEY_REUSED). Reconcile immediately after requests and on dynamic renders. Acceptance commands run directly only in disposable child workspaces; share-mode children use snapshot copies (D-047/058).
+
+Additional M5 acceptance (D-074/079/080/082/091):
+- I-SESS-6 verifies no crash-recovery resend; opId correlates every intent/payload/result.
+- A fake mise first on PATH records argv, proving session starts and anchor commands use mise exec.
+- session_spawn rejects extra fields/arbitrary harness/caps; runtime selection uses only a declared key and full profile spec. Unavailable launches fail RUNTIME_UNAVAILABLE.
+- Only declared credential refs with read grants enter the child env; values remain absent from persisted data (I-SEC-1).
+- Human checks return pending until human check/decided; command deadlines produce timeout and accepted:false. Pending-only results have accepted:null.
 
 ---
 
@@ -156,6 +190,6 @@ Session work includes parent/child evaluation rules, one Run per mounted child, 
 受け入れ基準：
 1. fixtures 上の 20 タスク × 2 ハーネス版 × 3 反復を実行し、比較レポート（成功率・費用・時間・ばらつき）を出す。
 2. evolver principal で final split を読もうとすると `SPLIT_LEAK`（I-EVO-1）。
-3. 比較対象 Trial の RunSpec が harness digest 以外一致しない場合、比較を拒否（I-EVO-2）。
+3. Reject comparisons with unequal TrialKey (workspace bases, task/model/seed/toolchain/caps/hosts); permit documented harness-derived metadata differences (I-EVO-2, D-089).
 4. 1 サイクル（propose → select → final → promote）を通しで実行した記録。
 5. Final data is sealed outside evolver namespaces and guarded against direct reads with SPLIT_LEAK; evolvers write only candidate copies (D-050/068).

@@ -25,11 +25,13 @@
 
 | 状況 | 行動 |
 |---|---|
+| A specification issue affects no law, invariant, or exported type | Decide and continue; record D-NNN (agent) and list it in the milestone report (D-092). |
+| A specification issue conflicts with a law/invariant or requires changing an exported type | Collect all such issues, report them together, and stop for the user decision (D-092). |
 | 仕様が上流（DSH・Claude Code・Codex）の実物と食い違う | 実物に合わせて **DSH_INTEGRATION.md / SPEC §7.5 の表だけ** を直し、DECISIONS.md に記録。法則・型・不変条件は変えない |
 | 仕様どおりだと不変条件が満たせない | 実装を止め、利用者に報告（§7 の書式、種別 BLOCKED） |
 | 仕様に書いていない細部（関数分割、内部データ構造、ファイル名） | 自由に決めてよい。公開 API・ファイル形式・CLI 引数に現れるなら DECISIONS.md に記録 |
 | 新しい要素種別・新しい法則が欲しくなった | 追加しない。DECISIONS.md に OQ として起票し、既存要素の組み合わせで実装を続ける |
-| types.ts の型を変えたい | 先に DECISIONS.md に D を起票し、理由と影響（どの I-* に触れるか）を書いてから変える。不変条件を弱める変更は不可 |
+| Exported types.ts change is needed | Stop and report under D-092 before changing it. Approved changes are recorded with affected I-*; never weaken invariants. |
 | 外部ツールの採用 | 既存のよく保守されたもの（yaml、fast-check、dependency-cruiser、esbuild 等）を優先。採用は DECISIONS.md に記録 |
 
 ## 3. 禁止事項（MUST NOT）
@@ -87,10 +89,10 @@ reins/
 ## 6. 工学上の規約
 
 - TypeScript strict（D-002 の全フラグ）。`any` 禁止、`as` キャストは境界（JSON パース直後の検証済み箇所）のみ。
-- 入力検証：外部から来る JSON（ファイル、frontmatter、ツール引数）は zod 等で検証してから types.ts の型にする。
+- Validate external JSON/frontmatter/tool args before assigning types. Structured canonical digest inputs go through toJson; reject unsupported values with NOT_JSON and never cast around the boundary (D-085).
 - エラー：`class ReinsError extends Error { code: ReinsErrorCode; node?; detail? }`。それ以外の throw はバグ扱い（`INTERNAL`）。
 - ライブラリは `console` に書かない。CLI だけが表示する。
-- Tests: invariant files use `test/invariants/I-XXX-N.test.ts`, and test names start with their ID. Use fast-check with 200 runs and report failure seeds. Goldens live in __golden__ and update only with UPDATE_GOLDEN=1. Normalize ETree namespace IDs, absolute Mount-config paths, and base to <NS>, <PATH>, and <BASE>; rendered file goldens compare exactly (D-051).
+- Tests: invariant files use `test/invariants/I-XXX-N.test.ts`, and test names start with their ID. Use fast-check with 200 runs and report failure seeds. Goldens live in __golden__ and update only with UPDATE_GOLDEN=1. ETree goldens save only {package:{name},root}, including exact gids/deps. File goldens use fixtureNamespace(name): memfs, root /fixture/<name>, zero SHA-256 base; useNamespace components have dedicated tests (D-088, replacing D-051).
 - 時刻と ULID は注入可能にする（テストで固定）。
 - コミット：1 論理変更 1 コミット。件名 `<package>: <変更>`、本文で関係する I-* / D-* を列挙。
 
@@ -120,4 +122,4 @@ BLOCKED の条件：法則・不変条件と上流の実物が矛盾する／受
 
 1. 上記構成の空リポジトリを作り、`docs/spec/` に本仕様一式を置き、`AGENTS.md` に本書へのポインタを書く。
 2. `mise.toml` を DSH_INTEGRATION.md §7 の通り置く（版は M0 で固定）。
-3. M0 を始める。
+3. Start M0 after the batch-4 reflection checkpoint. The general specification audit ends here. Apply D-092 for subsequent issues, and stop after the M0 report before M1.

@@ -96,7 +96,7 @@
 
 Canonical grammar: `<scheme>://<authority>[/<path>][@<pin>][#<fragment>]`. An empty root path omits the path separator.
 
-- `scheme`：`[a-z][a-z0-9+.-]*`。組み込み：`workspace` `harness` `context` `session` `run` `artifact`。他は Resolver プラグインが登録する。
+- `scheme`：`[a-z][a-z0-9+.-]*`。組み込み：`workspace` `harness` `context` `session` `run` `artifact` `secret`。他は Resolver プラグインが登録する。
 - For `harness`, `authority` is the package name: `(@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*`. The slash inside an npm scoped name belongs to authority. `self` is reserved for the current package (D-018).
 - Other schemes retain authority grammar `[a-z0-9][a-z0-9._-]*`, naming a binding in the namespace.
 - `path`：POSIX、正規化済み、`.`/`..` なし、末尾 `/` なし、先頭 `/` は区切りとして 1 個。
@@ -110,7 +110,7 @@ In `harness://@me/swe@^2#no-raw-sql`, authority is `@me/swe`, path is empty, pin
 
 ### 4.2 Namespace と Mount
 
-- Namespace は Mount の順序付き集合と親 id からなる不変値。`id = digestJson({mounts, parent})`。
+- Namespace は Mount の順序付き集合と親 id からなる不変値。`id = digestJson(toJson({mounts, parent}))`。
 - Mount は (scheme, authority) を Resolver と config に束縛する。同じ (scheme, authority) を 2 回含む Namespace は不正。
 - Mount の `ceiling` は、その Mount 経由で得られる権利の上限。実効権利 = principal の CapSet ∩ ceiling。
 - At Run start, construct ceiling grants with on `<scheme>://<authority>/**` and each Mount's rights, attenuate principal caps against their union without strict rejection, and use only the resulting effective caps in permits (D-057).
@@ -120,9 +120,15 @@ In `harness://@me/swe@^2#no-raw-sql`, authority is `@me/swe`, path is empty, pin
 
 | id | 対象 | config | version の定義 |
 |---|---|---|---|
-| `fs` | 任意ディレクトリ | `{ root: string }` | 内容ツリーの Merkle digest（`.git` と CommitRecord 対象外ファイルを除く。除外規則は §7.4） |
-| `git-worktree` | git 作業ツリー | `{ root: string }` | `git:<HEAD>` + 作業ツリー差分 digest |
+| `fs` | 任意ディレクトリ | `{ root: string }` | Merkle digest of included workspace files; exclusions are defined below (D-090) |
+| `git-worktree` | git 作業ツリー | `{ root: string }` | SHA-256 snapshot identity of HEAD, binary diff, and untracked files (D-073) |
 | `harness-pkg` | ハーネスパッケージ | `{ root?: string, registry?: string }` | パッケージ digest（§12.1） |
+
+All versions are sha256 Digests. A git-worktree snapshot is digestJson(toJson({kind:'git', head, diff:digestBytes(git diff --binary HEAD), untracked:{path:digestBytes}})). A workspace resolve returns its fixed Mount.base; immutable harness and pinned context mounts return their content digest. Git pins are reference notation, not a version representation. Changes during a Run appear only through ws/snapshot and ws/touched (D-073).
+
+Workspace snapshots exclude exactly .git/, every host CommitRecord target for that workspace, node_modules/, and, for git-worktree only, gitignored files. Include every other file. Changing source must change the snapshot; changing generated targets must not (D-090).
+
+secret://env/NAME addresses a driver-process environment credential. Its right is read; values are read only at launch and never placed in logs, CAS, or files (D-079).
 
 ### 4.3 解決規則
 
@@ -167,7 +173,7 @@ Types are defined in types.ts §4. Every element except fragment may carry BaseP
 Agent Skills 形式（`SKILL.md` + frontmatter `name` `description`）で描画される手順。`resources` は SKILL.md と同じディレクトリへコピーされる。
 
 ### 5.6 `tool`
-Tools are MCP server definitions or host-native tool names. MCP env entries MUST NOT contain literal secrets. Convert `${secret:NAME}` into the destination's supported environment-variable reference syntax, such as `${NAME}` in .mcp.json. If the destination has no supported reference syntax, account the tool as dropped with reason `secret-unsupported`. Secret values MUST NOT be written to any file or log (D-034).
+Tools are MCP server definitions or host-native tool names. ${secret:NAME} denotes secret://env/NAME (D-079). MCP env entries MUST NOT contain literal secrets. Convert `${secret:NAME}` into the destination's supported environment-variable reference syntax, such as `${NAME}` in .mcp.json. If the destination has no supported reference syntax, account the tool as dropped with reason `secret-unsupported`. Secret values MUST NOT be written to any file or log (D-034).
 
 ### 5.7 `context`
 毎ターン変わり得る情報。既定 `volatility: 'turn'`、既定 `onUnsupported: 'drop'`。`budgetTokens` を超える本文はホストが切り詰め、末尾に `…[truncated by reins: <gid>]` を付ける。`trust: 'relay'` は外部由来（子の出力、Web）を表し、ホストは次の形でのみ描画する（I-RENDER-6, I-SESS-2）：
@@ -231,6 +237,8 @@ anchors:
 
 TypeScript。JSX は任意の糖衣（`jsxImportSource: "@reins/core"`）で、`h()` と等価（MUST）。
 
+Only scope and session accept children. Leaf JSX props reject children and leaf h calls accept no rest children. Runtime unknown kinds and leaf children fail INVALID_ELEMENT (D-081).
+
 Brands are soft: JSX/frontmatter may use ordinary string literals, and kernel parse/validate functions enforce validity at runtime (D-042). Component calls are type-erased closures; `h(Component, props)` captures typed props, while `use(package, props?)` accepts JSON across package boundaries. LoadedPackage provides the entry and named component exports. Intrinsic h calls use IntrinsicProps; fragment syntax uses Fragment (D-045).
 
 `packages/core/src/jsx-runtime.ts` MUST export namespace JSX with the Element, ElementType, IntrinsicElements, and ElementChildrenAttribute members from JsxNamespaceShape. Under react-jsx, session key arrives as jsx/jsxs's third argument and MUST be restored into SessionEl props (D-046).
@@ -246,7 +254,7 @@ export default function Root() {
       {useFile('content/overview.md')}
       <scope at="workspace://app/src/auth/**">
         {useFile('content/auth/session-store.md')}
-        <rule id="no-raw-sql" enforcement="enforced"
+        <rule id="no-raw-sql" enforcement="enforced" onUnsupported="downgrade"
               guard={{ kind: 'deny-command', argvPrefix: ['psql'] }}
               body={{ format: 'md', text: 'DB へは ORM 経由でのみアクセスする。' }} />
       </scope>
@@ -266,12 +274,14 @@ export default function Root() {
 1. フック文脈を作る（現在パッケージ = root、`external`、projection キャッシュ）。
 2. `root.entry({})` を評価し、得られた ReinsNode を深さ優先・左から右で展開する：
    - Flatten arrays; discard null, undefined, and both boolean values; convert strings to instruction nodes (D-046).
-   - For $component, push name into via and invoke render() inside the hook context. If pkg is present, switch the current package before rendering; produced nodes belong to that package. Props were captured at call creation. Re-entry deeper than 256 fails with ELAB_CYCLE (D-045).
+   - For $component, push name into via and invoke render() inside the hook context. If pkg is present, switch the current package before rendering; produced nodes belong to that package. Props were captured at call creation. Re-entry reaching depth 256 fails with ELAB_CYCLE (D-091).
    - `fragment` は子を親へ平坦化。
    - Resolve Content refs to md. Read `harness://self/...` from the current package's files and other refs from driver-materialized `external`. Missing refs produce `suspended` with all missing refs; no suspended tree may supply a model request (D-024).
 3. scope の実効値を計算（§5.1）。
-4. Assign `<pkg>#<id>` for explicit IDs, or `<pkg>#~<via joined with />/<sibling index>` for anonymous nodes. Validate IDs, logical refs, required properties, and duplicate IDs at runtime; soft brands do not perform validation (I-ELAB-3, D-042).
-5. Wrap expanded nodes in a synthetic root scope with gid `<pkg>#~root` and no authored props. Exclude root and all scopes from accounting (D-043). Set ETree.external to the digest of the used `{ref: digest}` map. Compute `ETree.digest = digestJson({package, lock, namespace, external, root})`, keeping logSeq outside this digest (D-025).
+4. Assign GlobalNodeId as <pkg>#<domain><local>. Domain appends @<key>/ for each enclosing session portal. Explicit local IDs are NodeIds, unique within (package, domain); anonymous locals are ~ followed by the complete structural child-index path through every authoring node, including components (for example ~0.3.1). Each portal's descendants form their own uniqueness domain. Validate IDs, refs, required props, kinds, and leaf children at runtime (I-ELAB-3, D-075/081).
+5. Wrap expanded nodes in a synthetic root scope with gid `<pkg>#~root` and no authored props. Exclude root and all scopes from accounting (D-043). Set ETree.external to the digest of the used `{ref: digest}` map. Compute `ETree.digest = digestJson(toJson({package, lock, namespace, external, root}))`, keeping logSeq outside this digest (D-025).
+Every ENode has deps. Include its own resolved Content refs and all refs read by hooks in every ComponentCall on its via chain, propagating those call dependencies to all output descendants. Status is ok or unavailable. Hosts use unavailable deps to account degraded nodes with content-unavailable:<ref>; marker-text searches are forbidden (D-078).
+
 6. 開発モード（`REINS_DEV=1`、テストでは常時）では 1〜5 を 2 回行い digest 不一致なら `ELAB_IMPURE`。
 
 Before a dynamic model request or static CLI render, the driver MUST run `ensurePlan()` (D-024). Fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record `content/fetched {ref, digest}`, rebuild `external` from logged content events and CAS, and retry elaboration until done. Components do not access this map directly.
@@ -284,7 +294,7 @@ The hooks are `useLog(projection)`, `useTaskState()`, `useContent(ref)`, `useFil
 
 Purity checks have two required layers (D-023):
 
-1. **Static lint (MUST):** `@reins/eslint-plugin`, implemented in `packages/eslint-plugin` in M1, checks harness components. It prohibits imports of I/O modules such as `node:fs`, `node:child_process`, and `node:net`; `process.env`; `Date`; `Math.random`; `fetch`; `crypto.getRandomValues`; and I/O outside the `@reins/core` hooks. `reins render` MUST run this lint on the harness package and fail with `ELAB_IMPURE` if it reports a violation.
+1. **Static lint (MUST):** before evaluating any harness module, enumerate every module reachable from entry with the esbuild metafile and lint the complete graph, including initializers. Top-level statements may only be import/export, function/class declarations, or const declarations with pure literal initializers. Imports are limited to @reins/core, harness dependencies composed through use(), and manifest.pureDependencies; the last list is trusted and not linted. Prohibit I/O imports (including node:fs, node:child_process, node:net), process.env, Date, Math.random, fetch, crypto.getRandomValues, and I/O outside core hooks. reins render MUST reject violations with ELAB_IMPURE (D-023/084).
 2. **Double elaboration:** in development mode and tests, evaluate the same input twice and fail with `ELAB_IMPURE` if the results differ (I-ELAB-1). This detects nondeterminism only. Deterministic forbidden effects require static checks; passing repeated evaluation does not prove their absence.
 
 ### 6.4 Projection とタスク状態
@@ -294,13 +304,14 @@ Purity checks have two required layers (D-023):
 - The static projection applies to component task-state hooks; logged content inputs are still materialized through the same ensurePlan procedure (D-024).
 - Parent elaboration expands `session.children`, so JavaScript branches use parent state. Child hosts evaluate data `when`/`at` using the child's TaskState: the child's log projection for dynamic hosts, or the static projection for static hosts (D-029). Use data predicates for child-local dynamic conditions.
 - Projection<T>, useLog<T>, and project<T> do not require a Json generic constraint. Development mode MUST check projection state for JSON serializability at runtime (D-044).
+- At turn/start, move touchedThisTurn to touchedPrevTurn and clear touchedThisTurn. Keep touched/written cumulative. touches defaults to recent, matching the union of current and previous turn; turn and session select their respective windows (D-076).
 - requestedSessions contains only session/requested keys without session/unmounted; an unmounted key cannot be requested again in the same Run (D-047).
 
 ### 6.5 Predicate の評価と記述
 
 | op | 評価 | 静的ホストでの記述（英語固定文、ホストが見出しに使う） |
 |---|---|---|
-| touches | `touched` のいずれかが pattern に一致 | `When working on files matching \`<pattern>\`` |
+| touches | Match touchedThisTurn for window turn, current ∪ previous for recent (default), or cumulative touched for session (D-076). | `When working on files matching \`<pattern>\`` |
 | event | `within` に応じ `eventsThisTurn` / `eventsThisSession` が kind を含む | `After <kind> occurs` |
 | phase | `phase === is` | `During phase "<is>"` |
 | and/or/not | 論理演算 | `(<a>) and (<b>)` 等 |
@@ -313,9 +324,11 @@ Purity checks have two required layers (D-023):
 ### 7.1 契約
 `RuntimeHost`（types.ts §7）。`plan` は純粋・同期、`observe` は読み取りのみ、`commit` だけが書く。
 
-For dynamic hosts, observe returns empty targets; commit updates memo and records render/committed only for a changed plan digest. Dynamic hosts create no CommitRecord and have no drift (D-062).
+PlanContext.hostConfig is required. Normalize output-affecting settings by omitting default-valued keys and using canonical key order. RenderPlan.digest is digestJson(toJson({host, hostConfig, tree, taskState, outputs})); memo keys include tree.digest, taskState digest, and hostConfig digest. Lockfile.hosts and RunSpec.hosts record HostConfig values (D-072).
 
-### 7.2 ホスト調停（MUST）
+CommitReceipt distinguishes kind:static, with record/written/removed/skippedDrift, from kind:dynamic, with plan/changed. Dynamic observe returns empty targets; commit updates memo and records render/committed only for a changed digest. It creates no CommitRecord or drift (D-062/070).
+
+### 7.2 Static host reconciliation (MUST; D-070)
 
 Static host commits to the same workspace MUST be serialized by an exclusive lock at `$REINS_HOME/state/<wsid>/lock`. Hold it across observation, ownership/drift checks, writes, and CommitRecord updates. Fail with `LOCKED` after 30 seconds without acquiring it (D-037).
 
@@ -328,8 +341,9 @@ observed = host.observe(plan)
 last     = CommitRecord(workspace, host) or null
 for each target T in plan ∪ last:
   o = observed[T], l = last[T], p = plan[T]
-  if l == null and o != null:           → TARGET_OCCUPIED（全体失敗。import を提案）
-  if l != null and o != l.digest:       → drift/detected、T は skip（I-HOST-2）
+  if l != null and o == null and p == null: → remove T from CommitRecord (D-071)
+  elif l == null and o != null:           → TARGET_OCCUPIED（全体失敗。import を提案）
+  elif l != null and o != l.digest:       → drift/detected、T は skip（I-HOST-2）
   elif p != null and p.digest != o:     → 書く
   elif p == null and l != null:         → 削除（自分の生成物のみ）
 write CommitRecord（skip した T は旧 digest を保持）
@@ -348,7 +362,7 @@ The parent host accounts session descendants as `delegated`, with reason `sessio
 
 Volatility is a placement contract. Static/session nodes may change during a Run and the host MUST use the updated content. `render/committed.cacheBreak` is true when the system portion changes, and false otherwise. I-RENDER-4 still requires identical system outputs when only turn nodes differ (D-032).
 
-When the author has not specified onUnsupported, use these defaults (D-027). ENode.effective.onUnsupported is the resolved author setting or default. Select defaults from element properties without exposing host information to elaboration; the host decides whether realization is available.
+ENode.effective.onUnsupported is optional and contains only the authored/inherited setting. At plan time, choose the node setting, nearest explicitly specifying scope setting, the table below, then drop for any unlisted case. A prose realization counts as supported and does not consult onUnsupported. Elaboration never depends on host capabilities (D-077).
 
 | Unsupported situation | Default |
 |---|---|
@@ -401,7 +415,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 - `static`/`session` → `ctx.systemPrompt.section()`、`turn` と `at`/`when` 付き → `ctx.systemPrompt.context()`（DSH の cache-safe な動的文脈）。
 - `at` は動的ホストでは `when: touches(at)` として評価する（`pathScoping: 'on-touch'`）。
 - `tools: 'allowlist'` → `ctx.tools.restrict()`、enforced rule と権限 → `ctx.tools.guard()` / `tools/pre-execute`。
-- plan は (tree.digest, taskState digest) で memo 化（I-RENDER-1 により正当）。
+- Memoize by (tree.digest, taskState digest, hostConfig digest), with normalized HostConfig included in plan/replay inputs (I-RENDER-1, D-072).
 - Run ensurePlan before each model request; only done trees may be planned. Record render/committed only when the plan digest differs from the previously committed plan (D-024/025).
 - Skills expose only names and descriptions under `## Skills` in reins:static. `skill_load { name }` returns the body as a DSH tool result, which is logged (D-031).
 - Tasks lead reins:turn, compiled with §5.8. Reins does not synthesize ordinary user messages. Only `reins run --task <file> --profile reins-headless` sends the compiled task as the initial user message (D-031).
@@ -418,7 +432,9 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 §7.2。宣言 → 実体の同期と、実体の外部変更（ドリフト）の検出。
 
 ### 8.2 ドリフトの持ち上げ
-`drift/detected` に対して `reins status` は次を生成する：
+For deleted owned targets (observed:null), reins status displays deleted and creates no automatic Proposal. A human may restore only with reins render --force --target <path>, or edit the harness so the target leaves the plan. When both desired and observed target are absent, remove its old record entry without a drift proposal (D-071).
+
+For other drift/detected events, reins status generates:
 - 対象 target の sourcemap を使い、変更行を gid に対応付ける。
 - 変更行が単一の内容ファイル由来なら `content-patch`（内容ファイルへの unified diff）、そうでなければ `lift-drift`（新しい `raw` ノードとして取り込む diff）を持つ Proposal を作る。
 - 人間が「捨てる」を選んだ場合、`reins render --force`（human のみ）で上書きする。
@@ -487,13 +503,16 @@ External content is logged input (D-024): `content/fetched {ref: RefString, dige
 
 Run ownership (D-036): one Run per human CLI render/check/import invocation, per DSH root session, per mounted child session, and per evaluation Trial. `$REINS_HOME/runs/index.json` maps DSH session IDs to RunIds. Resume appends to the existing Run; child/fork relationships are recorded in RunSpec.
 
-On startup, reconcile intents without recorded outcomes (D-038):
+Log writers accept only built-in kinds or plugin names matching ^[a-z][a-z0-9-]*/[a-z][a-z0-9-/]*$. Plugins cannot use the reserved run/, ws/, turn/, task/, render/, content/, harness/, model/, drift/, anchor/, proposal/, session/, check/, cap/, or budget/ prefixes. Reject invalid kinds with EVENT_KIND_INVALID (D-083).
+
+Session intents have a ULID opId. session/sent is a pre-effect payload record, not an outcome. Only session/op-result closes an intent, using the same key/opId for mount, send, interrupt, stop, and detach. After a crash, an intent without op-result records outcome:unknown, notifies the human, and is never automatically retried; existing sessions still follow I-SESS-4 reattachment (D-074).
+
+On startup, recover unfinished effects (D-038 render recovery; D-074 session recovery):
 
 | Intent | Recovery |
 |---|---|
 | render/intent | Re-observe. If the observed outputs match the intended plan, record render/committed with recovered:true. Otherwise record render/failed and retain CommitRecord. |
-| session/intent mount | Try reattach. Record session/mounted on success, or session/status unknown on failure. |
-| session/intent send | Record session/status unknown and notify the human. Delivery cannot be established, so MUST NOT automatically resend. |
+| session/intent, any op | Record session/op-result with the matching opId and outcome unknown, notify the human, and MUST NOT automatically resend or repeat the effect (D-074). |
 
 ---
 
@@ -512,16 +531,16 @@ Static hosts do not mount sessions (D-048). Session reconciliation runs only in 
 
 | ツール | 動作 |
 |---|---|
-| `session_spawn {key, profile, workspace, task, interactive?}` | Select a predeclared manifest session profile, record session/requested, and wait for session/mounted before returning a session ref. RequestedSessions projects requests into session nodes; the kernel automatically appends it at the root's end when the root principal has spawn (D-041). |
-| `session_send {key, text}` | Record `session/intent` → record `session/sent` → perform `send`; on send failure, record `session/status` with status `failed` (D-021). |
+| `session_spawn {key, profile, workspace, task, interactive?, runtime?}` | Select a predeclared manifest session profile, record session/requested, and wait for session/mounted before returning a session ref. RequestedSessions projects requests into session nodes; the kernel automatically appends it at the root's end when the root principal has spawn (D-041). |
+| `session_send {key, text}` | Record session/intent {key,opId,op} → session/sent {key,opId,text} → send → session/op-result {key,opId,outcome:delivered or failed}. Preserve failure status reporting; only op-result is the outcome (D-021/074). |
 | `session_status {key}` | 最新状態と直近観測の要約（relay として） |
 | `session_interrupt {key}` | interrupt |
 | `session_result {key, wait?}` | 結果（relay） |
 | `session_stop {key}` | stop |
 
-`spawn` 権限が無ければ `session_spawn` はツール集合に現れない。
+Without spawn permission, session_* tools are not presented (D-091).
 
-The LLM MUST NOT construct an arbitrary child harness or supply arbitrary runtime/caps through session_spawn (D-041). `PackageManifest.sessionProfiles[name]` declares an entry-module component export, allowed runtime kinds, and caps. Select the child's harness from that export and attenuate profile caps against the requester's caps. Authors do not need to include RequestedSessions manually.
+The LLM MUST NOT supply arbitrary harness/caps or runtime model/tool/args. Profiles declare an exported component, runtimes:{kind:RuntimeSpec}, defaultRuntime, caps, and optional env refs. The optional runtime argument selects only a declared key, otherwise INVALID_ELEMENT. Use the full RuntimeSpec from the profile and reject extra tool arguments with additionalProperties:false. If mise exec cannot launch it, record failed and raise RUNTIME_UNAVAILABLE. Attenuate profile caps against the requester and inject RequestedSessions automatically (D-041/082).
 
 ### 11.3 マウント手順（MUST）
 1. `effective caps = attenuate(parent caps, node.caps, { strict: true })`. Check depth, child count, and budgets (I-SESS-1, I-CAP-4, D-022).
@@ -529,11 +548,13 @@ The LLM MUST NOT construct an arbitrary child harness or supply arbitrary runtim
 3. Parent elaboration has already expanded node.children and evaluated JavaScript branches using parent state. Plan the subtree with the child runtime's host, evaluating data when/at with child TaskState: the child log projection for dynamic DSH, or the static projection for static hosts (D-029). Map claude-code→claude-code, codex→codex, opencode/pi→agents-md, dsh→the child's DSH scope. Static plans produce renderedFiles and commit through §7.2.
 4. TaskSpec を §5.8 書式にコンパイル。
 5. セッションホストを選ぶ：`interactive` なら `tmux`（PTY）、そうでなければ構造化（DSH の `ctx.subagents` プロバイダ。DSH_INTEGRATION.md §5）。ランタイムは `mise exec <tool> -- <cmd>` で起動する。
-6. `session/mounted` に caps と Grant ごとの `Enforcement` を記録。
+6. Record session/mounted caps and per-Grant Enforcement, then the correlated session/op-result (D-074).
+
+For every SessionEl.env or profile env entry {VAR:secret://env/NAME}, require read in effective caps with permits; otherwise CAP_DENIED. MountRequest.env contains names/refs only. The session host reads values immediately before launch and never serializes them. Inherit only PATH, HOME, LANG, LC_*, TERM, TMPDIR, and MISE_* by default (D-079).
 
 ### 11.4 PTY（tmux）セッションホスト
 - tmux サーバはソケット `$REINS_HOME/tmux.sock` 専用。セッション名 `reins-<RunId 末尾8>-<key>`。
-- Send: record `session/intent`, then `session/sent`, then run `tmux load-buffer` + `paste-buffer -p` (bracketed paste) + `send-keys Enter`. On failure, record `session/status` with status `failed` (D-021).
+- Send: record intent and sent payload with one opId, then tmux load-buffer + paste-buffer -p + send-keys Enter. Record session/op-result delivered/failed afterward; failure status is separate. Never treat session/sent as an outcome (D-021/074).
 - observe：`capture-pane -p -J -S -2000` を 1 秒間隔で取り、前回との差分行を `screen` 観測として出す。
 - status 推定：ランタイムごとの判定器（プロンプト待ち表示・承認ダイアログの文字列パターン）をプラグインとして持つ。判定不能は `unknown`。パターンは M0 スパイク S-4 で採取する。
 - 人間の介入：`tmux -S $REINS_HOME/tmux.sock attach -t <name>`（`reins session attach <key>`）。人間の入力は観測されるが送信イベントにはならない（`screen` 観測として残る）。
@@ -545,16 +566,22 @@ The LLM MUST NOT construct an arbitrary child harness or supply arbitrary runtim
 
 ---
 
+### 11.6 Acceptance decisions (D-080)
+
+Command checks default to timeoutMs:600000; exceeding the deadline is timeout and fails acceptance. Human checks start pending. Only a human principal may run reins session check <key> <index> pass|fail [--note] to append check/decided. Child relay text cannot decide a human check. SessionResult.checks carry passed/failed/timeout/pending; accepted is true when all pass, false when any fail/timeout, and null when none fail but some remain pending. result() returns after the child exits and command/anchor checks complete, without waiting for pending human decisions.
+
+---
+
 ## 12. パッケージ・版・実行
 
 ### 12.1 パッケージ digest
-`digestJson({manifest, files: {path: digestBytes(content)}})`。files は entry から静的 import で到達する全モジュール（バンドラ esbuild の metafile で取得）と `content` glob の全ファイル。I-PKG-1。
+`digestJson(toJson({manifest, files: {path: digestBytes(content)}}))`。files は entry から静的 import で到達する全モジュール（バンドラ esbuild の metafile で取得）と `content` glob の全ファイル。I-PKG-1。
 
 ### 12.2 依存
 `dependencies` は `harness://` Ref（semver/tag/digest ピン）。レジストリは git URL（`registry` config で `harness://<scope>` → git URL のテンプレート）。`reins lock` が解決して `reins.lock` を書く。依存のコンポーネントは `use(name, props)` で使う。
 
 ### 12.3 Run
-`RunSpec`（types.ts §11）を `run/start` に完全記録する（I-RUN-1）。Run の識別：`RunId`（ULID）。比較キー：`digestJson(RunSpec から seed を除いたもの)`。
+`RunSpec`（types.ts §11）を `run/start` に完全記録する（I-RUN-1）。Run の識別：`RunId`（ULID）。General Run comparison key: digestJson(toJson(RunSpec with seed omitted)); this is distinct from TrialKey, which includes seed (D-089).
 
 Each CLI render/check/import invocation, DSH root session, mounted child session, and evaluation Trial owns one Run (D-036). Child RunSpec.parent is `{run, session}`; a DSH fork records forkedFrom `{run, seq}`. Resume continues the same Run, using runs/index.json for DSH session-to-Run mapping.
 
@@ -570,7 +597,7 @@ Human harness edits do not automatically change an active Run. `reins reload` or
 ## 13. 評価と進化（M7）
 
 - Taskset：splits（propose / select / final）は互いに素（I-EVO-1）。
-- Trial：一つの RunSpec の実行結果。比較する Trial 群は harness digest 以外が一致すること（I-EVO-2）。
+- Compare Trials only when TrialKey matches: digestJson(toJson({taskId, workspaceBases, model, seed, toolchain:{miseLock,dshVersion,patches}, principalCaps, hosts})). Harness digest, harness Mount config/base, harness dependency lock entries, namespace id, and RunSpec.parent may differ. This evaluation key is separate from the general Run key (I-EVO-2, D-089).
 - 進化ループ：evolver が propose split の Trial ログ（ファイルとして読む。Meta-Harness 方式）から Proposal を作る → 候補パッケージを fork に適用 → select split で評価 → promoter が final split で最終判定し `harness:write` で採用。
 - 外部評価基盤（Harbor 等）はアダプタとして接続してよい（MAY）。
 - Final tasks/results are stored under `$REINS_HOME/sealed/<taskset>/`, omitted from evolver Run namespaces, and protected by a read guard that raises SPLIT_LEAK. They MUST NOT remain accessible as ordinary files to evolvers (D-068).
@@ -582,8 +609,8 @@ Human harness edits do not automatically change an active Run. `reins reload` or
 | コマンド | 機能 | 導入 |
 |---|---|---|
 | `reins init [--embedded]` | パッケージ雛形 | M1 |
-| `reins render --harness <dir> --workspace <dir> --host <kind>[,..] [--dry-run] [--force] [--suspense-timeout <ms>]` | Lint → ensurePlan with bounded content fetching → plan → reconcile → commit. Save binding on first use (D-024). | M2 |
-| `reins import --workspace <dir> [--host ...] [--lossy]` | Import Markdown as raw and JSON/TOML as structural tool/rule nodes; generate composition components. Unsupported fields fail unless --lossy reports and drops them (D-035). | M2 |
+| `reins render --harness <dir> --workspace <dir> --host <kind>[,..] [--dry-run] [--force] [--target <path>] [--suspense-timeout <ms>]` | Lint → ensurePlan with bounded content fetching → plan → reconcile → commit. Save binding on first use (D-024). | M2 |
+| `reins import --workspace <dir> [--host ...] [--lossy] [--adopt]` | Import Markdown as raw and JSON/TOML as structural tool/rule nodes; generate composition components. Unsupported fields fail unless --lossy reports and drops them (D-035). | M2 |
 | `reins reload` | Explicitly record harness/switched for a running harness; DSH command is /reins-reload (D-026). | M3 |
 | `reins run --task <file> --profile reins-headless` | Start a headless run with the §5.8 compiled task as its initial user message (D-031). | M3 |
 | `reins status` | ドリフト・未適用提案・追跡済み生成物 | M2 |
@@ -592,6 +619,7 @@ Human harness edits do not automatically change an active Run. `reins reload` or
 | `reins check` | アンカー評価 → 提案 | M4 |
 | `reins propose list\|show\|apply\|reject <id>` | 提案管理 | M4 |
 | `reins session ls\|attach\|send\|interrupt\|stop` | 子セッション操作 | M5 |
+| `reins session check <key> <index> pass\|fail [--note]` | Human-only acceptance decision (D-080). | M5 |
 | `reins lock` / `reins add <ref>` | 依存解決 | M6 |
 | `reins replay <RunId>` | Reproduce the static render plan from a recorded Run (MILESTONES M6). | M6 |
 | `reins eval run\|compare\|promote` | 評価 | M7 |
@@ -602,11 +630,15 @@ Configuration import converts MCP servers to tool nodes and representable permis
 
 ---
 
+After import, plan in memory and compare each imported target with its existing normalized content. Only matching, lossless imports may be adopted with human --adopt or an interactive y. Record render/adopted and a CommitRecord using observed digests, without overwriting; a later render adds generated headers. Lossy/mismatching targets and unrelated non-owned files remain TARGET_OCCUPIED (D-086).
+
+The JSON boundary is toJson(unknown): accept plain objects, arrays, finite numbers, strings, booleans, and null; drop undefined object properties and reject unsupported values with NOT_JSON. All structured digest formulas use digestJson(toJson(value)); unchecked casts are forbidden (D-085).
+
 ## 15. Before / After
 
 **A. 指示ファイル**
 - Before：AGENTS.md と CLAUDE.md を手で書き、`src/auth/` 用の注意を両方にコピーし、Codex 用 skills と Claude 用 skills を別々に置く。
-- After：木に `<scope at="workspace://app/src/auth/**">` を 1 回書く。`reins render --host agents-md,claude-code` で `src/auth/AGENTS.md` と `src/auth/CLAUDE.md` が出る。DSH では同じノードが `src/auth` に触れたターンだけ文脈に入る。
+- After：木に `<scope at="workspace://app/src/auth/**">` を 1 回書く。`reins render --host agents-md,claude-code` で `src/auth/AGENTS.md` と `src/auth/CLAUDE.md` が出る。DSH uses the recent window (current and previous turn) by default; unused touches expire as defined in D-076.
 
 **B. 腐敗**
 - Before：誰かが CLAUDE.md を直接直し、AGENTS.md と食い違う。`pnpm test:unit` が改名されても指示は古いまま。

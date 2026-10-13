@@ -39,7 +39,7 @@
 | `tools: 'allowlist'` | `ctx.tools.restrict()`（scope 内） | 提示・検索・実行の 3 面が揃う |
 | enforced rule、Grant 外の操作 | `ctx.tools.guard()`（単調拒否）＋ `tools/pre-execute` | 拒否時に Reins ログへ `cap/denied` |
 | ハーネスへの書き込み禁止（I-CAP-2） | `ctx.tools.guard()` で harness Mount の locator 配下への書き込み系ツールを常に拒否 | `fs/*` イベントでも拒否 |
-| session_* ツール | `ctx.tools.register()`（`defineTool`） | `spawn` 権限が無ければ登録しない |
+| session_* tools | ctx.tools.register() / defineTool | Present none without spawn. Profile schemas reject extra args and arbitrary harness/caps; runtime only selects a declared profile key (D-082/091). |
 
 The inline plan(ac) helper is an adapter-local memo view. Its system(bucket) selects the completed per-agent prompt output's system part for that volatility. The typed helper is included in checks/dsh-examples.tsx.
 
@@ -50,13 +50,13 @@ The inline plan(ac) helper is an adapter-local memo view. Its system(bucket) sel
 | budget usage | Read assistant/message usage and append budget/charged; an over-budget agent/request waterfall rejects without next() and stops the turn (D-039). |
 | wallclock | Measure from mount, interrupt on excess, and stop after 30 seconds (D-039). |
 
-**Plan preparation and caching:** before a model request, run asynchronous ensurePlan(). If elaborate returns suspended, fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record content/fetched, rebuild external from content events/CAS, and retry (D-024). At the suspenseTimeoutMs deadline (default 10000), or on fetch failure, record content/unavailable and resolve the specified placeholder. Affected nodes are degraded with reason `content-unavailable:<ref>`. Requests MUST wait for done; synchronous text providers use only the completed plan.
+**Plan preparation and caching:** before a model request, run asynchronous ensurePlan(). If elaborate returns suspended, fetch missing refs in parallel, store successful bodies in `$REINS_HOME/cas/<digest>`, record content/fetched, rebuild external from content events/CAS, and retry (D-024). At the suspenseTimeoutMs deadline (default 10000), or on fetch failure, record content/unavailable and resolve the specified placeholder. Hosts identify affected nodes from ENode.deps status unavailable, never from marker-text matching; they are degraded with reason content-unavailable:<ref> (D-078). Requests MUST wait for done; synchronous text providers use only the completed plan.
 
-Memoize by (tree.digest, taskState digest). ETree.digest excludes logSeq and includes the used external-content digest (D-025). Record render/committed only when plan digest changes, and include cacheBreak indicating whether the system portion changed (D-032). Section order is Rules → Instructions → Knowledge → Skills → Conditional → raw (D-031).
+Memoize by (tree.digest, taskState digest, normalized hostConfig digest) (D-072). ETree.digest excludes logSeq and includes the used external-content digest (D-025). Record render/committed only when plan digest changes, and include cacheBreak indicating whether the system portion changed (D-032). Section order is Rules → Instructions → Knowledge → Skills → Conditional → raw (D-031).
 
 Implement preparation in the asynchronous per-agent system-prompt/assemble waterfall: await ensurePlan(), await next(), then replace the returned assembly's reins parts when the plan changed. Section/context providers are synchronous memo readers. S-5 MUST verify PromptAssembly structure and replacement support; unavailable replacement makes M0 BLOCKED (D-055). Names are exactly reins:static, reins:session, and reins:turn, scoped by registration (D-061).
 
-Dynamic observe returns empty targets; commit updates memo and records changed-plan render/committed only. It creates no CommitRecord and has no drift (D-062).
+Dynamic observe returns empty targets; commit returns {kind:dynamic,plan,changed}, updates memo, and logs changed-plan render/committed only. No CommitRecord or drift is created (D-062/070).
 
 ## 4. DSH ログの橋渡し
 
@@ -66,7 +66,7 @@ One DSH root session owns one Run. `$REINS_HOME/runs/index.json` maps DSH sessio
 
 | DSH セッションイベント | Reins ログ |
 |---|---|
-| `turn/start` | `turn/start {external}`（TaskState の `eventsThisTurn` をリセットする境界） |
+| `turn/start` | `turn/start {external}`(Reset eventsThisTurn; move touchedThisTurn to touchedPrevTurn and clear touchedThisTurn, D-076.) |
 | `tool/result`（fs 系ツール、read/write） | `ws/touched {paths, op}` |
 | `tool/result`（bash 系、argv が `testCommandPatterns` に一致し exit≠0） | `reins/test-failed`（拡張イベント）|
 | `agent/request`（waterfall、観察のみで `next()` を呼ぶ） | `model/request {host, bytes, external: {system:'dsh', session, seqFrom, seqTo}}` |
@@ -98,6 +98,8 @@ Reverse-map absolute tool paths through Namespace locators into workspace://<aut
 If a provider lacks a required condition, use the fallback and record the decision. For DSH-provider children, output travels through DSH relay messages with source kind subagent-report/subagent-settled; SessionDigest renders only state. Other child outputs enter Reins relay context. Child content never becomes instruction, rule, or knowledge (D-049, I-SESS-2).
 
 **深さ**：DSH の `SessionHeader.delegationDepth` と Reins の `Budget.maxDepth` の小さい方を実効値とする。
+
+Secret env handoff uses declared secret://env/NAME refs and effective read grants; values are resolved only immediately before launch. Inherit the D-079 environment allowlist only. All session effects use correlated intent/op-result events, and child human checks remain pending until a human check/decided (D-074/079/080).
 
 ## 6. 権限境界の注意
 

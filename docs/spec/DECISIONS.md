@@ -65,7 +65,7 @@ Batch 2 scope: support Linux and macOS only; Windows is a non-goal. M0 uses real
 
 ## User decisions, batch 3 (2026-10-13)
 
-`DECISIONS-batch-3.md` is preserved as supplied. Its bundled types.ts replaces the previous type source. The batch contains the 24 decisions below; D-052, D-054, and D-056 are absent from the supplied numbering range and are tracked by the full audit.
+`DECISIONS-batch-3.md` is preserved as supplied. Its bundled types.ts replaces the previous type source. The batch contains the 24 decisions below; D-052, D-054, and D-056 were absent from the supplied range; D-069 later reserves them permanently.
 
 | ID | Date | Decision | Reason | Alternatives | Impact |
 |---|---|---|---|---|---|
@@ -94,6 +94,46 @@ Batch 2 scope: support Linux and macOS only; Windows is a non-goal. M0 uses real
 | D-067 | 2026-10-13 | Reverse-map DSH absolute tool paths through Namespace locators into workspace refs. Omit paths outside all Mounts. | Keep logged paths logical and namespace-bound. | Store absolute tool paths in ws/touched. | DSH_INTEGRATION §4. |
 | D-068 | 2026-10-13 | Store final tasks/results under REINS_HOME/sealed/<taskset>, omit them from evolver namespaces, and deny reads through guards with SPLIT_LEAK. | Enforce split isolation beyond prompt conventions. | Leave final data readable to evolvers. | SPEC §13; I-EVO-1. |
 
+
+## User decisions, batch 4 (2026-10-13)
+
+DECISIONS-batch-4.md is preserved as supplied. Its canonical types replace the previous file. D-069 settles the prior numbering gaps; D-092 changes the work gate.
+
+| ID | Date | Decision | Reason | Alternatives | Impact |
+|---|---|---|---|---|---|
+| D-069 | 2026-10-13 | Reserve D-052, D-054, and D-056 permanently; never reuse them. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | DECISIONS; README |
+| D-070 | 2026-10-13 | Discriminate static/dynamic CommitReceipt; the file reconciliation algorithm is static-only. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | types; SPEC 7.1/7.2 |
+| D-071 | 2026-10-13 | Deleted owned outputs are drift with observed:null. Show deleted, make no automatic Proposal; human targeted force restores, or removing the declaration prunes the absent record. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 7.2/8.2/14; I-HOST-2; M2 |
+| D-072 | 2026-10-13 | Require normalized HostConfig in plan inputs, digest, memo, Lockfile and RunSpec; omit default-valued keys. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 7.1/7.6; DSH; I-RENDER-1; M3 |
+| D-073 | 2026-10-13 | Versions are SHA-256; mutable workspace resolution returns fixed Mount.base. Git snapshots hash head/binary diff/untracked digests; live changes are logged separately. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 4; I-REF-1/2 |
+| D-074 | 2026-10-13 | Correlate all session intents with ULID opId. Log send payload before effect; only op-result closes an intent. Recover absent results as unknown, notify, and never retry automatically. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 10/11; I-LOG-3; I-SESS-6; M5 |
+| D-075 | 2026-10-13 | GIDs combine package, enclosing session-key domain, and explicit ID or complete structural child-index path including components; explicit uniqueness is per package/domain. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6.2; I-ELAB-3; types |
+| D-076 | 2026-10-13 | touches defaults to recent (current plus previous turn); turn/session choose narrower/cumulative windows. Shift touchedThisTurn to touchedPrevTurn at turn/start. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6.4/6.5; DSH; TaskState; M3 |
+| D-077 | 2026-10-13 | ENode stores only optional authored/inherited unsupported policy. Plan selects node, nearest scope, the situation table, then drop. Prose counts as supported. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 7.3; types |
+| D-078 | 2026-10-13 | Record node deps from its own Content and refs read by all enclosing component calls; conservatively propagate to descendants and derive degradation from unavailable deps. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6.2; ENode; DSH; M3 |
+| D-079 | 2026-10-13 | Use secret://env/NAME with read grants and declared env refs. Read values only at launch, never serialize them; inherit only PATH/HOME/LANG/LC_*/TERM/TMPDIR/MISE_* by default. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 4/11; I-SESS-5; I-SEC-1; M5 |
+| D-080 | 2026-10-13 | Command checks default to 600000 ms. Human decisions are human-only check/decided; pending checks do not delay result. accepted is true/all passed, false/failed or timeout, null/pending-only. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 11.6/14; Check; SessionResult; M5 |
+| D-081 | 2026-10-13 | Only scope/session take children. Reject leaves in JSX/h types and raw-data validation; unknown kinds/leaf children fail INVALID_ELEMENT. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6; types; M1 |
+| D-082 | 2026-10-13 | Profiles contain full RuntimeSpecs keyed by allowed kind and defaultRuntime. LLM runtime selects a key only; schemas reject extra fields. Failed mise launches raise RUNTIME_UNAVAILABLE. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 11.2; manifest; M5 |
+| D-083 | 2026-10-13 | Validate plugin event grammar and forbid reserved built-in prefixes; invalid kinds fail EVENT_KIND_INVALID. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 10; writer; M1 |
+| D-084 | 2026-10-13 | Lint the complete reachable graph before evaluating modules, including initializers. Allow only stated top-level declarations/literals and explicit trusted pureDependencies. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6.3; manifest; M1 |
+| D-085 | 2026-10-13 | Add validated toJson(unknown), strip undefined object properties and reject non-JSON values with NOT_JSON; every structured digest formula uses toJson. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 12/other formulas; KernelApi; checks; M1 |
+| D-086 | 2026-10-13 | Adopt only normalized matching lossless imports with human --adopt/interactive confirmation. Record render/adopted and observed digests without overwriting; render then adds headers. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 14; I-HOST-1; M2 |
+| D-087 | 2026-10-13 | Hello no-raw-sql explicitly allows downgrade. Claude accounting is rendered; agents-md/Codex are degraded. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 6.1; M2; checks |
+| D-088 | 2026-10-13 | ETree goldens save {package:{name},root} only. Exact file goldens use deterministic memfs /fixture/name and zero-base Namespace; namespace-reading components get dedicated tests. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | AGENT 6; M1; replaces D-051 |
+| D-089 | 2026-10-13 | Compare Trials by a separate seed-inclusive TrialKey: task ID, workspace bases, model, toolchain, caps and HostConfigs. Permit harness-derived metadata differences. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 12.3/13; I-EVO-2; M7 |
+| D-090 | 2026-10-13 | Snapshots exclude only .git, all generated CommitRecord targets, node_modules, and (git-worktree only) gitignored files. Include all remaining source. Resolve OQ-05. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | SPEC 4.2; OQ-05; M2 |
+| D-091 | 2026-10-13 | Add I-SEC-1, I-HOST-6/7 and I-SESS-6, plus the complete missing acceptance checks for M1–M5 listed in the supplied batch. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | INVARIANTS; MILESTONES; A-018 |
+| D-092 | 2026-10-13 | End general spec auditing and begin M0. Agent decisions may resolve issues affecting no laws/invariants/exported types; protected-contract issues are aggregated and stop work. Stop after the M0 report. | Resolve the supplied audit response and preserve the approved contract. | Prior contradictory or unspecified behavior. | AGENT 2/8; process |
+
+### Reserved numbers (D-069)
+
+| ID | Date | Decision | Reason |
+|---|---|---|---|
+| D-052 | 2026-10-13 | Reserved; do not use or reuse. | Intentionally unused number, confirmed by D-069. |
+| D-054 | 2026-10-13 | Reserved; do not use or reuse. | Intentionally unused number, confirmed by D-069. |
+| D-056 | 2026-10-13 | Reserved; do not use or reuse. | Intentionally unused number, confirmed by D-069. |
+
 ## 未決（既定値で進める）
 
 | ID | 問い | 既定値 | 解決手段 |
@@ -102,7 +142,7 @@ Batch 2 scope: support Linux and macOS only; Windows is a non-goal. M0 uses real
 | OQ-02 | Codex の skills ディレクトリと、enforced rule を実現できる設定があるか | `.agents/skills`、guard なし（downgrade/error） | スパイク S-3 |
 | OQ-03 | DSH の `claude-code` / `codex` サブエージェントプロバイダが D-009 の条件 1〜4 を満たすか | 満たさない前提でフォールバック実装も用意 | スパイク S-6 |
 | OQ-04 | DSH で既存の AGENTS.md 読み込みプラグインと Reins の section が二重になるのをどう避けるか | Reins profile では既存の AGENTS.md section provider を patch.yml で無効化し、`reins import` で取り込んだ raw として出す | スパイク S-5 |
-| OQ-05 | `fs` resolver の Merkle digest に含めないファイル | `.git/`、Reins 生成物（CommitRecord の targets）、`node_modules/`、`.gitignore` 対象 | M1 実装時に確定 |
+| OQ-05 | Workspace snapshot exclusions | Resolved by D-090: .git/, all host CommitRecord targets, node_modules/, and gitignored paths for git-worktree only. | Resolved (D-090). |
 | OQ-06 | ワークスペースの `ws/snapshot` をいつ取るか（コスト） | mount 時と Run 終了時と `reins check` 時のみ。ターン毎は取らない | M3 で計測 |
 | OQ-07 | import-boundary アンカーの非 TS 言語対応 | custom evaluator に委ねる | M4 |
 | OQ-08 | ハーネスパッケージのレジストリ | git URL テンプレートのみ | M6 |

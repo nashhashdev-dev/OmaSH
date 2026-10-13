@@ -7,12 +7,14 @@
 | `AGENT_BRIEF.md` | 実装エージェントへの指示。**入口** | 規範 |
 | `SPEC.md` | 何を作るか、法則、全機構の意味論 | 規範 |
 | `types.ts` | カーネルのデータモデル（`tsc --strict` 通過済み） | 規範（正本） |
-| `INVARIANTS.md` | 不変条件 41 件と試験義務 | 規範（最上位） |
+| `INVARIANTS.md` | 不変条件 45 件と試験義務 | 規範（最上位） |
 | `DSH_INTEGRATION.md` | DSH / mise への載せ方、上流追随とパッチ方針 | 規範 |
 | `MILESTONES.md` | M0〜M7 の成果物と受け入れ基準 | 規範 |
-| `DECISIONS.md` | 65 recorded decisions numbered through D-068; D-052/054/056 were not supplied. Ten open questions have defaults. | Record |
+| `DECISIONS.md` | 89 active decisions through D-092 plus 3 permanently reserved IDs. Nine open questions have defaults; OQ-05 is resolved. | Record |
 | `DECISIONS-batch-2.md` | Supplied D-024 through D-041 and platform/real-runtime scope. | User decisions, reflected in the normative files. |
 | `DECISIONS-batch-3.md` | Supplied batch-3 decisions and its canonical type source. | User decisions, reflected in the normative files. |
+| `DECISIONS-batch-4.md` | Supplied D-069 through D-092; settles A-001 through A-022 and changes the work gate. | User decisions, reflected in the normative files. |
+| `audit/FULL_AUDIT.md` | Historical full audit with batch-4 resolution evidence. | Record |
 | `checks/` | Specification examples and positive/negative type checks; run tsc -p docs/spec/checks. | Validation |
 
 ## 渡し方

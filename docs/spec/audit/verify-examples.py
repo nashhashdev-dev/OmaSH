@@ -12,7 +12,7 @@ checks = [
  ('SPEC.md', '5.8 task template', 'spec-contracts.tsx', 'Typed TaskSpec exercises command/anchor/human criteria and deliverables/references. Rendering bytes remain implementation acceptance work.'),
  ('SPEC.md', '5.11 frontmatter', 'spec-contracts.tsx', 'Exact data transcribed as typed KnowledgeEl. YAML frontmatter parsed with PyYAML; runtime useFile validation remains M1.'),
  ('SPEC.md', '6.1 TSX', 'spec-fenced.tsx', 'Exact fenced TSX body; only its lastFailure helper is supplied as surrounding context.'),
- ('SPEC.md', '7.2 pseudocode', 'host-reconcile-example.tsx', 'Typed ownership/drift/write/delete/commit flow; deletion exposes the nullable observed-digest conflict.'),
+ ('SPEC.md', '7.2 pseudocode', 'host-reconcile-example.tsx', 'Typed ownership/drift/write/delete/commit flow; deletion carries observed:null and static receipts are discriminated.'),
  ('DSH_INTEGRATION.md', '1 architecture', None, 'Non-executable architecture text; no TypeScript meaning.'),
  ('DSH_INTEGRATION.md', '7 mise TOML', None, 'Parsed with Python tomllib; tool versions marked for M0 are placeholders, not verified runtime pins.'),
 ]
@@ -33,11 +33,11 @@ for block, (file, section, target, note) in zip(blocks, checks):
         item['syntax'] = 'PASS'
     manifest.append(item)
 inline = [
- ('SPEC.md', '4.2/6.2/12.1 digest formulas', 'digest-examples.tsx', 'Literal typed digest inputs; structured interfaces expose the Json boundary mismatch.'),
+ ('SPEC.md', '4.2/6.2/12.1 digest formulas', 'digest-examples.tsx', 'Typed digest inputs use the validated toJson boundary.'),
  ('SPEC.md', '4.1 references; 5 element props; 6 hooks; 9 strict attenuation; 10 event payloads; 11 profiles', 'spec-contracts.tsx / spec-examples.tsx', 'Typed literals and kernel calls; prose formulas are represented without executing effects.'),
  ('DSH_INTEGRATION.md', '2 settings / 4 event map / 8 upstream pin', 'dsh-examples.tsx', 'Typed configuration literals and event-map extension.'),
  ('DSH_INTEGRATION.md', '3 section/context/restrict/guard/register', 'dsh-examples.tsx', 'Exact inline registrations with a typed local memo view. DSH signatures are stubs for the documented seam; installed upstream behavior remains M0.'),
- ('DSH_INTEGRATION.md', '3 dynamic observe/commit', 'dsh-examples.tsx', 'D-062 no-record receipt conflicts with the mandatory CommitReceipt.record.'),
+ ('DSH_INTEGRATION.md', '3 dynamic observe/commit', 'dsh-examples.tsx', 'D-070 no-record dynamic receipt is represented explicitly by kind:dynamic.'),
  ('SPEC.md / DSH_INTEGRATION.md', 'Shell commands, paths, table syntax and output templates', None, 'Commands are inventoried, not run as TypeScript. Running real runtimes belongs to gated M0.'),
 ]
 manifest += [dict(file=file, section=section, check=check, review=note, kind='inline/prose') for file,section,check,note in inline]

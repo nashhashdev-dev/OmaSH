@@ -35,7 +35,7 @@ ctx.tools.register()
 
 // D-062 explicitly describes a dynamic host without a CommitRecord.
 const observed: Observed = { host: 'dsh@1.0.0', targets: [] }
-const dynamicReceipt: CommitReceipt = { written: [], removed: [], skippedDrift: [] }
+const dynamicReceipt: CommitReceipt = { kind: 'dynamic', plan: 'sha256:' + '0'.repeat(64), changed: false }
 
 // DSH_INTEGRATION 4: augmentation and event payload examples.
 declare module '../types.ts' {

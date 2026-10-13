@@ -14,12 +14,14 @@ type TargetDecision =
   | { readonly kind: 'skip-drift'; readonly expected: Digest; readonly observed: Digest | null }
   | { readonly kind: 'write'; readonly bytes: string }
   | { readonly kind: 'remove' }
+  | { readonly kind: 'forget' }
   | { readonly kind: 'unchanged' }
 
 function decision(target: string, plan: RenderPlan, observed: Observed, previous: CommitRecord | null): TargetDecision {
   const existing = observed.targets.find(item => item.target === target)?.digest ?? null
   const owned = previous?.targets.find(item => item.target === target)
   const desired = plan.outputs.find(output => output.kind === 'file' && output.target === target)
+  if (owned && existing === null && !desired) return { kind: 'forget' }
   if (!owned && existing !== null) return { kind: 'fail', code: 'TARGET_OCCUPIED' }
   if (owned && existing !== owned.digest) return { kind: 'skip-drift', expected: owned.digest, observed: existing }
   if (desired?.kind === 'file') {
@@ -38,13 +40,14 @@ async function checkReconcileFlow() {
   ])
   for (const target of targets) decision(target, planned, observed, last)
   const receipt = await host.commit(planned, observed, last, actor)
+  if (receipt.kind !== 'static') throw new Error('Expected a static receipt in the file-host example')
   const record: CommitRecord = receipt.record
   return record
 }
 void checkReconcileFlow
 
 // Deletion of a previously owned file is drift under SPEC 7.2 / I-HOST-2.
-// Observed represents absence as null; the required event field cannot.
+// Both observation and drift events preserve absence as null (D-071).
 const deletedDrift: LogEventMap['drift/detected'] = {
   host: 'agents-md@1.0.0', target: 'AGENTS.md', expected: 'sha256:' + '0'.repeat(64), observed: null,
 }

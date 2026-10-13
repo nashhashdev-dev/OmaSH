@@ -14,7 +14,7 @@ SPEC = Path(__file__).resolve().parent.parent
 OUT = SPEC / 'audit'
 CANONICAL = ['AGENT_BRIEF.md', 'SPEC.md', 'DSH_INTEGRATION.md', 'INVARIANTS.md',
              'MILESTONES.md', 'DECISIONS.md', 'README.md', 'types.ts']
-HISTORICAL = ['DECISIONS-batch-2.md', 'DECISIONS-batch-3.md']
+HISTORICAL = ['DECISIONS-batch-2.md', 'DECISIONS-batch-3.md', 'DECISIONS-batch-4.md']
 sources = {name: (SPEC / name).read_text() for name in CANONICAL + HISTORICAL}
 
 def emit(name: str, value):
@@ -53,10 +53,13 @@ non_events = {
     'reins/task-compile': 'core function', 'reins/task-state': 'projection ID',
     'render/check': 'CLI invocation shorthand', 'tool/rule': 'element-kind shorthand',
     'turn/task': 'volatility/element shorthand',
+    'check/write':'reconciliation phase shorthand', 'harness/caps':'spawn field shorthand',
+    'harness/pinned':'immutable mount category shorthand', 'model/tool':'runtime field shorthand',
+    'task/model':'trial comparison field shorthand', 'turn/session':'predicate-window alternatives',
 }
 for package in re.findall(r'@reins/[a-z-]+', sources['AGENT_BRIEF.md']):
     non_events[package[1:]] = 'npm package'
-non_errors = {'AGENT_BRIEF', 'DSH_INTEGRATION', 'FAKE_TOKEN', 'REINS_DEV', 'REINS_HOME', 'UPDATE_GOLDEN'}
+non_errors = {'AGENT_BRIEF', 'DSH_INTEGRATION', 'FAKE_TOKEN', 'REINS_DEV', 'REINS_HOME', 'UPDATE_GOLDEN', 'FULL_AUDIT', 'REINS_TEST_SECRET'}
 defs['package'] = sorted(set(re.findall(r'@reins/[a-z-]+|dsh-plugin-reins', sources['AGENT_BRIEF.md'])))
 package_roles = {
     '@acme/verify': 'illustrative harness dependency', '@me/swe': 'illustrative harness package',
@@ -65,7 +68,7 @@ package_roles = {
 }
 patterns = {
     'error': r'\b[A-Z]{2,}(?:_[A-Z0-9]+)+\b|\b(?:' + '|'.join(defs['error']) + r')\b',
-    'event': r'\b(?:run|ws|content|harness|task|turn|render|model|drift|anchor|proposal|session|cap|budget|reins|assistant|agent|tool|system-prompt|tools)/[a-z][a-z-]*\b',
+    'event': r'\b(?:run|ws|content|harness|task|turn|render|model|drift|anchor|proposal|session|check|cap|budget|reins|assistant|agent|tool|system-prompt|tools)/[a-z][a-z-]*\b',
     'package': r'@[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*|\bdsh-plugin-reins\b|\bdsh-contracts\b',
 }
 definition_files = {'invariant': 'INVARIANTS.md', 'decision': 'DECISIONS.md', 'open_question': 'DECISIONS.md', 'error': 'types.ts', 'event': 'types.ts', 'package': 'AGENT_BRIEF.md'}
@@ -77,7 +80,7 @@ for category, known_list in defs.items():
         for number, line in enumerate(source.splitlines(), 1):
             candidates = ids(line, category) if category in {'invariant', 'decision', 'open_question'} else set(re.findall(patterns[category], line))
             for identifier in candidates:
-                role = non_events.get(identifier) if category == 'event' else ('non-error identifier' if category == 'error' and identifier in non_errors else None)
+                role = ('session-domain/node ID' if category == 'package' and identifier == '@worker/style.guide' else None) or (non_events.get(identifier) if category == 'event' else ('non-error identifier' if category == 'error' and identifier in non_errors else None))
                 if role:
                     excluded[identifier] = role
                     continue
@@ -97,7 +100,7 @@ for category, known_list in defs.items():
         inventory[category]['external_roles'] = package_roles
 cli_names = ['init', 'render', 'import', 'reload', 'run', 'status', 'why', 'explain', 'check', 'lock', 'add', 'replay',
              'propose list', 'propose show', 'propose apply', 'propose reject',
-             'session ls', 'session attach', 'session send', 'session interrupt', 'session stop',
+             'session check', 'session ls', 'session attach', 'session send', 'session interrupt', 'session stop',
              'eval run', 'eval compare', 'eval promote']
 cli_refs = {}
 for name, source in sources.items():

@@ -8,7 +8,7 @@ export default function Root() {
       {useFile('content/overview.md')}
       <scope at="workspace://app/src/auth/**">
         {useFile('content/auth/session-store.md')}
-        <rule id="no-raw-sql" enforcement="enforced"
+        <rule id="no-raw-sql" enforcement="enforced" onUnsupported="downgrade"
               guard={{ kind: 'deny-command', argvPrefix: ['psql'] }}
               body={{ format: 'md', text: 'DB へは ORM 経由でのみアクセスする。' }} />
       </scope>

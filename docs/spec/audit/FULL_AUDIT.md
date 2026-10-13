@@ -1,5 +1,7 @@
 # Batch 3 full specification audit
 
+Current status: all A-001 through A-022 are resolved at the specification level by batch 4. The batch-3 audit below is historical; the appended resolution table records current evidence.
+
 Date: 2026-10-13. Scope: all eight current specification sources, both supplied decision batches, all seven fenced examples in SPEC/DSH_INTEGRATION, inline API/data examples, the complete declared ID sets, all 52 MUST groups including header-scoped clauses, and an implementation walkthrough from M1 through M7. No M0 or implementation work has started.
 
 ## Reflection
@@ -100,3 +102,42 @@ No new decision IDs, weaker invariants, changed exported type shapes, or impleme
 4. Run the three TypeScript commands above with TypeScript 5.9.3.
 
 The trace annotations are reviewed evidence, not an automatic proof of semantic coverage. After a normative change, regenerate inventories and review those annotations and findings again.
+
+## Batch 4 resolution checkpoint — 2026-10-13
+
+All A-001 through A-022 are RESOLVED by the supplied D-069 through D-092. The canonical types.ts matches the supplied file byte-for-byte. Batch checks are merged, and all prior positive probes are updated to the new contracts; none is suppressed with ts-expect-error. Six intended negative examples retain their expected diagnostics.
+
+| Finding | Decision | Status | Current evidence |
+|---|---|---|---|
+| A-001 | D-069 | RESOLVED | DECISIONS.md: Reserved; do not use or reuse. |
+| A-002 | D-070 | RESOLVED | SPEC.md: CommitReceipt distinguishes kind:static |
+| A-003 | D-071 | RESOLVED | SPEC.md: observed:null |
+| A-004 | D-073 | RESOLVED | SPEC.md: A workspace resolve returns its fixed Mount.base |
+| A-005 | D-072 | RESOLVED | SPEC.md: PlanContext.hostConfig is required |
+| A-006 | D-087 | RESOLVED | SPEC.md: onUnsupported="downgrade" |
+| A-007 | D-075 | RESOLVED | INVARIANTS.md: (package, session-portal domain) |
+| A-008 | D-078 | RESOLVED | SPEC.md: Every ENode has deps |
+| A-009 | D-074 | RESOLVED | INVARIANTS.md: only with the correlated session/op-result |
+| A-010 | D-088 | RESOLVED | AGENT_BRIEF.md: ETree goldens save only {package:{name},root} |
+| A-011 | D-089 | RESOLVED | INVARIANTS.md: Compare only equal TrialKeys |
+| A-012 | D-076 | RESOLVED | SPEC.md: move touchedThisTurn to touchedPrevTurn |
+| A-013 | D-077 | RESOLVED | SPEC.md: ENode.effective.onUnsupported is optional |
+| A-014 | D-082 | RESOLVED | SPEC.md: runtimes:{kind:RuntimeSpec}, defaultRuntime |
+| A-015 | D-079 | RESOLVED | INVARIANTS.md: Declared env credential refs require effective read grants |
+| A-016 | D-080 | RESOLVED | SPEC.md: Command checks default to timeoutMs:600000 |
+| A-017 | D-081 | RESOLVED | SPEC.md: Only scope and session accept children |
+| A-018 | D-091 | RESOLVED | MILESTONES.md: I-HOST-6/7 pass atomic-failure/concurrent-lock tests |
+| A-019 | D-084 | RESOLVED | SPEC.md: before evaluating any harness module |
+| A-020 | D-086 | RESOLVED | SPEC.md: Only matching, lossless imports may be adopted |
+| A-021 | D-085 | RESOLVED | SPEC.md: All structured digest formulas use digestJson(toJson(value)) |
+| A-022 | D-090 | RESOLVED | SPEC.md: Workspace snapshots exclude exactly .git/ |
+
+Executed validation:
+- TypeScript 5.9.3: `tsc --strict --noEmit --target es2022 docs/spec/types.ts` PASS.
+- `tsc -p docs/spec/checks` PASS, including prior digest/receipt/deletion probes and batch-4 profile/env/check/config/effect contracts.
+- `inventory.py`, `write-trace.py`, `verify-examples.py`, and `verify-batch4.py` PASS.
+- 45 invariant definitions, 92 decision IDs (89 active and 3 reserved), 27 errors, 31 event kinds, 25 CLI commands; no undefined references.
+- All 52 MUST groups have approved acceptance/review coverage. No GAP/PARTIAL groups remain. These are specification obligations, not claims that future M1–M7 runtime tests have run.
+- YAML/TOML syntax PASS; generic runtime/helper compatibility still belongs to M0.
+
+D-092 ends general specification auditing here. Begin M0 after this checkpoint is committed and pushed. Record issues outside laws/invariants/exported types as agent decisions and continue; aggregate protected-contract issues and stop. Stop after the M0 report before M1.

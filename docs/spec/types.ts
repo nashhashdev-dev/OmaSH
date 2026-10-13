@@ -5,8 +5,7 @@
  * - SPEC.md defines semantics; INVARIANTS.md defines laws (I-*) that tests must enforce.
  * - Copy this file verbatim into packages/core/src/types.ts. Changing any exported
  *   shape requires a decision record (DECISIONS.md, D-NNN) BEFORE the change.
- * - Persisted data types are JSON-serializable. Types documented as runtime-only may hold functions.
- *   No `any`. No class instances in persisted data.
+ * - Every non-`Runtime*` type is JSON-serializable. No `any`. No class instances.
  * - Merge-extensible maps (`...Map` interfaces) may be extended by plugins via
  *   declaration merging, with keys namespaced `<plugin>/<name>`.
  */
@@ -28,9 +27,12 @@ export type Digest = Brand<string, 'Digest'>
 /** Local node id. Regex: ^[a-z][a-z0-9-]*(\.[a-z0-9-]+)*$ . Unique within one package. */
 export type NodeId = Brand<string, 'NodeId'>
 /**
- * `<package-name>#<NodeId>` for nodes with an explicit id — stable across versions.
- * `<package-name>#~<via-path>/<sibling-index>` for anonymous nodes — NOT stable by design.
- * The package version is carried by ETree.package, not by the gid.
+ * Grammar (D-075):  <package-name>#<domain><local>
+ *   domain := ( '@' <SessionKey> '/' )*      — one segment per enclosing `session` portal (uniqueness domain)
+ *   local  := <NodeId>                        — explicit id: stable across versions
+ *           | '~' <index> ( '.' <index> )*    — anonymous: structural child-index path from the domain root
+ *                                               through EVERY authoring node (components included); not stable by design
+ * Examples: `@me/swe#no-raw-sql`, `@me/swe#@worker/style.guide`, `@me/swe#~0.3.1`.
  */
 export type GlobalNodeId = Brand<string, 'GlobalNodeId'>
 /** ULID. */
@@ -58,10 +60,11 @@ export type Scheme =
   | 'session' // a live or durable agent session
   | 'run' // a run and its log
   | 'artifact' // produced outputs (reports, patches, eval results)
+  | 'secret' // credentials: secret://<store>/<NAME>; store `env` = the driver process environment (D-079)
   | (string & {})
 
 /**
- * Canonical string form: <scheme>://<authority>[/<path>][@<pin>][#<fragment>]
+ * Canonical string form:  <scheme>://<authority>/<path>[@<pin>][#<fragment>]
  * - authority: ^[a-z0-9][a-z0-9._-]*$ ; for scheme `harness` additionally an npm package name
  *   ^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$ (D-018), e.g. harness://@me/swe@^2#rule-id
  * - path: POSIX, normalized, no `.`/`..` segments, no trailing slash (root path is "")
@@ -211,7 +214,8 @@ export type Content =
  * Evaluated against the LogProjection 'reins/task-state' (SPEC §6.4).
  */
 export type Predicate =
-  | { readonly op: 'touches'; readonly pattern: RefPattern } // task's touched/changed files intersect pattern
+  /** window default 'recent' = touched in the current or the previous turn (D-076). */
+  | { readonly op: 'touches'; readonly pattern: RefPattern; readonly window?: 'turn' | 'recent' | 'session' }
   | { readonly op: 'event'; readonly kind: string; readonly within: 'turn' | 'session' } // log has event of kind
   | { readonly op: 'phase'; readonly is: string } // task-state phase equals
   | { readonly op: 'and'; readonly of: readonly Predicate[] }
@@ -400,7 +404,14 @@ export interface TaskSpec {
 }
 
 export type Check =
-  | { readonly kind: 'command'; readonly argv: readonly string[]; readonly cwd: RefString; readonly expectExit: number }
+  | {
+      readonly kind: 'command'
+      readonly argv: readonly string[]
+      readonly cwd: RefString
+      readonly expectExit: number
+      /** Default 600000. Exceeding it yields status 'timeout' (counts as not passed) (D-080). */
+      readonly timeoutMs?: number
+    }
   | { readonly kind: 'anchor'; readonly anchor: Anchor }
   | { readonly kind: 'human'; readonly question: string }
 
@@ -416,13 +427,15 @@ export interface SessionEl extends BaseProps {
   readonly key: SessionKey
   readonly runtime: RuntimeSpec
   readonly workspace: WorkspaceBinding
-  /** Requested caps; mount uses attenuate(parent, requested, { strict: true }) (I-CAP-1, D-022). */
+  /** Requested caps; effective = attenuate(parent, requested) (I-CAP-1). */
   readonly caps: CapSet
   /** The child's harness tree; rendered by the child runtime's host. */
   readonly children: readonly ReinsNode[]
   readonly task?: TaskSpec
   /** Human may attach to observe/intervene. Forces transport 'pty'. Default false. */
   readonly interactive?: boolean
+  /** Env vars handed to the child: VAR → `secret://…` ref. Each requires `read` on that ref in the effective caps (D-079). */
+  readonly env?: { readonly [variable: string]: RefString }
   /** What happens when this node leaves the tree. Default 'detach' (I-SESS-3). */
   readonly onRemove?: 'detach' | 'stop'
 }
@@ -493,10 +506,13 @@ export type ReinsNode = Element | ComponentCall | string | null | boolean | unde
 
 export type IntrinsicKind = Exclude<ElementKind, 'fragment'>
 
-/** Props accepted by an intrinsic in JSX / h(): the element minus `kind`, with optional single-or-many children. */
-export type IntrinsicProps<K extends IntrinsicKind> = Omit<Extract<Element, { readonly kind: K }>, 'kind' | 'children'> & {
-  readonly children?: ReinsNode
-}
+/** Only these intrinsics accept children (D-081). Leaf children are a type error and, at runtime, INVALID_ELEMENT. */
+export type ContainerKind = 'scope' | 'session'
+export type LeafKind = Exclude<IntrinsicKind, ContainerKind>
+
+/** Props accepted by an intrinsic in JSX / h(): the element minus `kind`; children only for containers. */
+export type IntrinsicProps<K extends IntrinsicKind> = Omit<Extract<Element, { readonly kind: K }>, 'kind' | 'children'> &
+  (K extends ContainerKind ? { readonly children?: ReinsNode } : { readonly children?: never })
 
 /**
  * Declared by packages/core/src/jsx-runtime.ts as `export namespace JSX { … }` with exactly these members.
@@ -544,12 +560,18 @@ export interface ENode {
     readonly caps: CapSet
     readonly volatility: Volatility
     readonly hosts?: readonly HostKind[]
-    readonly onUnsupported: OnUnsupported
+    /** Authored or inherited only; hosts compute the effective policy (D-077). */
+    readonly onUnsupported?: OnUnsupported
     readonly toolsMode: 'inherit' | 'allowlist'
   }
   /** Element props with Content resolved to `md`, minus children. */
   readonly props: Json
   readonly children: readonly ENode[]
+  /**
+   * External content this node depends on (D-078): refs resolved for its own Content, plus every ref read
+   * by hooks in any ComponentCall on its `via` chain (taint flows to all descendants of that call's output).
+   */
+  readonly deps: readonly { readonly ref: RefString; readonly status: 'ok' | 'unavailable' }[]
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -588,7 +610,18 @@ export interface LogEventMap {
   }
   'render/failed': { readonly host: HostId; readonly plan: Digest; readonly error: ReinsErrorData }
   'model/request': { readonly host: HostId; readonly bytes: Digest; readonly external?: ExternalLogRef }
-  'drift/detected': { readonly host: HostId; readonly target: string; readonly expected: Digest; readonly observed: Digest }
+  /** observed null = an owned generated target was deleted (D-071). */
+  'drift/detected': { readonly host: HostId; readonly target: string; readonly expected: Digest; readonly observed: Digest | null }
+  /** Human-authorized adoption of existing files after a lossless import (D-086). */
+  'render/adopted': { readonly host: HostId; readonly targets: readonly { readonly target: string; readonly digest: Digest }[] }
+  /** A human's decision on a `human` acceptance check (D-080). */
+  'check/decided': {
+    readonly session: SessionKey
+    readonly index: number
+    readonly passed: boolean
+    readonly by: PrincipalId
+    readonly note?: string
+  }
   'anchor/evaluated': { readonly result: AnchorResult }
   'proposal/created': { readonly proposal: Proposal }
   'proposal/decided': {
@@ -598,7 +631,8 @@ export interface LogEventMap {
     readonly reason?: string
   }
   'session/requested': { readonly key: SessionKey; readonly spec: Json /* SessionEl props */ }
-  'session/intent': { readonly key: SessionKey; readonly op: SessionOp }
+  /** opId: ULID correlating intent → sent (send only) → op-result (D-074). */
+  'session/intent': { readonly key: SessionKey; readonly opId: string; readonly op: SessionOp }
   'session/mounted': {
     readonly key: SessionKey
     readonly ref: RefString
@@ -606,7 +640,15 @@ export interface LogEventMap {
     readonly caps: CapSet
     readonly enforcement: readonly { readonly grant: Grant; readonly enforcement: Enforcement }[]
   }
-  'session/sent': { readonly key: SessionKey; readonly text: string }
+  /** Payload record written BEFORE transmission (I-LOG-2). Not an outcome. */
+  'session/sent': { readonly key: SessionKey; readonly opId: string; readonly text: string }
+  /** The outcome of an intent. Absent after a crash ⇒ outcome unknown; never auto-retried (D-074). */
+  'session/op-result': {
+    readonly key: SessionKey
+    readonly opId: string
+    readonly outcome: 'delivered' | 'failed' | 'unknown'
+    readonly detail?: string
+  }
   'session/observed': { readonly key: SessionKey; readonly observation: SessionObservation }
   'session/status': { readonly key: SessionKey; readonly status: SessionStatus }
   'session/result': { readonly key: SessionKey; readonly result: SessionResult }
@@ -684,7 +726,7 @@ export interface PromptPart {
 
 export type AccountStatus =
   | 'rendered'
-  | 'degraded' // fallback prose or a logged content-unavailable placeholder (D-024)
+  | 'degraded' // rendered as prose although realization was requested natively (downgrade)
   | 'filtered' // scope/when/hosts excluded it — reason REQUIRED
   | 'dropped' // unsupported + onUnsupported 'drop'
   | 'error' // unsupported + onUnsupported 'error' → plan fails
@@ -710,7 +752,7 @@ export interface AccountingSummary {
   readonly delegated: number
 }
 
-/** UTF-16 code-unit ranges (JavaScript string indices, end exclusive) of an output → origin node. */
+/** Byte ranges (UTF-16 code unit offsets, end exclusive) of an output → origin node. */
 export interface SourceMap {
   readonly output: string // file target or prompt part name
   readonly mappings: readonly { readonly start: number; readonly end: number; readonly node: GlobalNodeId | 'host' }[]
@@ -722,7 +764,7 @@ export interface RenderPlan {
   readonly outputs: readonly Output[]
   readonly accounting: Accounting
   readonly sourcemaps: readonly SourceMap[]
-  /** Digest of canonical {host, tree, outputs}. */
+  /** Digest of canonical {host, hostConfig, tree, taskState, outputs} (D-072). */
   readonly digest: Digest
 }
 
@@ -730,6 +772,14 @@ export interface PlanContext {
   /** Evaluated projection 'reins/task-state' (static hosts: the static projection). */
   readonly taskState: TaskState
   readonly workspaceAuthority: string
+  /** Normalized host settings (dedupeWith, instructions, …). Part of every plan/memo/replay input (D-072). */
+  readonly hostConfig: HostConfig
+}
+
+/** Host settings that can change output. Normalized: absent keys = defaults, keys sorted by canonicalJson. */
+export interface HostConfig {
+  readonly id: HostId
+  readonly settings: { readonly [k: string]: Json }
 }
 
 /** Observed current state of a host's targets (read back from disk / runtime). */
@@ -748,12 +798,16 @@ export interface CommitRecord {
   readonly at: Timestamp
 }
 
-export interface CommitReceipt {
-  readonly record: CommitRecord
-  readonly written: readonly string[]
-  readonly removed: readonly string[]
-  readonly skippedDrift: readonly string[] // targets left untouched because of drift (I-HOST-2)
-}
+/** Static hosts write files and keep a CommitRecord; dynamic hosts only update their memo (D-070). */
+export type CommitReceipt =
+  | {
+      readonly kind: 'static'
+      readonly record: CommitRecord
+      readonly written: readonly string[]
+      readonly removed: readonly string[]
+      readonly skippedDrift: readonly string[] // targets left untouched because of drift (I-HOST-2)
+    }
+  | { readonly kind: 'dynamic'; readonly plan: Digest; readonly changed: boolean }
 
 /** Runtime-only. */
 export interface RuntimeHost {
@@ -794,10 +848,15 @@ export type SessionObservation =
   | { readonly kind: 'usage'; readonly tokens?: number; readonly usdMicros?: number }
   | { readonly kind: 'status'; readonly status: SessionStatus }
 
+export type CheckStatus = 'passed' | 'failed' | 'timeout' | 'pending'
+
 export interface SessionResult {
+  /** How the child run ended. */
   readonly status: 'completed' | 'failed' | 'aborted'
   readonly output: string // untrusted (relay)
-  readonly checks: readonly { readonly check: Check; readonly passed: boolean; readonly evidence: string }[]
+  readonly checks: readonly { readonly check: Check; readonly status: CheckStatus; readonly evidence: string }[]
+  /** true: all checks passed; false: any failed/timeout; null: none failed but some human check is pending (D-080). */
+  readonly accepted: boolean | null
   readonly artifacts: readonly RefString[]
 }
 
@@ -810,6 +869,8 @@ export interface MountRequest {
   readonly renderedFiles: readonly { readonly target: string; readonly bytes: string }[] // child harness via static host
   readonly initialTask?: string // compiled TaskSpec text
   readonly interactive: boolean
+  /** Names only. Values are resolved by the session host from the secret store at spawn time and never serialized (D-079). */
+  readonly env: { readonly [variable: string]: RefString }
 }
 
 /** Runtime-only. The `send/observe/interrupt/status/result` contract. */
@@ -840,7 +901,9 @@ export interface RuntimeSessionHandle {
 
 export interface TaskState {
   readonly phase: string // last task/state phase, '' initially
-  readonly touched: readonly RefString[] // union of ws/touched (sorted, deduped)
+  readonly touched: readonly RefString[] // whole session: union of ws/touched (sorted, deduped)
+  readonly touchedThisTurn: readonly RefString[] // since the latest turn/start (D-076)
+  readonly touchedPrevTurn: readonly RefString[] // between the previous turn/start and the latest one
   readonly written: readonly RefString[] // subset with op 'write'
   readonly eventsThisTurn: readonly LogKind[]
   readonly eventsThisSession: readonly LogKind[]
@@ -883,9 +946,11 @@ export interface Proposal {
 export interface PackageManifest {
   readonly name: string // npm-style, e.g. @me/swe
   readonly version: string // semver
-  readonly entry: string // module path whose default export accepts Json props (D-045)
+  readonly entry: string // module path whose default export is a Component<{}>
   /** Globs (relative) of files that affect rendering besides `entry` imports. Default ["content/**"]. */
   readonly content?: readonly string[]
+  /** npm packages the harness may import besides @reins/core and harness deps; trusted as pure, not linted (D-084). */
+  readonly pureDependencies?: readonly string[]
   readonly dependencies?: { readonly [name: string]: string /* RefString with semver/tag/digest pin */ }
   readonly requires?: {
     readonly hosts?: readonly HostKind[]
@@ -898,8 +963,12 @@ export interface PackageManifest {
   readonly sessionProfiles?: {
     readonly [name: string]: {
       readonly export: string
-      readonly runtimes: readonly RuntimeSpec['kind'][]
+      /** Allowed runtimes with their full specs; `session_spawn.runtime` may pick a key, else `defaultRuntime` (D-082). */
+      readonly runtimes: { readonly [kind: string]: RuntimeSpec }
+      readonly defaultRuntime: string
       readonly caps: CapSet
+      /** Env handed to children of this profile; still requires read grants (D-079). */
+      readonly env?: { readonly [variable: string]: RefString }
     }
   }
 }
@@ -912,7 +981,7 @@ export interface Lockfile {
   }
   readonly dsh?: { readonly version: string; readonly patches: Digest | null }
   readonly mise?: { readonly lock: Digest }
-  readonly hosts: { readonly [kind: string]: string /* HostId */ }
+  readonly hosts: { readonly [kind: string]: HostConfig }
 }
 
 export interface ModelSpec {
@@ -927,7 +996,7 @@ export interface RunSpec {
   readonly lock: Digest
   readonly namespace: Namespace
   readonly principal: Principal
-  readonly hosts: readonly HostId[]
+  readonly hosts: readonly HostConfig[]
   readonly model?: ModelSpec
   readonly task?: TaskSpec
   readonly taskset?: { readonly ref: RefString; readonly taskId: string; readonly split: SplitRole }
@@ -977,7 +1046,7 @@ export type ReinsErrorCode =
   | 'ID_MISSING' // element kind requires id
   | 'ID_DUPLICATE'
   | 'ELAB_HOOK_OUTSIDE_RENDER'
-  | 'ELAB_IMPURE' // a static purity-lint violation or double-elaboration nondeterminism (D-023)
+  | 'ELAB_IMPURE' // detected nondeterminism (double elaboration mismatch)
   | 'ELAB_CYCLE'
   | 'UNSUPPORTED_NODE' // onUnsupported 'error'
   | 'ENFORCEMENT_UNAVAILABLE' // enforced rule with no guard realization and no downgrade allowed
@@ -992,6 +1061,10 @@ export type ReinsErrorCode =
   | 'LOCKED' // could not acquire the per-workspace commit lock within 30 s (D-037)
   | 'TARGET_CONFLICT' // two selected hosts plan the same target (D-064)
   | 'DIRTY_PACKAGE' // proposal apply on a git package with uncommitted changes (D-050)
+  | 'INVALID_ELEMENT' // runtime validation of an authored element failed (unknown kind, leaf children, …) (D-081)
+  | 'RUNTIME_UNAVAILABLE' // the selected runtime's tool cannot be launched via mise (D-082)
+  | 'NOT_JSON' // toJson() met a non-serializable value (D-085)
+  | 'EVENT_KIND_INVALID' // log event kind neither built-in nor `<plugin>/<name>` (D-083)
   | 'KEY_REUSED' // a session key that was already unmounted in this Run was requested again (D-047)
   | 'INTERNAL'
 
@@ -1049,12 +1122,15 @@ export interface KernelApi {
   matchRef(p: RefPattern, r: Ref): boolean
   canonicalJson(v: Json): string // RFC 8785
   digestJson(v: Json): Digest
+  /** Validated structural conversion (plain objects, arrays, finite numbers, strings, booleans, null; drops `undefined` props). Throws NOT_JSON (D-085). */
+  toJson(v: unknown): Json
   digestBytes(b: Uint8Array | string): Digest
   elaborate(input: ElaborateInput): ElaborateResult
   /** Built-in component: mounts a dependency package's entry; nodes inside are attributed to it. Props cross a package boundary, so they are JSON. */
   use(pkg: string, props?: Json): ComponentCall
   /** Hyperscript, equivalent to JSX (D-003). Children given as rest args are appended to props.children. */
-  h<K extends IntrinsicKind>(type: K, props: IntrinsicProps<K>, ...children: ReinsNode[]): Element
+  h<K extends ContainerKind>(type: K, props: IntrinsicProps<K>, ...children: ReinsNode[]): Element
+  h<K extends LeafKind>(type: K, props: IntrinsicProps<K>): Element
   h<P>(type: Component<P>, props: P): ComponentCall
   /** Fragment component for `<>…</>`. */
   Fragment(props: { readonly children?: ReinsNode }): ReinsNode

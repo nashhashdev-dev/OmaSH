@@ -1,0 +1,178 @@
+[
+  {
+    "audit": "A-001",
+    "decision": "D-069",
+    "status": "RESOLVED",
+    "location": "DECISIONS.md",
+    "evidence": "Reserved; do not use or reuse.",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-002",
+    "decision": "D-070",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "CommitReceipt distinguishes kind:static",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-003",
+    "decision": "D-071",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "observed:null",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-004",
+    "decision": "D-073",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "A workspace resolve returns its fixed Mount.base",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-005",
+    "decision": "D-072",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "PlanContext.hostConfig is required",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-006",
+    "decision": "D-087",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "onUnsupported=\"downgrade\"",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-007",
+    "decision": "D-075",
+    "status": "RESOLVED",
+    "location": "INVARIANTS.md",
+    "evidence": "(package, session-portal domain)",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-008",
+    "decision": "D-078",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "Every ENode has deps",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-009",
+    "decision": "D-074",
+    "status": "RESOLVED",
+    "location": "INVARIANTS.md",
+    "evidence": "only with the correlated session/op-result",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-010",
+    "decision": "D-088",
+    "status": "RESOLVED",
+    "location": "AGENT_BRIEF.md",
+    "evidence": "ETree goldens save only {package:{name},root}",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-011",
+    "decision": "D-089",
+    "status": "RESOLVED",
+    "location": "INVARIANTS.md",
+    "evidence": "Compare only equal TrialKeys",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-012",
+    "decision": "D-076",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "move touchedThisTurn to touchedPrevTurn",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-013",
+    "decision": "D-077",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "ENode.effective.onUnsupported is optional",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-014",
+    "decision": "D-082",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "runtimes:{kind:RuntimeSpec}, defaultRuntime",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-015",
+    "decision": "D-079",
+    "status": "RESOLVED",
+    "location": "INVARIANTS.md",
+    "evidence": "Declared env credential refs require effective read grants",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-016",
+    "decision": "D-080",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "Command checks default to timeoutMs:600000",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-017",
+    "decision": "D-081",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "Only scope and session accept children",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-018",
+    "decision": "D-091",
+    "status": "RESOLVED",
+    "location": "MILESTONES.md",
+    "evidence": "I-HOST-6/7 pass atomic-failure/concurrent-lock tests",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-019",
+    "decision": "D-084",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "before evaluating any harness module",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-020",
+    "decision": "D-086",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "Only matching, lossless imports may be adopted",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-021",
+    "decision": "D-085",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "All structured digest formulas use digestJson(toJson(value))",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  },
+  {
+    "audit": "A-022",
+    "decision": "D-090",
+    "status": "RESOLVED",
+    "location": "SPEC.md",
+    "evidence": "Workspace snapshots exclude exactly .git/",
+    "scope": "approved specification contract; runtime tests remain milestone work"
+  }
+]

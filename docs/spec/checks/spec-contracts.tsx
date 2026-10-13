@@ -40,7 +40,7 @@ const state: TaskState = hooks.useTaskState()
 
 // D-041/D-045: canonical manifest spelling and named JSON component boundary.
 const profileManifest: PackageManifest = { name: '@example/harness', version: '1.0.0', entry: 'index.js',
-  sessionProfiles: { verify: { export: 'Verify', runtimes: ['codex'], caps } } }
+  sessionProfiles: { verify: { export: 'Verify', runtimes: { codex: { kind: 'codex' } }, defaultRuntime: 'codex', caps } } }
 declare const run: RunSpec
 const switchEvent: LogEventMap['harness/switched'] = { digest: run.harness.digest, lock: run.lock }
 const missingContent: LogEventMap['content/unavailable'] = { ref: 'context://docs/readme', reason: 'timeout' }

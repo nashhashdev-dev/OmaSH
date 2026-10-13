@@ -9,7 +9,7 @@ export default function Root() {
       {useFile('content/overview.md')}
       <scope at="workspace://app/src/auth/**">
         {useFile('content/auth/session-store.md')}
-        <rule id="no-raw-sql" enforcement="enforced"
+        <rule id="no-raw-sql" enforcement="enforced" onUnsupported="downgrade"
               guard={{ kind: 'deny-command', argvPrefix: ['psql'] }}
               body={{ format: 'md', text: 'DB へは ORM 経由でのみ。' }} />
       </scope>
@@ -49,3 +49,22 @@ const fm: Element = { kind: 'knowledge', id: 'auth.store', claim: 'fact', body: 
 declare const p: CapSet
 const att: CapSet = api.attenuate(p, p, { strict: true })
 void d; void s; void pkg; void fm; void att
+
+// ── batch 4 probes ─────────────────────────────────────────────
+import type { CommitReceipt, LogEventMap, Mount, ENode, PackageManifest, Digest, SessionResult, HostConfig } from '@reins/core'
+declare const mounts: readonly Mount[]
+declare const enode: ENode
+declare const manifest: PackageManifest
+const d1: Digest = api.digestJson(api.toJson({ mounts, parent: null }))
+const d2: Digest = api.digestJson(api.toJson(enode))
+const d3: Digest = api.digestJson(api.toJson(manifest))
+const dyn: CommitReceipt = { kind: 'dynamic', plan: d1, changed: false }
+const del: LogEventMap['drift/detected'] = { host: 'claude-code@0.1.0', target: 'CLAUDE.md', expected: d2, observed: null }
+const res: SessionResult = { status: 'completed', output: '', checks: [{ check: { kind: 'human', question: 'Accept?' }, status: 'pending', evidence: '' }], accepted: null, artifacts: [] }
+const hc: HostConfig = { id: 'codex@0.1.0', settings: { instructions: 'via-agents-md' } }
+const profiles: PackageManifest['sessionProfiles'] = {
+  reviewer: { export: 'Reviewer', runtimes: { codex: { kind: 'codex', tool: 'npm:@openai/codex@0.50.0' } }, defaultRuntime: 'codex',
+    caps: { grants: [], budget: {} }, env: { GITHUB_TOKEN: 'secret://env/GITHUB_TOKEN' } } }
+const hello = <rule id="no-raw-sql" enforcement="enforced" onUnsupported="downgrade"
+  guard={{ kind: 'deny-command', argvPrefix: ['psql'] }} body={{ format: 'md', text: 'x' }} />
+void d3; void dyn; void del; void res; void hc; void profiles; void hello
