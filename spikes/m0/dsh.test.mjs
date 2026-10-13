@@ -70,6 +70,12 @@ test('S-5 real asynchronous assembly returns replacement sections and contexts i
   try {
     const key = {};
     const scoped = createScope(ctx, key);
+    scoped.ctx.systemPrompt.section({ name: 'reins:static', order: 10, text: 'STALE' });
+    scoped.ctx.systemPrompt.context({ name: 'reins:turn', order: 10, text: 'STALE_TURN' });
+    ctx.systemPrompt.section({ name: 'fixture:other', order: 30, text: 'KEEP_{{fixture_var}}' });
+    ctx.systemPrompt.context({ name: 'fixture:other', order: 20, text: 'KEEP_CONTEXT' });
+    ctx.systemPrompt.variable('fixture_var', () => 'kept');
+    ctx.systemPrompt.tools(() => ({ schemas: [{ name: 'fixture_tool', description: 'Fixture schema', parameters: { type: 'object', properties: {} } }] }));
     let completed = false;
     scoped.ctx.on('system-prompt/assemble', async (_assembly, _context, next) => {
       await Promise.resolve();
@@ -77,15 +83,17 @@ test('S-5 real asynchronous assembly returns replacement sections and contexts i
       const assembly = await next();
       return {
         ...assembly,
-        sections: [...assembly.sections, { name: 'reins:static', text: 'REPLACED' }],
-        contexts: [...assembly.contexts, { name: 'reins:turn', text: 'READY' }],
+        sections: assembly.sections.map((part) => part.name === 'reins:static' ? { ...part, text: 'REPLACED' } : part),
+        contexts: assembly.contexts.map((part) => part.name === 'reins:turn' ? { ...part, text: 'READY' } : part),
       };
     });
     const assembly = await ctx.systemPrompt.assemble({ scope: key });
     assert.equal(completed, true);
-    assert.equal(renderPrompt(assembly), 'REPLACED');
-    assert.deepEqual(assembly.contexts, [{ name: 'reins:turn', text: 'READY' }]);
-    assert.equal(renderPrompt(await ctx.systemPrompt.assemble({ scope: {} })), '');
+    assert.equal(renderPrompt(assembly), 'REPLACED\n\nKEEP_kept');
+    assert.deepEqual(assembly.contexts, [{ name: 'reins:turn', text: 'READY' }, { name: 'fixture:other', text: 'KEEP_CONTEXT' }]);
+    assert.equal(assembly.variables.fixture_var, 'kept');
+    assert.deepEqual(assembly.tools.map((tool) => tool.name), ['fixture_tool']);
+    assert.equal(renderPrompt(await ctx.systemPrompt.assemble({ scope: {} })), 'KEEP_kept');
     await scoped.dispose();
   } finally {
     await ctx.root.fiber.dispose();

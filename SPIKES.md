@@ -115,7 +115,7 @@ spikes/m0/dsh.test.mjs executes published 0.2.0-rc.2 services using the real Cor
 Verified:
 - Identity order is -1000 and Bash guidance starts at 1000; Reins 10/20 still fits between persona and tool guidance.
 - Scoped same-name sections shadow globals; sibling scopes stay separate; disposing removes sections and contexts.
-- An awaited scoped system-prompt/assemble waterfall returns replacement sections/contexts while preserving the other assembly fields.
+- An awaited scoped system-prompt/assemble waterfall replaces existing same-name sections/contexts in place. The test preserves unrelated sections/contexts, expanded variables, and tool schemas, and confirms sibling-scope isolation.
 - Restrict removes a global tool from both schemas and dispatch in the selected scope. A sibling remains unaffected.
 - A guard denies after a permissive pre-execute waterfall. The denied body never runs.
 - Execution outside the selected scope succeeds, demonstrating that scope is not a security boundary; Reins must preserve its own capability checks.

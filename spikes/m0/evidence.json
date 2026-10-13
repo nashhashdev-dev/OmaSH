@@ -96,7 +96,7 @@
         {
           "name": "async assembly replacement",
           "status": "pass",
-          "evidence": "S-5 real asynchronous assembly returns replacement sections and contexts in one scope. Awaited preparation and scope isolation verified."
+          "evidence": "S-5 real asynchronous assembly returns replacement sections and contexts in one scope. Existing parts are replaced in place; unrelated parts, variables, tool schemas, and sibling-scope isolation are preserved."
         },
         {
           "name": "restrict/guard/scope boundary",
