@@ -93,16 +93,19 @@
 
 ### 4.1 Ref
 
-文法（正規形）：`<scheme>://<authority>/<path>[@<pin>][#<fragment>]`
+Canonical grammar: `<scheme>://<authority>[/<path>][@<pin>][#<fragment>]`. An empty root path omits the path separator.
 
 - `scheme`：`[a-z][a-z0-9+.-]*`。組み込み：`workspace` `harness` `context` `session` `run` `artifact`。他は Resolver プラグインが登録する。
-- `authority`：`[a-z0-9][a-z0-9._-]*`。名前空間内の名前。`harness` スキームでは予約名 `self`（現在のパッケージ）を持つ。
+- For `harness`, `authority` is the package name: `(@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*`. The slash inside an npm scoped name belongs to authority. `self` is reserved for the current package (D-018).
+- Other schemes retain authority grammar `[a-z0-9][a-z0-9._-]*`, naming a binding in the namespace.
 - `path`：POSIX、正規化済み、`.`/`..` なし、末尾 `/` なし、先頭 `/` は区切りとして 1 個。
 - `pin`：`@sha256:<hex>`（digest）、`@git:<commit>[+dirty:<digest>]`、`@^1.2`（semver。`harness` のみ）、`@tag:<name>`。
 - `fragment`：`harness` では NodeId、それ以外は解釈しない。
 - RefPattern：同文法で path に `*`（1 セグメント）と `**`（0 以上）を許し、pin を禁止。
 
 例：`workspace://app/src/auth/session.ts`、`harness://@me/swe@^2#no-raw-sql`、`harness://self/content/auth.md`、`session://dsh/01JB…`。
+
+In `harness://@me/swe@^2#no-raw-sql`, authority is `@me/swe`, path is empty, pin is semver `^2`, and fragment is `no-raw-sql`.
 
 ### 4.2 Namespace と Mount
 
@@ -266,7 +269,12 @@ export default function Root() {
 
 ### 6.3 フック
 
-`useLog(projection)`、`useTaskState()`、`useContent(ref)`、`useFile(path)`、`useNamespace()` のみ（types.ts `Hooks`）。精緻化外の呼び出しは `ELAB_HOOK_OUTSIDE_RENDER`。**ホスト情報を返すフックは存在しない**（I-ELAB-2）。乱数・時刻・環境変数・ファイルシステムへの直接アクセスはコンポーネント内で禁止（MUST NOT）。違反は I-ELAB-1 の二重精緻化で検出される。
+The hooks are `useLog(projection)`, `useTaskState()`, `useContent(ref)`, `useFile(path)`, and `useNamespace()` (types.ts `Hooks`). Calling them outside elaboration fails with `ELAB_HOOK_OUTSIDE_RENDER`. Hooks MUST NOT expose host information (I-ELAB-2).
+
+Purity checks have two required layers (D-023):
+
+1. **Static lint (MUST):** `@reins/eslint-plugin`, implemented in `packages/eslint-plugin` in M1, checks harness components. It prohibits imports of I/O modules such as `node:fs`, `node:child_process`, and `node:net`; `process.env`; `Date`; `Math.random`; `fetch`; `crypto.getRandomValues`; and I/O outside the `@reins/core` hooks. `reins render` MUST run this lint on the harness package and fail with `ELAB_IMPURE` if it reports a violation.
+2. **Double elaboration:** in development mode and tests, evaluate the same input twice and fail with `ELAB_IMPURE` if the results differ (I-ELAB-1). This detects nondeterminism only. Deterministic forbidden effects require static checks; passing repeated evaluation does not prove their absence.
 
 ### 6.4 Projection とタスク状態
 
@@ -311,7 +319,7 @@ log 'render/committed' or 'render/failed'
 ### 7.3 揮発度と会計
 - 静的ホスト：`static` と `session` の要素を描画。`turn` 揮発の要素は `onUnsupported` 既定 `drop`。
 - 動的ホスト：`static` → `session` → `turn` の順に並べる（I-RENDER-4）。
-- 全ノードを会計する（I-RENDER-2）。`filtered` 理由の書式：`when:<describe>` / `at:<pattern>` / `hosts:<list>`。
+- Account for every ENode except the synthetic root (I-RENDER-2, D-019). The root is a container. `filtered` reason format: `when:<describe>` / `at:<pattern>` / `hosts:<list>`.
 
 ### 7.4 静的ホスト共通規則
 - 出力ファイル先頭（frontmatter を持つ形式では frontmatter の直後）に 1 行のヘッダ：
@@ -391,7 +399,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 
 ### 9.1 CapSet 演算（MUST、core に実装）
 - `permits(caps, right, ref)`：`ref` に一致する Grant のいずれかが `right` を含めば true。Grant は union。
-- `attenuate(parent, req)`：結果の Grant 集合は「req の各 Grant g について、g.rights ∩（g.on に包含する親 Grant の rights の和）」。RefPattern の包含判定はグロブ包含（`**` ⊇ `*` ⊇ リテラル）で保守的に行い、判定不能なら包含しない扱い。budget は項目ごとに min（未指定は親の値）。`strict` モードでは縮小が起きた場合 `CAP_WIDENING` を投げる（セッション mount 時は strict）。
+- `attenuate(parent, req, opts?)`: for each requested Grant g, intersect g.rights with the union of rights of parent Grants whose patterns contain g.on. RefPattern containment is conservative glob containment (`**` ⊇ `*` ⊇ literal); an undecidable containment is treated as false. Budget fields use min, with omitted fields inheriting the parent value. `opts.strict` defaults to false, which silently attenuates. With `{ strict: true }`, any attenuation throws `CAP_WIDENING`. Session mount MUST pass `{ strict: true }` (D-022).
 - `harness:write` を agent principal に含む CapSet は作れない（I-CAP-2）。
 
 ### 9.2 Principal の既定
@@ -434,7 +442,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 | ツール | 動作 |
 |---|---|
 | `session_spawn {key, runtime, workspace, task, caps?, interactive?}` | `session/requested` を記録する。組み込みコンポーネント `<RequestedSessions/>`（root ハーネスが含める）が `TaskState.requestedSessions` から `session` ノードを生成し、調停が mount する。ツールは mount 完了（`session/mounted`）まで待ち、`session://…` ref を返す。 |
-| `session_send {key, text}` | `session/intent` → `send` → `session/sent` |
+| `session_send {key, text}` | Record `session/intent` → record `session/sent` → perform `send`; on send failure, record `session/status` with status `failed` (D-021). |
 | `session_status {key}` | 最新状態と直近観測の要約（relay として） |
 | `session_interrupt {key}` | interrupt |
 | `session_result {key, wait?}` | 結果（relay） |
@@ -443,7 +451,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 `spawn` 権限が無ければ `session_spawn` はツール集合に現れない。
 
 ### 11.3 マウント手順（MUST）
-1. `effective caps = attenuate(parent caps, node.caps)`（strict）。深さ・子数・予算を検査（I-SESS-1, I-CAP-4）。
+1. `effective caps = attenuate(parent caps, node.caps, { strict: true })`. Check depth, child count, and budgets (I-SESS-1, I-CAP-4, D-022).
 2. `WorkspaceBinding` に従い子 Namespace を作る（明示されたものだけ。I-SESS-5）。`fork-worktree` の既定パスは `$REINS_HOME/worktrees/<RunId>/<key>`。
 3. 子の木（`node.children`）を、子ランタイムに対応する静的ホストで plan し、`renderedFiles` を得る（`runtime.kind` → host：`claude-code`→`claude-code`、`codex`→`codex`、`opencode`/`pi`→`agents-md`、`dsh`→子 DSH エージェントの scope に `dsh` 動的ホスト）。子ワークスペースへ §7.2 でコミット。
 4. TaskSpec を §5.8 書式にコンパイル。
@@ -452,7 +460,7 @@ DSH の `ctx.systemPrompt`・`ctx.tools`・`agent/*` に写像する。詳細は
 
 ### 11.4 PTY（tmux）セッションホスト
 - tmux サーバはソケット `$REINS_HOME/tmux.sock` 専用。セッション名 `reins-<RunId 末尾8>-<key>`。
-- send：`session/sent` を記録してから、`tmux load-buffer` + `paste-buffer -p`（ブラケットペースト）+ `send-keys Enter`。
+- Send: record `session/intent`, then `session/sent`, then run `tmux load-buffer` + `paste-buffer -p` (bracketed paste) + `send-keys Enter`. On failure, record `session/status` with status `failed` (D-021).
 - observe：`capture-pane -p -J -S -2000` を 1 秒間隔で取り、前回との差分行を `screen` 観測として出す。
 - status 推定：ランタイムごとの判定器（プロンプト待ち表示・承認ダイアログの文字列パターン）をプラグインとして持つ。判定不能は `unknown`。パターンは M0 スパイク S-4 で採取する。
 - 人間の介入：`tmux -S $REINS_HOME/tmux.sock attach -t <name>`（`reins session attach <key>`）。人間の入力は観測されるが送信イベントにはならない（`screen` 観測として残る）。

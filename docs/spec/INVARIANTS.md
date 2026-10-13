@@ -19,7 +19,7 @@
 
 | ID | 言明 | 根拠 | 試験 |
 |---|---|---|---|
-| I-ELAB-1 | **純粋性**：`elaborate` の結果 `ETree.digest` は (package digest, lock digest, namespace id, log[0..logSeq]) の関数である。同一入力で 2 回精緻化して digest が異なれば `ELAB_IMPURE`。実装は開発モードで常に二重精緻化して検査する。 | React の render 純粋性。再現・キャッシュ・time travel の前提。 | P |
+| I-ELAB-1 | **Purity:** `ETree.digest` is a function of (package digest, lock digest, namespace id, log[0..logSeq]). Development mode MUST elaborate twice and reject differing digests with `ELAB_IMPURE`; this detects nondeterminism only. Static purity lint is also required: `reins render` MUST lint harness components using `@reins/eslint-plugin` and fail with `ELAB_IMPURE` on violations (SPEC §6.3, D-023). | React render purity; reproducibility, caching, and time travel. | P, lint |
 | I-ELAB-2 | **ホスト非依存**：精緻化はホストを知らない。Hooks にホスト情報を返すものは存在しない。ホスト差は `hosts` プロパティと各ホストの plan だけで表す。 | 同じ木を複数ホストへ render する、という中心命題。 | P（API 面の型テスト） |
 | I-ELAB-3 | `knowledge` `rule` `skill` `tool` `context` `task` `raw` は `id` 必須、`session` は `key` 必須。欠落は `ID_MISSING`。パッケージ内重複は `ID_DUPLICATE`。 | 差分・アンカー・提案・sourcemap の安定参照。 | P |
 | I-ELAB-4 | ETree には component・fragment・`ref` 形式の Content が残らない。 | ETree が IR として自己完結する。 | P |
@@ -31,8 +31,8 @@
 |---|---|---|---|
 | I-RENDER-1 | `host.plan(tree, ctx)` は純粋・同期。同じ (tree.digest, ctx, host id) なら同じ `RenderPlan.digest`。 | 再現性。memo 化の正当性。 | P |
 | I-RENDER-2 | **全量会計**：ETree の全 ENode（root を除く）が `Accounting.entries` にちょうど 1 回現れる。`filtered` には理由が必須。 | 「なぜ X がプロンプトに無いか」に必ず答えられる。黙って消える情報を作らない。 | P |
-| I-RENDER-3 | **sourcemap 完全性**：各出力の全バイト範囲は重複なく mappings で覆われ、各範囲は ENode の gid か `'host'` を指す。 | 出力 → 定義の逆引き（`reins why`）。 | P |
-| I-RENDER-4 | **揮発度順序**：`turn` 揮発ノードだけを変更した 2 つの木の plan は、`static`・`session` 揮発の出力バイトが一致する。動的ホストは出力を揮発度昇順に並べる。 | prompt cache prefix の安定。React の key による差分最小化に相当。 | P |
+| I-RENDER-3 | **Complete source maps:** mappings cover each output's entire UTF-16 code-unit range without gaps or overlap. Positions are JavaScript string indices with an exclusive end; each range points to an ENode gid or `'host'` (D-020). | Trace output to its definition (`reins why`). | P |
+| I-RENDER-4 | **Volatility ordering:** plans for two trees differing only in `turn` nodes have completely identical `static` and `session` output strings. Dynamic hosts order outputs by increasing volatility (D-020). | Stable prompt-cache prefixes and minimal changes. | P |
 | I-RENDER-5 | **強制の誠実性**：`enforcement: 'enforced'` の rule は、ホストの guard 機構で実現されるか、`onUnsupported: 'downgrade'` で `degraded` と会計されるかのいずれか。それ以外は `ENFORCEMENT_UNAVAILABLE` で plan 失敗。散文で書いただけで強制済みと扱わない。 | 安全性の誤認を防ぐ。 | P |
 | I-RENDER-6 | `context` ノードは静的ホストでは既定で `dropped`。`trust: 'relay'` のノードは常に囲み（フェンス）付きで出力され、出所が明記される。 | 静的ファイルに揮発情報を焼き込まない。注入対策。 | P, G |
 
@@ -84,4 +84,4 @@
 | I-EVO-1 | `final` split のタスクとその結果は、`evolver` principal から読めない。`promoter` だけが読む。違反は `SPLIT_LEAK`。 | 選択への過適合の防止。 | P |
 | I-EVO-2 | Candidate は親 harness digest と Proposal を持ち、比較される Trial 群は harness digest 以外の RunSpec 項目が一致する。 | 差の原因をハーネスに限定。 | P |
 | I-RUN-1 | `RunSpec` から Namespace・Lock・パッケージ・ホスト版が一意に復元でき、`run/start` に完全な RunSpec が記録される。 | 「Harness v18 × Workspace v482 × モデル × 依存」の固定。 | E |
-| I-PKG-1 | パッケージ digest は entry から到達する全モジュールと `content` glob の全ファイルを覆う。覆われないファイルが render に影響したら（二重精緻化で検出）`ELAB_IMPURE`。 | digest が意味を持つ。 | P |
+| I-PKG-1 | The package digest covers every module reachable from entry and every file matched by the `content` globs. A file outside this coverage MUST NOT affect rendering; violations fail with `ELAB_IMPURE`. Static purity lint checks forbidden direct I/O, and double elaboration detects nondeterminism only (D-023). | The digest identifies all inputs that affect rendering. | P |

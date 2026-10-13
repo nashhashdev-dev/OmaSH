@@ -25,6 +25,17 @@
 | D-016 | 評価の split は propose / select / final の 3 つ。final は promoter のみ閲覧。 | 繰り返し選択による間接的過適合を防ぐ。 | 2 分割 |
 | D-017 | ログ本文の正本は、DSH 内のモデル要求については DSH セッションログ。Reins は参照（ExternalLogRef）だけを持つ。 | 二重保存と不整合の回避。 | 全部コピー |
 
+## User decisions (2026-10-13)
+
+| ID | Date | Decision | Reason | Alternatives | Impact |
+|---|---|---|---|---|---|
+| D-018 | 2026-10-13 | For `harness` refs, authority is the package name and follows `(@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*`. In `harness://@me/swe@^2#no-raw-sql`, authority is `@me/swe` and path is empty. Other schemes retain their authority grammar; `self` remains reserved. | Support npm scoped package names and make the example conform to the grammar. | Keep the old authority grammar and rewrite package names. | SPEC §4.1; types.ts Ref comments; I-REF-3/4; M1 ref parsing and formatting. |
+| D-019 | 2026-10-13 | Accounting includes exactly one entry for every ENode except root. Root is a synthetic container and has no entry. | Align the type comments with I-RENDER-2. | Include root in accounting. | types.ts Accounting/root comments; SPEC §7.3; I-RENDER-2. |
+| D-020 | 2026-10-13 | Source-map positions use UTF-16 code units, matching JavaScript string indices, with an exclusive end. Stable static/session outputs mean complete string equality. | Use one position unit consistently with types.ts. | Use byte offsets. | types.ts SourceMap comment; I-RENDER-3/4; output provenance descriptions. |
+| D-021 | 2026-10-13 | Send order is: record `session/intent`, record `session/sent`, perform the send. On send failure, record `session/status` with status `failed`. | Preserve recorded payloads before exposing them to a child runtime. | Record `session/sent` after sending. | SPEC §11.2/11.4; I-LOG-2/3; session hosts and crash recovery. |
+| D-022 | 2026-10-13 | `attenuate(parent: CapSet, requested: CapSet, opts?: { strict?: boolean }): CapSet`. Default strict is false and silently attenuates. With strict true, any attenuation throws `CAP_WIDENING`. Session mount always passes `{ strict: true }`. | Expose strict behavior explicitly without ambient configuration. | Keep the two-argument API with an unspecified strict mode. | types.ts KernelApi; SPEC §9.1/11.3; I-CAP-1; M1 and session mount. |
+| D-023 | 2026-10-13 | Add `packages/eslint-plugin` (`@reins/eslint-plugin`) in M1. Harness components MUST pass static lint that prohibits imports of I/O modules such as `node:fs`, `node:child_process`, and `node:net`, and prohibits `process.env`, `Date`, `Math.random`, `fetch`, `crypto.getRandomValues`, and I/O outside the `@reins/core` hooks. `reins render` MUST run this lint and fail with `ELAB_IMPURE` on violations. Double elaboration detects nondeterminism only. | Combine static effect checks with runtime nondeterminism checks; repeated evaluation alone cannot establish purity. | Rely on double elaboration alone. | SPEC §6.3; I-ELAB-1 and its lint tests; I-PKG-1 detection wording; types.ts error comment; AGENT_BRIEF layout; M1 deliverables. |
+
 ## 未決（既定値で進める）
 
 | ID | 問い | 既定値 | 解決手段 |

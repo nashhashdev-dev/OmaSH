@@ -15,7 +15,7 @@
 
 ハーネス（エージェントの動かし方）を、React のように **合成可能なコンポーネントの木** として書けるようにする。木はログの射影から純粋に精緻化され（ETree）、ホスト（AGENTS.md / CLAUDE.md / Codex 設定などの静的ファイル、DSH の毎ターンのプロンプト、子エージェントのセッション）へ純粋に plan され、副作用は commit とセッション操作だけに閉じ込められる。宣言と実態のずれ（ドリフト、アンカー違反）は検出されて提案になる。論理参照・権限の減衰・追記ログ・版固定がこれを支える。
 
-**成功の判定文**：「同じ一つの木が、AGENTS.md と CLAUDE.md と DSH の毎ターンのプロンプトと子セッションに落ち、各バイトがどのノードから来たかを辿れ、誰かが生成物を直接直したら提案として拾われ、作業中のエージェントは自分のハーネスを書き換えられない。」
+**Success criterion:** one tree produces AGENTS.md, CLAUDE.md, DSH per-turn prompts, and child sessions; every output range can be traced to its origin using UTF-16 code-unit positions; direct edits to generated outputs become proposals; a working agent cannot rewrite its own harness.
 
 ## 2. 権威の順序と、曖昧さの解き方
 
@@ -66,6 +66,7 @@ reins/
   package.json  pnpm-workspace.yaml  tsconfig.base.json
   packages/
     core/              @reins/core
+    eslint-plugin/     @reins/eslint-plugin (M1; D-023)
     host-agents-md/    @reins/host-agents-md
     host-claude-code/  @reins/host-claude-code
     host-codex/        @reins/host-codex

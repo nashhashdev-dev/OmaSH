@@ -34,6 +34,8 @@
 
 パッケージ：`@reins/core`。
 
+Also deliver `@reins/eslint-plugin` in `packages/eslint-plugin` (D-023).
+
 成果物：
 - `types.ts` を `packages/core/src/types.ts` に配置（逐語）。
 - refs（parse / format / match / pattern 包含）、canonicalJson（RFC 8785）、digest。
@@ -45,11 +47,13 @@
 - `task-compile`（SPEC §5.8）。
 - Resolver `fs`、`harness-pkg`（ローカルのみ）。
 - `examples/hello`（SPEC §6.1 相当）。
+- Static purity lint for harness components: reject I/O module imports (including `node:fs`, `node:child_process`, and `node:net`), `process.env`, `Date`, `Math.random`, `fetch`, `crypto.getRandomValues`, and I/O outside the `@reins/core` hooks. Provide the lint used by `reins render`, which MUST fail with `ELAB_IMPURE` on violations (SPEC §6.3, D-023).
 
 受け入れ基準：
 - I-REF-1〜5、I-ELAB-1〜5、I-CAP-1・2・4、I-LOG-1・4、I-PKG-1 のテストが通る。
 - `examples/hello` を elaborate した ETree の golden が安定（2 回の CI 実行で同一 digest）。
 - 欠落 id、重複 id、hook の範囲外呼び出し、`Math.random()` を使うコンポーネント、の各々が規定のエラーコードで失敗するテストがある。
+- I-ELAB-1 lint tests cover forbidden imports and expressions, including deterministic forbidden I/O, and verify that permitted core hooks pass. Double-elaboration tests verify nondeterminism detection separately.
 
 ---
 
@@ -87,11 +91,11 @@
 受け入れ基準：
 1. `dsh --profile reins --dump-config` に Reins の行が出る。
 2. 台本 LLM で 3 ターン実行：ターン 2 で `src/auth/x.ts` を読む → ターン 3 の要求にだけ auth 系ノードが現れる（on-touch）。
-3. ターン間で `reins:static` と `reins:session` のバイトが一致し、`reins:turn` だけが変わる（I-RENDER-4）。
+3. Across turns, `reins:static` and `reins:session` output strings are completely identical; only `reins:turn` changes (I-RENDER-4, D-020).
 4. エージェントがハーネスディレクトリへ書こうとするツール呼び出しが拒否され、`cap/denied` が記録される（I-CAP-2, I-CAP-5）。
 5. `model/request` が DSH セッションログを指し、そこから要求本文を再構成できる（I-LOG-2）。
 6. DSH_INTEGRATION.md §8.2 の contract（`subagents.continuable` を除く）が全て通る。
-7. **デモ**：同じ `examples/hello` が AGENTS.md・CLAUDE.md・DSH の毎ターンプロンプトの 3 つに落ち、`reins why` / `reins explain` で各バイトの出所が辿れることを示すスクリプト `examples/hello/demo.sh`。
+7. **Demo:** `examples/hello/demo.sh` demonstrates one tree producing AGENTS.md, CLAUDE.md, and DSH per-turn prompts, with origin tracing through `reins why` / `reins explain` using UTF-16 code-unit ranges (D-020).
 
 ---
 

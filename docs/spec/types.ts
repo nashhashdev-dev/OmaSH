@@ -55,8 +55,11 @@ export type Scheme =
   | (string & {})
 
 /**
- * Canonical string form:  <scheme>://<authority>/<path>[@<pin>][#<fragment>]
- * - authority: ^[a-z0-9][a-z0-9._-]*$
+ * Canonical string form: <scheme>://<authority>[/<path>][@<pin>][#<fragment>]
+ * - harness authority: ^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$
+ *   It is the package name, including its npm scope; `self` is reserved.
+ *   `harness://@me/swe@^2#no-raw-sql` has authority "@me/swe" and path "".
+ * - other schemes' authority: ^[a-z0-9][a-z0-9._-]*$
  * - path: POSIX, normalized, no `.`/`..` segments, no trailing slash (root path is "")
  * - pin and fragment as in {@link Ref}.
  */
@@ -73,6 +76,7 @@ export type Pin =
 
 export interface Ref {
   readonly scheme: Scheme
+  /** A package name (optionally npm-scoped) for harness; a simple authority for other schemes. */
   readonly authority: string
   readonly path: string
   readonly pin?: Pin
@@ -408,7 +412,7 @@ export interface SessionEl extends BaseProps {
   readonly key: SessionKey
   readonly runtime: RuntimeSpec
   readonly workspace: WorkspaceBinding
-  /** Requested caps; effective = attenuate(parent, requested) (I-CAP-1). */
+  /** Requested caps; mount uses attenuate(parent, requested, { strict: true }) (I-CAP-1). */
   readonly caps: CapSet
   /** The child's harness tree; rendered by the child runtime's host. */
   readonly children: readonly ReinsNode[]
@@ -488,6 +492,7 @@ export interface ETree {
   readonly namespace: Digest
   /** Log seq the projections were computed at; -1 = static projection (SPEC §6.4). */
   readonly logSeq: number
+  /** Synthetic container, excluded from Accounting.entries (I-RENDER-2). */
   readonly root: ENode
   readonly digest: Digest
 }
@@ -643,7 +648,7 @@ export interface AccountEntry {
 }
 
 export interface Accounting {
-  readonly entries: readonly AccountEntry[] // exactly one per ENode (I-RENDER-2)
+  readonly entries: readonly AccountEntry[] // exactly one per ENode except the synthetic root (I-RENDER-2)
 }
 
 export interface AccountingSummary {
@@ -653,7 +658,7 @@ export interface AccountingSummary {
   readonly dropped: number
 }
 
-/** Byte ranges (UTF-16 code unit offsets, end exclusive) of an output → origin node. */
+/** UTF-16 code-unit ranges (JavaScript string indices, end exclusive) of an output → origin node. */
 export interface SourceMap {
   readonly output: string // file target or prompt part name
   readonly mappings: readonly { readonly start: number; readonly end: number; readonly node: GlobalNodeId | 'host' }[]
@@ -907,7 +912,7 @@ export type ReinsErrorCode =
   | 'ID_MISSING' // element kind requires id
   | 'ID_DUPLICATE'
   | 'ELAB_HOOK_OUTSIDE_RENDER'
-  | 'ELAB_IMPURE' // detected nondeterminism (double elaboration mismatch)
+  | 'ELAB_IMPURE' // a static purity-lint violation or detected nondeterminism (double elaboration mismatch)
   | 'ELAB_CYCLE'
   | 'UNSUPPORTED_NODE' // onUnsupported 'error'
   | 'ENFORCEMENT_UNAVAILABLE' // enforced rule with no guard realization and no downgrade allowed
@@ -978,7 +983,8 @@ export interface KernelApi {
   use<P>(pkg: string, props?: P): ComponentCall<P>
   /** JSX/hyperscript factory. `h(Component, props)` or `h('knowledge', props, ...children)`. */
   h(type: Component<never> | Exclude<ElementKind, 'fragment'>, props: Json | null, ...children: ReinsNode[]): ReinsNode
-  attenuate(parent: CapSet, requested: CapSet): CapSet // throws CAP_WIDENING if requested ⊄ parent and strict
+  /** Default strict is false; strict true throws CAP_WIDENING if attenuation is required. */
+  attenuate(parent: CapSet, requested: CapSet, opts?: { strict?: boolean }): CapSet
   permits(caps: CapSet, right: Right, on: Ref): boolean
   evaluatePredicate(p: Predicate, s: TaskState): boolean
   project<T extends Json>(p: Projection<T>, log: readonly LogEvent[], uptoSeq: number): T
