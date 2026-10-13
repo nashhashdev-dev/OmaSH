@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+  - contracts/*
+  - spikes/m0
+
+ignoreScripts: true

@@ -1,0 +1,21 @@
+[tools]
+node = "22.23.3"
+pnpm = "10.34.7"
+tmux = "3.7c"
+"npm:@deepseek-ai/dsh" = "0.2.0-rc.2"
+"npm:@anthropic-ai/claude-code" = "2.1.296"
+"npm:@openai/codex" = "0.162.1"
+"npm:opencode-ai" = "1.19.0"
+"npm:@mariozechner/pi-coding-agent" = "0.73.1"
+
+[tasks.lint]
+run = "pnpm lint"
+
+[tasks.test]
+run = "pnpm test"
+
+[tasks."m0:probe"]
+description = "Run disposable probes with real, pinned upstream runtimes"
+run = "node spikes/m0/probe.mjs"
+
+# Build, invariant, contract, and candidate tasks are added with their milestones.

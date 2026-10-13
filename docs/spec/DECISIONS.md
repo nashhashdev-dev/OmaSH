@@ -134,6 +134,14 @@ DECISIONS-batch-4.md is preserved as supplied. Its canonical types replace the p
 | D-054 | 2026-10-13 | Reserved; do not use or reuse. | Intentionally unused number, confirmed by D-069. |
 | D-056 | 2026-10-13 | Reserved; do not use or reuse. | Intentionally unused number, confirmed by D-069. |
 
+## M0 agent decisions (2026-10-13)
+
+| ID | Date | Decision | Reason | Alternatives | Impact |
+|---|---|---|---|---|---|
+| D-093 | 2026-10-13 | (agent) Execute real upstream CLIs against a deterministic local protocol fixture, using disposable homes and dummy credentials. Do not pass real provider keys to these runtimes in this environment. Report live-provider authentication and behavior separately as unverified. | UID switching and filesystem namespace isolation are unavailable; keep the already-authorized credential store outside runtime inputs. A transport fixture is not a fake CLI. | Pass live keys to the CLIs; claim fixture results prove live-provider behavior. | M0 evidence and probe implementation only; no laws, invariants, or public types change. |
+| D-094 | 2026-10-13 | (agent) Pin Node 22.23.3, pnpm 10.34.7, mise 2026.10.8, tmux 3.7c, DSH 0.2.0-rc.2, Claude Code 2.1.296, Codex 0.162.1, OpenCode 1.19.0, and Pi 0.73.1 for M0. | Exact official release metadata and integrity values were retrieved; tmux 3.7c has official prebuilt Linux/macOS artifacts. | Unpinned latest versions; compile tmux 3.8 without available development headers. | Development toolchain and M0 reproducibility only. |
+| D-095 | 2026-10-13 | (agent) M0 tasks validate disposable probes and specification examples. Add build, invariant, contract, and candidate-update tasks when their actual implementations arrive; keep package directories empty now. | Avoid suggesting later milestone implementations already exist. Acceptance tests may initially fail before evidence is recorded, as allowed by AGENT_BRIEF section 7. | Empty tasks that always succeed. | Repository scaffolding only. |
+
 ## 未決（既定値で進める）
 
 | ID | 問い | 既定値 | 解決手段 |

@@ -1,0 +1,12 @@
+{
+  "name": "reins-m0-spikes",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.2.0-rc.2",
+    "@anthropic-ai/claude-code": "2.1.296",
+    "@openai/codex": "0.162.1",
+    "opencode-ai": "1.19.0",
+    "@mariozechner/pi-coding-agent": "0.73.1"
+  }
+}

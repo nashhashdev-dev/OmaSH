@@ -10,3 +10,8 @@
 *.pem
 *.key
 /secrets.env.enc
+
+# Local dependencies and disposable M0 runs.
+node_modules/
+/spikes/m0/.runs/
+*.tsbuildinfo
